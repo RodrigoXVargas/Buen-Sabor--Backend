@@ -7,7 +7,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class BuenSaborApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(BuenSaborApplication.class, args);
+		SpringApplication.run(BuenSaborApplication.class, args
+		);
 	}
 
 }

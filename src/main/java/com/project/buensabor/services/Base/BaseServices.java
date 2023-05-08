@@ -1,6 +1,6 @@
-package com.project.buensabor.services;
+package com.project.buensabor.services.Base;
 
-import com.project.buensabor.entities.Base;
+import com.project.buensabor.entities.Base.Base;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

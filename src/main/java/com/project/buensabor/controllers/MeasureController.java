@@ -2,7 +2,6 @@ package com.project.buensabor.contmeasurelers;
 
 import com.project.buensabor.dto.productDto.MeasureDto;
 import com.project.buensabor.entities.Measure;
-import com.project.buensabor.services.MeasureService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @Slf4j

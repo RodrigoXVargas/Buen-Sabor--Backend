@@ -2,7 +2,6 @@ package com.project.buensabor.controllers;
 
 import com.project.buensabor.dto.userDto.SectionDto;
 import com.project.buensabor.entities.Section;
-import com.project.buensabor.services.SectionService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

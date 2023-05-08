@@ -1,7 +1,7 @@
-package com.project.buensabor.services;
+package com.project.buensabor.services.Base;
 
-import com.project.buensabor.entities.Base;
-import com.project.buensabor.repositories.BaseRepository;
+import com.project.buensabor.entities.Base.Base;
+import com.project.buensabor.repositories.Base.BaseRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

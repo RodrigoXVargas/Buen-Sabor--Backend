@@ -1,6 +1,7 @@
 package com.project.buensabor.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.project.buensabor.entities.Base.Base;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,13 +10,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "INGREDIENTS")
-@Getter
-@Setter
-public class Ingredient {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_ingredient;
+public class Ingredient extends Base {
 
     @Column
     private String name;

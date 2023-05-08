@@ -2,7 +2,6 @@ package com.project.buensabor.controllers;
 
 import com.project.buensabor.dto.userDto.RolDto;
 import com.project.buensabor.entities.Rol;
-import com.project.buensabor.services.RolService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,9 +1,8 @@
 package com.project.buensabor.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.project.buensabor.entities.Base.Base;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,13 +11,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "ADDRESSES")
-@Getter
-@Setter
-public class Address {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id_address;
+public class Address extends Base {
 
     @Column
     private String street;

@@ -1,6 +1,6 @@
-package com.project.buensabor.repositories;
+package com.project.buensabor.repositories.Base;
 
-import com.project.buensabor.entities.Base;
+import com.project.buensabor.entities.Base.Base;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 

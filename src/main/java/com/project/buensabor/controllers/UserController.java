@@ -2,13 +2,11 @@ package com.project.buensabor.controllers;
 
 import com.project.buensabor.dto.userDto.UserDto;
 import com.project.buensabor.entities.User;
-import com.project.buensabor.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/user")

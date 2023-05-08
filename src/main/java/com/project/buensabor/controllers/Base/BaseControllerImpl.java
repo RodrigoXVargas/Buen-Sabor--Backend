@@ -1,7 +1,7 @@
-package com.project.buensabor.controllers;
+package com.project.buensabor.controllers.Base;
 
-import com.project.buensabor.entities.Base;
-import com.project.buensabor.services.BaseServicesImpl;
+import com.project.buensabor.entities.Base.Base;
+import com.project.buensabor.services.Base.BaseServicesImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;

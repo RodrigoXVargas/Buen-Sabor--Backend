@@ -1,6 +1,6 @@
-package com.project.buensabor.controllers;
+package com.project.buensabor.controllers.Base;
 
-import com.project.buensabor.entities.Base;
+import com.project.buensabor.entities.Base.Base;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;

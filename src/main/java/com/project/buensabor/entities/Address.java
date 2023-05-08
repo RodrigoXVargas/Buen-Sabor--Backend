@@ -1,6 +1,5 @@
 package com.project.buensabor.entities;
 
-import ch.qos.logback.core.net.server.Client;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -14,7 +13,7 @@ public class Address {
     private Long id;
 
     @Column
-    private String stread;
+    private String street;
 
     @Column
     private Integer number;
@@ -22,5 +21,12 @@ public class Address {
     @ManyToOne(cascade={ CascadeType.ALL})
     @JoinColumn(name = "user_id")
     private User user;
+
+    @ManyToOne()
+    @JoinColumn(name = "location_id")
+    private Location location;
+
+    @OneToMany(mappedBy = "address", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Order> orders;
 
 }

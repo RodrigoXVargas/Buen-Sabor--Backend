@@ -15,10 +15,8 @@ public class Category{
     @Column
     private String name;
 
-
     @OneToMany(mappedBy="category", cascade = CascadeType.ALL)
     private List<Category> subcategory;
-
 
     @ManyToOne(cascade={ CascadeType.ALL})
     @JoinColumn(name="subcategory_to")

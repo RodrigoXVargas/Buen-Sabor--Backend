@@ -21,10 +21,12 @@ public class Order {
 
     @ManyToOne(cascade={ CascadeType.ALL})
     @JoinColumn(name = "user_id")
+    @JsonBackReference(value = "user-order")
     private User user;
 
     @ManyToOne(cascade={ CascadeType.ALL})
     @JoinColumn(name = "address_id")
+    @JsonBackReference(value = "address-orders")
     private Address address;
 
     @Column
@@ -35,6 +37,7 @@ public class Order {
 
     @ManyToOne(cascade={ CascadeType.ALL})
     @JoinColumn(name = "status_id")
+    @JsonBackReference(value = "status-order")
     private Status status;
 
     @ManyToMany
@@ -43,6 +46,8 @@ public class Order {
             joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "order_id"))
     private List<Product> products;
+
+
 //    private Payment formPayment;
 
 

@@ -25,10 +25,10 @@ public class Location {
 
     @ManyToOne()
     @JoinColumn(name = "section_id", referencedColumnName = "id_section")
-    @JsonManagedReference
+    @JsonBackReference(value = "section-location")
     private Section section;
 
     @OneToMany(mappedBy = "location", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonBackReference
+    @JsonManagedReference(value = "location-address")
     private List<Address> addresses;
 }

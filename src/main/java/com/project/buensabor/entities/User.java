@@ -37,15 +37,15 @@ public class User {
 
     @ManyToOne(cascade={ CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "rol_id")
-    @JsonManagedReference
+    @JsonBackReference(value = "rol-user")
     private Rol rol;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonBackReference
+    @JsonManagedReference(value = "user-address")
     private List<Address> addresses;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonBackReference
+    @JsonManagedReference(value = "user-order")
     private List<Order> orders;
 
 

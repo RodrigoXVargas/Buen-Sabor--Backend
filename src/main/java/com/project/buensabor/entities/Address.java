@@ -28,16 +28,16 @@ public class Address {
 
     @ManyToOne
     @JoinColumn(name = "user", referencedColumnName = "id_user")
-    @JsonManagedReference
+    @JsonBackReference(value = "user-address")
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "location_id",referencedColumnName = "id_location")
-    @JsonManagedReference
+    @JsonBackReference(value = "location-address")
     private Location location;
 
     @OneToMany(mappedBy = "address", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonBackReference
+    @JsonManagedReference(value = "address-orders")
     private List<Order> orders;
 
 }

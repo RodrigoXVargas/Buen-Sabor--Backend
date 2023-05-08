@@ -1,16 +1,24 @@
 package com.project.buensabor.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
 @Table(name = "USERS")
+@Getter
+@Setter
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id_user;
 
     @Column
     private String firstName;
@@ -19,19 +27,25 @@ public class User {
     private String lastName;
 
     @Column
-    private String password;
+    private String mail;
 
     @Column
+    private String password;
+
+    @Column(columnDefinition="tinyint(1) default 0")
     private Boolean blacklist;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "rol_id", referencedColumnName = "rol")
+    @ManyToOne(cascade={ CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinColumn(name = "rol_id")
+    @JsonBackReference(value = "rol-user")
     private Rol rol;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference(value = "user-address")
     private List<Address> addresses;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference(value = "user-order")
     private List<Order> orders;
 
 

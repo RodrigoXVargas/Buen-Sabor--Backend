@@ -16,21 +16,26 @@ public class Order extends Base {
     @Column
     private Instant date;
 
-    @ManyToOne(cascade={ CascadeType.ALL})
-    @JoinColumn(name = "user_id")
-    @JsonBackReference(value = "user-order")
-    private User user;
+    @Column
+    private String withdrawalMode;
 
     @ManyToOne(cascade={ CascadeType.ALL})
     @JoinColumn(name = "address_id")
     @JsonBackReference(value = "address-orders")
     private Address address;
 
-    @Column
-    private String withdrawalMode;
-
     @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonManagedReference(value = "order-bill")
     private Bill bill;
+
+    /*@ManyToOne(cascade={ CascadeType.ALL})
+    @JoinColumn(name = "user_id")
+    @JsonBackReference(value = "user-order")
+    private User user;
+
+
+
+
 
     @ManyToOne(cascade={ CascadeType.ALL})
     @JoinColumn(name = "status_id")
@@ -47,5 +52,5 @@ public class Order extends Base {
 
 //    private Payment formPayment;
 
-
+*/
 }

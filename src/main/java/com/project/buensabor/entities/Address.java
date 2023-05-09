@@ -26,7 +26,7 @@ public class Address extends Base {
 
     @ManyToOne
     @JoinColumn(name = "location_id",referencedColumnName = "id_location")
-    @JsonBackReference(value = "location-address")
+    @JsonBackReference(value = "location-addresses")
     private Location location;
 
     @OneToMany(mappedBy = "address", cascade = CascadeType.ALL, fetch = FetchType.EAGER)

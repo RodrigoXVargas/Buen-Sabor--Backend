@@ -20,7 +20,7 @@ public class Rol extends Base {
     private String rol;
 
     @OneToMany(mappedBy = "rol", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference(value = "rol-user")
-    private List<User> user;
+    @JsonManagedReference(value = "rol-users")
+    private List<User> users;
 
 }

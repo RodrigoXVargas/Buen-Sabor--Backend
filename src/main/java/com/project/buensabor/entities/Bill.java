@@ -14,9 +14,10 @@ public class Bill extends Base {
     @Column
     private Instant date;
 
-    @JoinColumn(name = "order_id")
+
     @OneToOne(fetch = FetchType.LAZY)
-    @JsonBackReference(value = "order-bill")
+    @JsonBackReference
+    @JoinColumn(name = "order_fk")
     private Order order;
 
 }

@@ -24,7 +24,7 @@ import java.util.Optional;
 @CrossOrigin(origins = "*")
 @RequestMapping("/api/categories")
 public class CategoryController extends BaseControllerImpl<Category, CategoryServiceImpl> {
-
+/*
     @Autowired
     private CategoryService categoryService;
 
@@ -40,5 +40,5 @@ public class CategoryController extends BaseControllerImpl<Category, CategorySer
             log.info(e.getMessage(), e);
         }
         return category;
-    }
+    }*/
 }

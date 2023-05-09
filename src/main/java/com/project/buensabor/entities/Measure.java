@@ -16,8 +16,8 @@ public class Measure extends Base {
     @Column
     private String measure;
 
-    @OneToMany(mappedBy = "measure_id", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
+    @OneToMany(mappedBy = "measure", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference(value = "measure-ingredients")
     private List<Ingredient> ingredients;
 
 }

@@ -16,15 +16,16 @@ public class Category extends Base {
     @Column
     private String name;
 
-    @OneToMany(mappedBy="subcategory_to", cascade = CascadeType.ALL)
-    @JsonManagedReference
-    private List<Category> category;
+    @OneToMany(mappedBy="category", cascade = CascadeType.ALL)
+    @JsonManagedReference(value = "category-subcategories")
+    private List<Category> subcategories;
 
     @ManyToOne(cascade= {CascadeType.MERGE})
-    @JoinColumn(name="subcategory_to")
-    private Category subcategory_to;
+    @JoinColumn(name="category_fk")
+    @JsonBackReference(value = "category-subcategories")
+    private Category category;
 
-    @OneToMany(mappedBy = "product_id", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "subcategory", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference(value = "subcategory-products")
     private List<Product> products;
 

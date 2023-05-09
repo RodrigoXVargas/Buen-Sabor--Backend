@@ -22,7 +22,7 @@ public class Product extends Base {
     private Long price;
 
     @ManyToOne()
-    @JoinColumn(name = "subcategory")
+    @JoinColumn(name = "subcategory_fk")
     @JsonBackReference(value = "subcategory-products")
     private Category subcategory;
 

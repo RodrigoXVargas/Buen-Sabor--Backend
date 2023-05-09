@@ -25,7 +25,7 @@ public class CategoryServiceImpl extends BaseServicesImpl<Category, Long> implem
     private CategoryRepository categoryRepository;
 
 
-    @Override
+    /*@Override
     public Optional<Category> findByName(String name) throws Exception {
         return categoryRepository.findByName(name);
     }
@@ -42,5 +42,5 @@ public class CategoryServiceImpl extends BaseServicesImpl<Category, Long> implem
             log.info(e.getMessage());
             throw new Exception(e.getMessage());
         }
-    }
+    }*/
 }

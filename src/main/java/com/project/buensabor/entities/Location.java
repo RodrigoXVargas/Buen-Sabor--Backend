@@ -18,10 +18,10 @@ public class Location extends Base {
     @Column
     private String location;
 
-    /*@ManyToOne()
-    @JoinColumn(name = "section_id", referencedColumnName = "id_section")
-    @JsonBackReference(value = "section-location")
-    private Section section;*/
+    @ManyToOne()
+    @JoinColumn(name = "section_fk")
+    @JsonBackReference(value = "section-locations")
+    private Section section;
 
     @OneToMany(mappedBy = "location", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JsonManagedReference(value = "location-addresses")

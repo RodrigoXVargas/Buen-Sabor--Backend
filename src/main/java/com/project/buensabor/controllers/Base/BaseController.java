@@ -11,17 +11,17 @@ import java.io.Serializable;
 
 public interface BaseController <E extends Base, ID extends Serializable> {
 
-    @PreAuthorize("hasAnyRole('admin', 'superAdmin')")
+    //@PreAuthorize("hasAnyRole('admin', 'superAdmin')")
     public ResponseEntity<?> getAll();
-    @PreAuthorize("hasAnyRole('admin', 'superAdmin')")
+    //@PreAuthorize("hasAnyRole('admin', 'superAdmin')")
     public ResponseEntity<?> getAll(Pageable pageable);
-    @PreAuthorize("hasAnyRole('admin', 'superAdmin')")
+    //@PreAuthorize("hasAnyRole('admin', 'superAdmin')")
     public ResponseEntity<?> getOne(@PathVariable ID id);
-    @PreAuthorize("hasAnyRole('admin', 'superAdmin')")
+    //@PreAuthorize("hasAnyRole('admin', 'superAdmin')")
     public ResponseEntity<?> saveOne(@RequestBody E entity) throws Exception;
-    @PreAuthorize("hasAnyRole('admin', 'superAdmin')")
+    //@PreAuthorize("hasAnyRole('admin', 'superAdmin')")
     public ResponseEntity<?> updateOne(@PathVariable ID id, @RequestBody E entity);
-    @PreAuthorize("hasAnyRole('admin', 'superAdmin')")
+    //@PreAuthorize("hasAnyRole('admin', 'superAdmin')")
     public ResponseEntity<?> deleteById(@PathVariable ID id);
 
 }

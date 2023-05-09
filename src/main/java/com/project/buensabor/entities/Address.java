@@ -20,12 +20,12 @@ public class Address extends Base {
     private Integer number;
 
     @ManyToOne
-    @JoinColumn(name = "user", referencedColumnName = "id_user")
-    @JsonBackReference(value = "user-address")
+    @JoinColumn(name = "user_fk")
+    @JsonBackReference(value = "user-addresses")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "location_id",referencedColumnName = "id_location")
+    @JoinColumn(name = "location_fk")
     @JsonBackReference(value = "location-addresses")
     private Location location;
 

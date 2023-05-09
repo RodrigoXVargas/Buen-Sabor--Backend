@@ -14,9 +14,9 @@ import java.util.Optional;
 @Repository
 public interface CategoryRepository extends BaseRepository<Category, Long> {
 
-    @Query(value = "SELECT * FROM categories WHERE category.name = :name", nativeQuery = true)
-    Optional<Category> findByName(@Param("name") String name);
+    /*@Query(value = "SELECT * FROM categories WHERE category.name = :name", nativeQuery = true)
+    Optional<Category> findByName(@Param("name") String name);*/
 
-    boolean existByName(String name);
+    //boolean existByName(String name);
 
 }

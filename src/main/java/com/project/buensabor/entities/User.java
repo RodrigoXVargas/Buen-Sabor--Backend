@@ -30,18 +30,18 @@ public class User extends Base {
     @Column(columnDefinition="tinyint(1) default 0")
     private Boolean blacklist;
 
-    /*@ManyToOne(cascade={ CascadeType.MERGE, CascadeType.REFRESH})
-    @JoinColumn(name = "rol_id")
-    @JsonBackReference(value = "rol-user")
-    private Rol rol;*/
+    @ManyToOne(cascade={ CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinColumn(name = "rol_fk")
+    @JsonBackReference(value = "rol-users")
+    private Rol rol;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference(value = "user-addresses")
     private List<Address> addresses;
 
-    /*@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference(value = "user-order")
-    private List<Order> orders;*/
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference(value = "user-orders")
+    private List<Order> orders;
 
 
 }

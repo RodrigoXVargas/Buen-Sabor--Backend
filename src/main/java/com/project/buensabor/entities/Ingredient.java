@@ -22,8 +22,9 @@ public class Ingredient extends Base {
     private Long cost;
 
     @ManyToOne()
-    @JoinColumn(name = "measure_id")
-    private Measure measure_id;
+    @JoinColumn(name = "measure_fk")
+    @JsonBackReference(value = "measure-ingredients")
+    private Measure measure;
 
     @ManyToMany(mappedBy = "ingredients")
     private List<Product> products;

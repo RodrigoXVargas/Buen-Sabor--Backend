@@ -1,58 +1,16 @@
-package com.project.buensabor.contmeasurelers;
+package com.project.buensabor.controllers;
 
-import com.project.buensabor.dto.productDto.MeasureDto;
+import com.project.buensabor.controllers.Base.BaseControllerImpl;
 import com.project.buensabor.entities.Measure;
-import jakarta.validation.Valid;
+import com.project.buensabor.services.MeasureServiceImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Slf4j
-@RequestMapping("/api/measure")
-public class MeasureController {
-    private final MeasureService measureService;
-
-    @Autowired
-    public MeasureController(MeasureService measureService) {
-        this.measureService = measureService;
-    }
-
-
-    @GetMapping("/getAll")
-    public ResponseEntity<?> getAllMeasure()
-    {
-        List<MeasureDto> list = measureService.getAllMeasurees();
-        ResponseEntity<?> responseEntity = ResponseEntity.ok(list) ;
-        return responseEntity;
-    }
-
-    @GetMapping("/get/{id}")
-    public MeasureDto getMeasureByID(@PathVariable("id") Long measureID)
-    {
-        MeasureDto measure = measureService.getMeasure(measureID);
-        return measure;
-    }
-
-    @PostMapping("/save")
-    public Measure saveMeasure(@Valid @RequestBody Measure measure)
-    {
-        return measureService.saveMeasure(measure);
-    }
-
-    @PutMapping("/update/{id}")
-    public Measure updateMeasure(@RequestBody Measure measure, @PathVariable("id") Long measureID)
-    {
-        return measureService.updateMeasure(measure, measureID);
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public String deleteMeasureById(@PathVariable("id") Long measureID)
-    {
-        measureService.deleteMeasureById(measureID);
-        return "Deleted Successfully";
-    }
+@CrossOrigin(origins = "*")
+@RequestMapping(path = "/api/measures")
+public class MeasureController extends BaseControllerImpl<Measure, MeasureServiceImpl> {
 }

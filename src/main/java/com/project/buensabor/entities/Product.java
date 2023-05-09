@@ -1,5 +1,7 @@
 package com.project.buensabor.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.project.buensabor.entities.Base.Base;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -21,6 +23,7 @@ public class Product extends Base {
 
     @ManyToOne()
     @JoinColumn(name = "subcategory")
+    @JsonBackReference(value = "subcategory-products")
     private Category subcategory;
 
     @ManyToMany
@@ -31,7 +34,11 @@ public class Product extends Base {
     private List<Ingredient> ingredients;
 
 
-    @ManyToMany(mappedBy = "products")
+    @ManyToMany
+    @JoinTable(
+            name = "Product_Order",
+            joinColumns = @JoinColumn(name = "product_id"),
+            inverseJoinColumns = @JoinColumn(name = "ingredient_id"))
     private List<Order> orders;
 
 }

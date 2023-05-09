@@ -2,6 +2,7 @@ package com.project.buensabor.entities;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.project.buensabor.entities.Base.Base;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -16,15 +17,15 @@ public class Category extends Base {
     private String name;
 
     @OneToMany(mappedBy="subcategory_to", cascade = CascadeType.ALL)
-    @JsonBackReference
+    @JsonManagedReference
     private List<Category> category;
 
     @ManyToOne(cascade= {CascadeType.MERGE})
     @JoinColumn(name="subcategory_to")
     private Category subcategory_to;
 
-    @OneToMany(mappedBy = "subcategory", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
+    @OneToMany(mappedBy = "product_id", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference(value = "subcategory-products")
     private List<Product> products;
 
 }

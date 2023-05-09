@@ -1,49 +1,16 @@
 package com.project.buensabor.controllers;
 
-import com.project.buensabor.dto.userDto.UserDto;
+import com.project.buensabor.controllers.Base.BaseControllerImpl;
 import com.project.buensabor.entities.User;
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import com.project.buensabor.services.UserServiceImpl;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/user")
-public class UserController {
-
-    @Autowired
-    private UserService userService;
-
-    @GetMapping("/getAll")
-    public List<UserDto> getAllUsers()
-    {
-        return userService.getAllUsers();
-    }
-
-    @GetMapping("/get/{id}")
-    public UserDto getUserByID(@PathVariable("id") Long userID)
-    {
-        UserDto user = userService.getUser(userID);
-        return user;
-    }
-
-    @PostMapping("/save")
-    public User saveUser(@Valid @RequestBody User user)
-    {
-        return userService.saveUser(user);
-    }
-
-    @PutMapping("/update/{id}")
-    public User updateUser(@RequestBody User user, @PathVariable("id") Long userID)
-    {
-        return userService.updateUser(user, userID);
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public String deleteUserById(@PathVariable("id") Long userID)
-    {
-        userService.deleteUserById(userID);
-        return "Deleted Successfully";
-    }
+@Slf4j
+@CrossOrigin(origins = "*")
+@RequestMapping(path = "/api/users")
+public class UserController extends BaseControllerImpl<User, UserServiceImpl> {
 }

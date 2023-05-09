@@ -1,5 +1,7 @@
 package com.project.buensabor.entities;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.project.buensabor.entities.Base.Base;
 import jakarta.persistence.*;
 
@@ -9,11 +11,12 @@ import java.time.Instant;
 @Table(name = "BILLS")
 public class Bill extends Base {
 
-    @JoinColumn(name = "order_id")
-    @OneToOne(fetch = FetchType.LAZY)
-    private Order order;
-
     @Column
     private Instant date;
+
+    @JoinColumn(name = "order_id")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JsonBackReference(value = "order-bill")
+    private Order order;
 
 }

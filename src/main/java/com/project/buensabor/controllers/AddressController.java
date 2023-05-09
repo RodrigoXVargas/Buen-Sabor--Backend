@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Slf4j
 @CrossOrigin(origins = "*")
-@RequestMapping(path = "/addresses")
+@RequestMapping(path = "/api/addresses")
 public class AddressController extends BaseControllerImpl<Address, AddressServiceImpl> {
 }

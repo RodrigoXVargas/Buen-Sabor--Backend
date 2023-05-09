@@ -1,7 +1,11 @@
 package com.project.buensabor.controllers;
 
+import com.project.buensabor.controllers.Base.BaseControllerImpl;
 import com.project.buensabor.dto.productDto.CategoryDto;
+import com.project.buensabor.entities.Address;
 import com.project.buensabor.entities.Category;
+import com.project.buensabor.services.AddressServiceImpl;
+import com.project.buensabor.services.CategoryServiceImpl;
 import com.project.buensabor.services.interfaces.CategoryService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +23,7 @@ import java.util.Optional;
 @Slf4j
 @CrossOrigin(origins = "*")
 @RequestMapping("/api/categories")
-public class CategoryController {
+public class CategoryController extends BaseControllerImpl<Category, CategoryServiceImpl> {
 
     @Autowired
     private CategoryService categoryService;

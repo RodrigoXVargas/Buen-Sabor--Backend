@@ -38,15 +38,16 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests()
-                .requestMatchers(HttpMethod.OPTIONS).permitAll()
-                .requestMatchers("/api/v1/public").permitAll()
+        http.authorizeHttpRequests().requestMatchers("/**").permitAll();
+                /*.requestMatchers(HttpMethod.OPTIONS).permitAll()
+                .requestMatchers("/**").permitAll()
+                .requestMatchers("/api/v1/public").permitAll();
                 .requestMatchers("/**").authenticated()
                 .and().cors().configurationSource(corsConfigurationSource())
                 .and().oauth2ResourceServer()
                     .jwt()
                         .decoder(jwtDecoder())
-                        .jwtAuthenticationConverter(jwtAuthenticationConverter());
+                        .jwtAuthenticationConverter(jwtAuthenticationConverter());*/
         return http.build();
     }
 

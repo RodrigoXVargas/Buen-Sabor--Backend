@@ -1,5 +1,6 @@
 package com.project.buensabor.services;
 
+import com.project.buensabor.dto.productDto.CategoryDto;
 import com.project.buensabor.entities.Address;
 import com.project.buensabor.entities.Category;
 import com.project.buensabor.repositories.Base.BaseRepository;
@@ -24,7 +25,19 @@ public class CategoryServiceImpl extends BaseServicesImpl<Category, Long> implem
     @Autowired
     private CategoryRepository categoryRepository;
 
-
+/*
+    @Override
+    public CategoryDto findById(Long id) throws Exception {
+        try {
+            Optional<CategoryDto> entityOptional = categoryRepository.findById(
+                    id); //Optional porque no se sabe si se encontrará un registro que tenga el ID especificado como PrimaryKey.
+            return entityOptional.get();
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+    }
+  */  
     /*@Override
     public Optional<Category> findByName(String name) throws Exception {
         return categoryRepository.findByName(name);

@@ -27,13 +27,13 @@ import java.util.Arrays;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    @Value("http://buen-sabor-api.com/")
+    @Value("${auth0.audience}")
     private String audience;
 
-    @Value("https://dev-zt6p5h6omxpkktfp.us.auth0.com/")
+    @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}")
     private String issuer;
 
-    @Value("http://buen-sabor-api.com/")
+    @Value("${web.cors.allowed-origins}")
     private String corsAllowebOrigins;
 
     @Bean
@@ -68,11 +68,8 @@ public class SecurityConfig {
     JwtDecoder jwtDecoder() {
         NimbusJwtDecoder jwtDecoder = JwtDecoders.fromOidcIssuerLocation(issuer);
 
-        OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator();
+        OAuth2TokenValidator<Jwt> audienceValidator = new AudienceValidator(audience);
         OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuer);
-        OAuth2TokenValidator<Jwt> withAudience = new DelegatingOAuth2TokenValidator<>(withIssuer, audienceValidator);
-
-        jwtDecoder.setJwtValidator(withAudience);
 
         return jwtDecoder;
     }

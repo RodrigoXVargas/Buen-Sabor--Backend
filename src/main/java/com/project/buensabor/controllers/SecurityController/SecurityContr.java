@@ -23,7 +23,7 @@ public class SecurityContr {
     }
 
     @GetMapping(value = "/admin-only")
-    @PreAuthorize("hasAuthority('read:admin-test')")
+    @PreAuthorize("hasAuthority('create:user')")
     public ResponseEntity<?> adminOnlyEndPoint() {
         return ResponseEntity.status(HttpStatus.OK).body("{\"message\": \"All good. You can see this because you are Admin.\"}");
     }

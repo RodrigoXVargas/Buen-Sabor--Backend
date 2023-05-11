@@ -6,7 +6,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.project.buensabor.entities.Base.Base;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
@@ -14,6 +16,10 @@ import java.util.List;
 
 @Entity
 @Table(name = "ROLES")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Rol extends Base {
 
     @Column

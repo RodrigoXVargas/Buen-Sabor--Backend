@@ -3,13 +3,19 @@ package com.project.buensabor.entities;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.project.buensabor.entities.Base.Base;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
 
 @Entity
 @Table(name = "INGREDIENTS")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Ingredient extends Base {
 
     @Column

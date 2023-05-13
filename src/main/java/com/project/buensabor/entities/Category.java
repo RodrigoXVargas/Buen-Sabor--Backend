@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,7 +17,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="@id")
+@JsonIdentityInfo(generator=ObjectIdGenerators.PropertyGenerator.class, property="id")
 public class Category extends Base {
     @Column
     private String name;
@@ -33,5 +34,20 @@ public class Category extends Base {
     @OneToMany(mappedBy = "subcategory", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference(value = "subcategory-products")
     private List<Product> products;
+
+    public List<Category> getCategories(){
+        List<Category> categories = new ArrayList<>();
+        getArbolCategorias(this,categories);
+        return categories;
+    }
+
+    public void getArbolCategorias(Category category, List<Category> categorias){
+        categorias.add(category);
+        if(category.getSubcategories()!=null){
+            for (Category categ : category.getSubcategories()) {
+                getArbolCategorias(categ, categorias);
+            }
+        }
+    }
 
 }

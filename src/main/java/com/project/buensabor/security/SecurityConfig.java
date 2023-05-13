@@ -41,8 +41,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.OPTIONS).permitAll()
                 .requestMatchers("/api/v1/public").permitAll()
                 .requestMatchers("/**").authenticated()
-                .and().cors().configurationSource(corsConfigurationSource())
-                .and().csrf().disable().oauth2ResourceServer()
+                .and().csrf().disable().cors().configurationSource(corsConfigurationSource())
+                .and().oauth2ResourceServer()
                 .jwt()
                         .decoder(jwtDecoder())
                         .jwtAuthenticationConverter(jwtAuthenticationConverter());

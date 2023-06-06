@@ -21,8 +21,8 @@ public class Product extends Base {
     @Column
     private String name;
 
-    @Column(columnDefinition="tinyint(1) default 0")
-    private Boolean active;
+    @Column
+    private boolean active;
 
     @Column
     private Long price;

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.project.buensabor.entities.Base.Base;
+import com.project.buensabor.enums.RolName;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,8 +23,9 @@ import java.util.List;
 @AllArgsConstructor
 public class Rol extends Base {
 
+    @Enumerated(EnumType.STRING)
     @Column
-    private String rol;
+    private RolName rol;
 
     @OneToMany(mappedBy = "rol", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference(value = "rol-users")

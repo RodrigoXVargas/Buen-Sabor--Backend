@@ -3,6 +3,7 @@ package com.project.buensabor.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.project.buensabor.entities.Base.Base;
+import com.project.buensabor.enums.MeasureType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,8 +20,9 @@ import java.util.List;
 @AllArgsConstructor
 public class Measure extends Base {
 
+    @Enumerated(EnumType.STRING)
     @Column
-    private String measure;
+    private MeasureType measure;
 
     @OneToMany(mappedBy = "measure", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference(value = "measure-ingredients")

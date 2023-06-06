@@ -33,8 +33,8 @@ public class User extends Base {
     @Column
     private String password;
 
-    @Column(columnDefinition="tinyint(1) default 0")
-    private Boolean blacklist;
+    @Column
+    private boolean blacklist;
 
     @ManyToOne(cascade={ CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "rol_fk")

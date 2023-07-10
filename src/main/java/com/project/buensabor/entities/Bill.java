@@ -20,11 +20,9 @@ import java.time.Instant;
 public class Bill extends Base {
 
     @Column
-    private Instant date;
+    private String date;
 
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JsonBackReference
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "order_fk")
     private Order order;
 

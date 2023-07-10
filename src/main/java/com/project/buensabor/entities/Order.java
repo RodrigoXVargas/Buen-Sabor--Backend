@@ -1,6 +1,5 @@
 package com.project.buensabor.entities;
 
-import ch.qos.logback.core.net.server.Client;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.project.buensabor.entities.Base.Base;
@@ -11,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,40 +22,30 @@ import java.util.List;
 public class Order extends Base {
 
     @Column
-    private Instant date;
+    private String date;
 
     @Column
     private String withdrawalMode;
 
-    @ManyToOne(cascade={ CascadeType.ALL})
+    @Column
+    private Double totalPrice;
+
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "paymode_fk")
+    private Paymode paymode;
+
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "address_fk")
-    @JsonBackReference(value = "address-orders")
     private Address address;
 
 
-    @ManyToOne(cascade={ CascadeType.ALL})
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_fk")
-    @JsonBackReference(value = "user-orders")
     private User user;
 
-
-
-
-
-    @ManyToOne(cascade={ CascadeType.ALL})
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "status_fk")
-    @JsonBackReference(value = "status-orders")
-    private Status status;
-
-    @ManyToMany
-    @JoinTable(
-            name = "DetailOrder",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "order_id"))
-    private List<Product> products;
-
-
-//    private Payment formPayment;
+    private StatusOrder statusOrder;
 
 
 }

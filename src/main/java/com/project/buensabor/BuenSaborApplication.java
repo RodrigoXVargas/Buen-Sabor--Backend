@@ -1,7 +1,7 @@
 package com.project.buensabor;
 
 
-import com.project.buensabor.entities.ManufacturedProduct;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

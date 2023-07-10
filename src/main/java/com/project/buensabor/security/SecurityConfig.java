@@ -39,6 +39,10 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests()
                 .requestMatchers(HttpMethod.OPTIONS).permitAll()
+                .requestMatchers(HttpMethod.GET).permitAll()
+                .requestMatchers(HttpMethod.PUT).permitAll()
+                .requestMatchers(HttpMethod.POST).permitAll()
+                .requestMatchers(HttpMethod.DELETE).permitAll()
                 .requestMatchers("/api/v1/public").permitAll()
                 .requestMatchers("/**").authenticated()
                 .and().csrf().disable().cors().configurationSource(corsConfigurationSource())

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import java.util.List;
 
 @Entity
-@Table(name = "ROLES")
+@Table(name = "ROLS")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -27,8 +27,5 @@ public class Rol extends Base {
     @Column
     private RolName rol;
 
-    @OneToMany(mappedBy = "rol", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference(value = "rol-users")
-    private List<User> users;
 
 }

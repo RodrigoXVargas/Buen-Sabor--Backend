@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,30 +22,23 @@ public class Product extends Base {
     @Column
     private String name;
 
-    @Column(columnDefinition="tinyint(1) default 0")
-    private Boolean active;
+    @Column
+    private boolean active;
 
     @Column
     private Long price;
 
-    @ManyToOne()
+    @Column
+    private Long cookingTime;
+
+    @Column
+    private String image;
+
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "subcategory_fk")
-    @JsonBackReference(value = "subcategory-products")
     private Category subcategory;
 
-    @ManyToMany
-    @JoinTable(
-            name = "Product_Ingredient",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "ingredient_id"))
-    private List<Ingredient> ingredients;
 
 
-    @ManyToMany
-    @JoinTable(
-            name = "Product_Order",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "ingredient_id"))
-    private List<Order> orders;
 
 }

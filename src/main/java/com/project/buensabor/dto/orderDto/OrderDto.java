@@ -1,7 +1,6 @@
 package com.project.buensabor.dto.orderDto;
 
 import com.project.buensabor.entities.*;
-import jakarta.persistence.*;
 
 import java.time.Instant;
 import java.util.List;
@@ -18,7 +17,7 @@ public class OrderDto {
 
     private Bill bill;
 
-    private Status status;
+    private StatusOrder statusOrder;
 
     private List<Product> products;
 //    private Payment formPayment;

@@ -1,27 +1,22 @@
 package com.project.buensabor.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.project.buensabor.entities.Base.Base;
-import com.project.buensabor.enums.MeasureType;
+import com.project.buensabor.enums.PayType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Entity
-@Table(name = "MEASURES")
+@Table(name = "PAYMODES")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Measure extends Base {
+public class Paymode extends Base {
 
     @Enumerated(EnumType.STRING)
     @Column
-    private MeasureType measure;
-
+    private PayType paymode;
 }

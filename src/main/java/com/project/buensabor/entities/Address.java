@@ -25,18 +25,12 @@ public class Address extends Base {
     @Column
     private Integer number;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_fk")
-    @JsonBackReference(value = "user-addresses")
     private User user;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "location_fk")
-    @JsonBackReference(value = "location-addresses")
     private Location location;
-
-    @OneToMany(mappedBy = "address", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonManagedReference(value = "address-orders")
-    private List<Order> orders;
 
 }

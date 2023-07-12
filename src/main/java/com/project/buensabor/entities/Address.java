@@ -4,13 +4,19 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.project.buensabor.entities.Base.Base;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.List;
 
 @Entity
 @Table(name = "ADDRESSES")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Address extends Base {
 
     @Column
@@ -19,18 +25,12 @@ public class Address extends Base {
     @Column
     private Integer number;
 
-    @ManyToOne
-    @JoinColumn(name = "user", referencedColumnName = "id_user")
-    @JsonBackReference(value = "user-address")
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "user_fk")
     private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "location_id",referencedColumnName = "id_location")
-    @JsonBackReference(value = "location-addresses")
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "location_fk")
     private Location location;
-
-    @OneToMany(mappedBy = "address", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JsonManagedReference(value = "address-orders")
-    private List<Order> orders;
 
 }

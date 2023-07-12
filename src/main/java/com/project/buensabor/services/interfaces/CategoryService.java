@@ -9,9 +9,9 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface CategoryService extends BaseServices<Category, Long> {
-
+/*
     Optional<Category> findByName(String name) throws Exception;
 
     boolean existByName(String name) throws Exception;
-
+*/
 }

@@ -1,56 +1,51 @@
 package com.project.buensabor.entities;
 
-import ch.qos.logback.core.net.server.Client;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.project.buensabor.entities.Base.Base;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "ORDERS")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Order extends Base {
 
     @Column
-    private Instant date;
+    private String date;
 
     @Column
     private String withdrawalMode;
 
-    @ManyToOne(cascade={ CascadeType.ALL})
-    @JoinColumn(name = "address_id")
-    @JsonBackReference(value = "address-orders")
+    @Column
+    private Double totalPrice;
+
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "paymode_fk")
+    private Paymode paymode;
+
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "address_fk")
     private Address address;
 
-    @OneToOne(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    @JsonManagedReference(value = "order-bill")
-    private Bill bill;
 
-    /*@ManyToOne(cascade={ CascadeType.ALL})
-    @JoinColumn(name = "user_id")
-    @JsonBackReference(value = "user-order")
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "user_fk")
     private User user;
 
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "status_fk")
+    private StatusOrder statusOrder;
 
 
-
-
-    @ManyToOne(cascade={ CascadeType.ALL})
-    @JoinColumn(name = "status_id")
-    @JsonBackReference(value = "status-order")
-    private Status status;
-
-    @ManyToMany
-    @JoinTable(
-            name = "DetailOrder",
-            joinColumns = @JoinColumn(name = "product_id"),
-            inverseJoinColumns = @JoinColumn(name = "order_id"))
-    private List<Product> products;
-
-
-//    private Payment formPayment;
-
-*/
 }

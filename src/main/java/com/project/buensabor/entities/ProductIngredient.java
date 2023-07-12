@@ -8,28 +8,23 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Entity
-@Table(name = "INGREDIENTS")
+@Table(name = "PRODUCTS_INGREDIENTS")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Ingredient extends Base {
-
-    @Column
-    private String name;
-
-    @Column
-    private Long stock;
-
-    @Column
-    private Double cost;
+public class ProductIngredient  extends Base {
 
     @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "measure_fk")
-    private Measure measure;
+    @JoinColumn(name = "product_fk")
+    private Product product;
 
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "ingredient_fk")
+    private Ingredient ingredient;
+
+    @Column(name = "cantidad")
+    private Long cant;
 
 }

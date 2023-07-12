@@ -11,7 +11,6 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -24,7 +23,7 @@ import java.util.Optional;
 @CrossOrigin(origins = "*")
 @RequestMapping("/api/categories")
 public class CategoryController extends BaseControllerImpl<Category, CategoryServiceImpl> {
-
+/*
     @Autowired
     private CategoryService categoryService;
 
@@ -40,5 +39,5 @@ public class CategoryController extends BaseControllerImpl<Category, CategorySer
             log.info(e.getMessage(), e);
         }
         return category;
-    }
+    }*/
 }

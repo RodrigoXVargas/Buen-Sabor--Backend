@@ -32,7 +32,9 @@ public class SecurityConfig implements WebMvcConfigurer {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.authorizeHttpRequests()
+        http
+                .cors().disable()
+                .authorizeHttpRequests()
                 .requestMatchers(HttpMethod.OPTIONS).permitAll()
                 .requestMatchers(HttpMethod.GET).permitAll()
                 .requestMatchers(HttpMethod.PUT).permitAll()
@@ -40,7 +42,8 @@ public class SecurityConfig implements WebMvcConfigurer {
                 .requestMatchers(HttpMethod.DELETE).permitAll()
                 .requestMatchers("/api/v1/public").permitAll()
                 .requestMatchers("/**").authenticated()
-                .and().csrf().disable();
+                .and().csrf().disable()
+                ;
         return http.build();
     }
 

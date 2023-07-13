@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Slf4j
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*",allowedHeaders = "*")
 @RequestMapping(path = "/api/paymodes")
 public class PaymodeController extends BaseControllerImpl<Paymode, PaymodeServiceImpl> {
 }

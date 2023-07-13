@@ -25,33 +25,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.Arrays;
 
 @Configuration
-@EnableWebSecurity
-@EnableMethodSecurity
 public class SecurityConfig implements WebMvcConfigurer {
 
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-                .cors().disable()
-                .authorizeHttpRequests()
-                .requestMatchers(HttpMethod.OPTIONS).permitAll()
-                .requestMatchers(HttpMethod.GET).permitAll()
-                .requestMatchers(HttpMethod.PUT).permitAll()
-                .requestMatchers(HttpMethod.POST).permitAll()
-                .requestMatchers(HttpMethod.DELETE).permitAll()
-                .requestMatchers("/api/v1/public").permitAll()
-                .requestMatchers("/**").authenticated()
-                .and().csrf().disable()
-                ;
-        return http.build();
-    }
-
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
+        registry.addMapping("/*")
                 .allowedOrigins("*")
-                .allowedMethods("HEAD", "GET", "PUT", "POST", "DELETE", "PATCH", "OPTIONS");
+                .allowedMethods("*")
+                .allowedHeaders("*");
     }
 
 }

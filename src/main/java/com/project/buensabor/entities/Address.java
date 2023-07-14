@@ -27,6 +27,7 @@ public class Address extends Base {
 
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_fk")
+    @JsonBackReference(value = "user-addresses")
     private User user;
 
     @ManyToOne(cascade = CascadeType.MERGE)

@@ -41,7 +41,6 @@ public class Order extends Base {
 
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_fk")
-    @JsonBackReference(value = "user-orders")
     private User user;
 
     @ManyToOne(cascade = CascadeType.MERGE)

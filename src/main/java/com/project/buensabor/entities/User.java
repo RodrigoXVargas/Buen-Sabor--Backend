@@ -45,9 +45,5 @@ public class User extends Base {
     @JoinColumn(name = "rol_fk")
     private Rol rol;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Address> addresses;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Order> orders;
 }

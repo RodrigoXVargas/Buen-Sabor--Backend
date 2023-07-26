@@ -7,6 +7,7 @@ import lombok.Data;
 @Builder
 public class LocationDto {
 
+    private Long id;
     private String location;
 
 

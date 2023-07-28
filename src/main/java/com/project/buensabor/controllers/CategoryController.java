@@ -20,7 +20,7 @@ import java.util.Optional;
 
 @RestController
 @Slf4j
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*",allowedHeaders = "*")
 @RequestMapping("/api/categories")
 public class CategoryController extends BaseControllerImpl<Category, CategoryServiceImpl> {
 /*

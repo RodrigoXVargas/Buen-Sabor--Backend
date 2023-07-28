@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Slf4j
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*",allowedHeaders = "*")
 @RequestMapping(path = "/api/products")
 public class ProductController extends BaseControllerImpl<Product, ProductServiceImpl> {
 }

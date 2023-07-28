@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Slf4j
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*",allowedHeaders = "*")
 @RequestMapping(path = "/api/ingredients")
 public class IngredientController extends BaseControllerImpl<Ingredient, IngredientServiceImpl> {
 }

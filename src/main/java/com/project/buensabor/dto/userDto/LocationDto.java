@@ -1,15 +1,13 @@
 package com.project.buensabor.dto.userDto;
 
-import lombok.Builder;
-import lombok.Data;
+import com.project.buensabor.dto.BaseDto;
+import lombok.*;
 
-@Data
-@Builder
-public class LocationDto {
+@Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class LocationDto extends BaseDto {
 
-    private Long id;
     private String location;
-
-
 
 }

@@ -1,11 +1,20 @@
 package com.project.buensabor.dto.orderDto;
 
+import com.project.buensabor.dto.BaseDto;
 import com.project.buensabor.entities.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.Instant;
 import java.util.List;
 
-public class OrderDto {
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class OrderDto extends BaseDto {
 
     private Instant date;
 

@@ -1,4 +1,4 @@
-package com.project.buensabor.dto.productDto;
+package com.project.buensabor.dto.orderDto;
 
 import com.project.buensabor.dto.BaseDto;
 import lombok.*;
@@ -7,10 +7,8 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class MeasureDto extends BaseDto {
+public class StatusOrderDto extends BaseDto {
 
-
-    private String measure;
-
+    private String status;
 
 }

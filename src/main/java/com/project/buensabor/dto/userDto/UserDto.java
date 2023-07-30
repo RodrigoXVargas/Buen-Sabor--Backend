@@ -1,20 +1,21 @@
 package com.project.buensabor.dto.userDto;
 
+import com.project.buensabor.dto.BaseDto;
 import com.project.buensabor.entities.Address;
 import com.project.buensabor.entities.Order;
 import com.project.buensabor.entities.Rol;
 import com.project.buensabor.enums.StatusUser;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.util.List;
 
-@Data
-@Builder
-public class UserDto {
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class UserDto extends BaseDto {
 
-    private Long id;
     private String firstName;
     private String lastName;
     private Long telephone;

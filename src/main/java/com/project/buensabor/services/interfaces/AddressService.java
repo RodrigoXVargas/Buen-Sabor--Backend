@@ -1,7 +1,7 @@
 package com.project.buensabor.services.interfaces;
 
-import com.project.buensabor.entities.Address;
-import com.project.buensabor.services.Base.BaseServices;
+import com.project.buensabor.dto.userDto.AddressDto;
+import com.project.buensabor.services.Base.BaseServicesDTO;
 
-public interface AddressService extends BaseServices<Address, Long> {
+public interface AddressService extends BaseServicesDTO<AddressDto, Long> {
 }

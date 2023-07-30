@@ -1,7 +1,7 @@
 package com.project.buensabor.services.interfaces;
 
-import com.project.buensabor.entities.Paymode;
-import com.project.buensabor.services.Base.BaseServices;
+import com.project.buensabor.dto.orderDto.PaymodeDto;
+import com.project.buensabor.services.Base.BaseServicesDTO;
 
-public interface PaymodeService extends BaseServices<Paymode, Long> {
+public interface PaymodeService extends BaseServicesDTO<PaymodeDto, Long> {
 }

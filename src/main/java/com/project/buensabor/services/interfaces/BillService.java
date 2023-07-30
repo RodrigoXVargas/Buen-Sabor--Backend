@@ -1,7 +1,7 @@
 package com.project.buensabor.services.interfaces;
 
-import com.project.buensabor.entities.Bill;
-import com.project.buensabor.services.Base.BaseServices;
+import com.project.buensabor.dto.orderDto.BillDto;
+import com.project.buensabor.services.Base.BaseServicesDTO;
 
-public interface BillService extends BaseServices<Bill, Long> {
+public interface BillService extends BaseServicesDTO<BillDto, Long> {
 }

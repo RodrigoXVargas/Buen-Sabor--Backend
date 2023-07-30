@@ -1,7 +1,7 @@
 package com.project.buensabor.services.interfaces;
 
-import com.project.buensabor.entities.ProductIngredient;
-import com.project.buensabor.services.Base.BaseServices;
+import com.project.buensabor.dto.productDto.ProductIngredientsDto;
+import com.project.buensabor.services.Base.BaseServicesDTO;
 
-public interface ProductIngredientService extends BaseServices<ProductIngredient, Long> {
+public interface ProductIngredientService extends BaseServicesDTO<ProductIngredientsDto, Long> {
 }

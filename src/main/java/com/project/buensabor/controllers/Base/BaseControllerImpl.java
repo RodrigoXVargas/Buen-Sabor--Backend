@@ -1,14 +1,16 @@
 package com.project.buensabor.controllers.Base;
 
+import com.project.buensabor.dto.BaseDto;
 import com.project.buensabor.entities.Base.Base;
-import com.project.buensabor.services.Base.BaseServicesImpl;
+import com.project.buensabor.entities.ModelMappers.ModelMapperEntity;
+import com.project.buensabor.services.Base.BaseServicesDTOImpl;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-public abstract class BaseControllerImpl <E extends Base, S extends BaseServicesImpl<E, Long>> implements BaseController<E, Long> {
+public abstract class BaseControllerImpl <E extends Base, F extends BaseDto, S extends BaseServicesDTOImpl> implements BaseController<F, Long> {
 
     @Autowired
     private S servicio;
@@ -22,14 +24,6 @@ public abstract class BaseControllerImpl <E extends Base, S extends BaseServices
         }
     }
 
-    @GetMapping("/getAll/paged")
-    public ResponseEntity<?> getAll(Pageable pageable){
-        try{
-            return ResponseEntity.status(HttpStatus.OK).body(servicio.findAll(pageable));
-        }catch(Exception e){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Error. Por favor intente más tarde.\"}");
-        }
-    }
 
     @GetMapping("/get/{id}")
     public ResponseEntity<?> getOne(@PathVariable Long id){
@@ -41,7 +35,7 @@ public abstract class BaseControllerImpl <E extends Base, S extends BaseServices
     }
 
     @PostMapping("/save")
-    public ResponseEntity<?> saveOne(@RequestBody E entity){
+    public ResponseEntity<?> saveOne(@RequestBody F entity){
         try {
             return ResponseEntity.status(HttpStatus.OK).body(servicio.saveOne(entity));
         }catch (Exception e){
@@ -50,7 +44,7 @@ public abstract class BaseControllerImpl <E extends Base, S extends BaseServices
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateOne(@PathVariable Long id, @RequestBody E entity){
+    public ResponseEntity<?> updateOne(@PathVariable Long id, @RequestBody F entity){
         try {
             return ResponseEntity.status(HttpStatus.OK).body(servicio.updateOne(entity, id));
         }catch (Exception e){

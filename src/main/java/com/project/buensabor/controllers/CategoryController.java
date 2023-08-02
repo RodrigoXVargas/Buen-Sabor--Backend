@@ -22,22 +22,6 @@ import java.util.Optional;
 @Slf4j
 @CrossOrigin(origins = "*",allowedHeaders = "*")
 @RequestMapping("/api/categories")
-public class CategoryController extends BaseControllerImpl<Category, CategoryServiceImpl> {
-/*
-    @Autowired
-    private CategoryService categoryService;
+public class CategoryController extends BaseControllerImpl<Category, CategoryDto, CategoryServiceImpl> {
 
-    @PreAuthorize("hasAnyRole('admin', 'superAdmin')")
-    @GetMapping(value = "/{name}")
-    public Category getByName(String name){
-        Category category = null;
-        try{
-            if(categoryService.existByName(name)){
-                Optional<Category> optionalCategory = categoryService.findByName(name);
-            }
-        }catch (Exception e){
-            log.info(e.getMessage(), e);
-        }
-        return category;
-    }*/
 }

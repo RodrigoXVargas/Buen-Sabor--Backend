@@ -1,6 +1,7 @@
 package com.project.buensabor.controllers;
 
 import com.project.buensabor.controllers.Base.BaseControllerImpl;
+import com.project.buensabor.dto.userDto.UserDto;
 import com.project.buensabor.entities.User;
 import com.project.buensabor.services.UserServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -12,5 +13,5 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @CrossOrigin(origins = "*",allowedHeaders = "*")
 @RequestMapping(path = "/api/users")
-public class UserController extends BaseControllerImpl<User, UserServiceImpl> {
+public class UserController extends BaseControllerImpl<User, UserDto, UserServiceImpl> {
 }

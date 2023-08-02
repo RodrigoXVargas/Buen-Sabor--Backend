@@ -1,6 +1,7 @@
 package com.project.buensabor.controllers;
 
 import com.project.buensabor.controllers.Base.BaseControllerImpl;
+import com.project.buensabor.dto.orderDto.BillDto;
 import com.project.buensabor.entities.Bill;
 import com.project.buensabor.services.BillServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -12,5 +13,5 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @CrossOrigin(origins = "*",allowedHeaders = "*")
 @RequestMapping(path = "/api/bills")
-public class BillController extends BaseControllerImpl<Bill, BillServiceImpl> {
+public class BillController extends BaseControllerImpl<Bill, BillDto, BillServiceImpl> {
 }

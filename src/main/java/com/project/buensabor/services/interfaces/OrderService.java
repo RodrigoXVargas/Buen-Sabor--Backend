@@ -1,7 +1,7 @@
 package com.project.buensabor.services.interfaces;
 
-import com.project.buensabor.entities.Order;
-import com.project.buensabor.services.Base.BaseServices;
+import com.project.buensabor.dto.orderDto.OrderDto;
+import com.project.buensabor.services.Base.BaseServicesDTO;
 
-public interface OrderService extends BaseServices<Order, Long> {
+public interface OrderService extends BaseServicesDTO<OrderDto, Long> {
 }

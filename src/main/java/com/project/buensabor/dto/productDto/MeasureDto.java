@@ -1,11 +1,13 @@
 package com.project.buensabor.dto.productDto;
 
-import lombok.Builder;
-import lombok.Data;
+import com.project.buensabor.dto.BaseDto;
+import lombok.*;
 
-@Data
-@Builder
-public class MeasureDto {
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class MeasureDto extends BaseDto {
 
 
     private String measure;

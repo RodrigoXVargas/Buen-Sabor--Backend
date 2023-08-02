@@ -1,82 +1,81 @@
 package com.project.buensabor.services.Base;
 
+import com.project.buensabor.dto.BaseDto;
+import com.project.buensabor.entities.Address;
 import com.project.buensabor.entities.Base.Base;
+import com.project.buensabor.entities.ModelMappers.ModelMapperEntity;
 import com.project.buensabor.repositories.Base.BaseRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Slf4j
-public abstract class BaseServicesImpl<E extends Base, ID extends Serializable> implements BaseServices<E, ID> {
+public abstract class BaseServicesDTOImpl <E extends Base, F extends BaseDto, M extends ModelMapperEntity<E, F>, ID extends Serializable> implements BaseServicesDTO<F, ID>{
 
     protected BaseRepository<E, ID> baseRepository;
+    protected ModelMapperEntity<E, F> mapper;
 
-    public BaseServicesImpl(BaseRepository<E, ID> baseRepository) {
+    public BaseServicesDTOImpl(BaseRepository<E, ID> baseRepository, M mapper ) {
         this.baseRepository = baseRepository;
+        this.mapper = mapper;
     }
+
+
 
     @Override
     @Transactional //Indica que el método es una transacción.
-    public List<E> findAll() throws Exception {
-        try {
+    public List<F> findAll() throws Exception {
+        try{
             List<E> entities = baseRepository.findAll();
-            return entities;
-        } catch (Exception e) {
+            List<F> entitiesDtos = new ArrayList<>();
+            for (E entity: entities) {
+                entitiesDtos.add(mapper.convertToDto(entity));
+            }
+            return entitiesDtos;
+        }catch (Exception e){
             log.info(e.getMessage());
             throw new Exception(e.getMessage());
         }
     }
 
-    @Override
-    @Transactional
-    public Page<E> findAll(Pageable pageable) throws Exception {
-        try {
-            Page<E> entities = baseRepository.findAll(pageable);
-            return entities;
-        } catch (Exception e) {
-            log.info(e.getMessage());
-            throw new Exception(e.getMessage());
-        }
-    }
 
     @Override
     @Transactional
-    public E findById(ID id) throws Exception {
-        try {
-            Optional<E> entityOptional = baseRepository.findById(
-                    id); //Optional porque no se sabe si se encontrará un registro que tenga el ID especificado como PrimaryKey.
-            return entityOptional.get();
-        } catch (Exception e) {
-            log.info(e.getMessage());
-            throw new Exception(e.getMessage());
-        }
-    }
-
-    @Override
-    @Transactional
-    public E saveOne(E entity) throws Exception {
-        try {
-            entity = baseRepository.save(entity);
-            return entity;
-        } catch (Exception e) {
-            log.info(e.getMessage());
-            throw new Exception(e.getMessage());
-        }
-    }
-
-    @Override
-    @Transactional
-    public E updateOne(E entity, ID id) throws Exception {
+    public F findById(ID id) throws Exception {
         try {
             Optional<E> entityOptional = baseRepository.findById(id);
-            E entityUpdate = entityOptional.get();
-            entityUpdate = baseRepository.save(entity);
-            return entityUpdate;
+            return mapper.convertToDto(entityOptional.get());
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    @Override
+    @Transactional
+    public F saveOne(F entityDto) throws Exception {
+        try {
+            E entity = mapper.convertToEntity(entityDto);
+            entity = baseRepository.save(entity);
+            return mapper.convertToDto(entity);
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    @Override
+    @Transactional
+    public F updateOne(F entity, ID id) throws Exception {
+        try {
+            Optional<E> locationOptional = baseRepository.findById(id);
+            E entityUpdate = locationOptional.get();
+            entityUpdate = baseRepository.save(mapper.convertToEntity(entity));
+            return mapper.convertToDto(entityUpdate);
         } catch (Exception e) {
             log.info(e.getMessage());
             throw new Exception(e.getMessage());
@@ -100,4 +99,3 @@ public abstract class BaseServicesImpl<E extends Base, ID extends Serializable> 
     }
 
 }
-

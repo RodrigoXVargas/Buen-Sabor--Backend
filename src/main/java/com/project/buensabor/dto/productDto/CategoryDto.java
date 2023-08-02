@@ -1,16 +1,18 @@
 package com.project.buensabor.dto.productDto;
 
+import com.project.buensabor.dto.BaseDto;
 import com.project.buensabor.entities.Category;
 import com.project.buensabor.entities.Product;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.util.List;
 
-@Data
-@Builder
-public class CategoryDto {
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class CategoryDto extends BaseDto {
 
     private String name;
 

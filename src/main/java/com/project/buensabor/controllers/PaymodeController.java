@@ -1,6 +1,7 @@
 package com.project.buensabor.controllers;
 
 import com.project.buensabor.controllers.Base.BaseControllerImpl;
+import com.project.buensabor.dto.orderDto.PaymodeDto;
 import com.project.buensabor.entities.Paymode;
 import com.project.buensabor.entities.StatusOrder;
 import com.project.buensabor.services.PaymodeServiceImpl;
@@ -14,5 +15,5 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 @CrossOrigin(origins = "*",allowedHeaders = "*")
 @RequestMapping(path = "/api/paymodes")
-public class PaymodeController extends BaseControllerImpl<Paymode, PaymodeServiceImpl> {
+public class PaymodeController extends BaseControllerImpl<Paymode, PaymodeDto, PaymodeServiceImpl> {
 }

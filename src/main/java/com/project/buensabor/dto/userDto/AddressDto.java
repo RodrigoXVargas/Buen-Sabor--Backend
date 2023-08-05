@@ -1,17 +1,15 @@
 package com.project.buensabor.dto.userDto;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.project.buensabor.dto.BaseDto;
-import com.project.buensabor.entities.Base.Base;
 import com.project.buensabor.entities.Location;
 import com.project.buensabor.entities.User;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Getter @Setter
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class AddressDto extends BaseDto {

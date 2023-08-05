@@ -1,20 +1,21 @@
-package com.project.buensabor.dto.orderDto;
+package com.project.buensabor.dto.productDto.ProductIngredientDTOs;
 
 import com.project.buensabor.dto.BaseDto;
-import com.project.buensabor.entities.Order;
+import com.project.buensabor.entities.Ingredient;
 import com.project.buensabor.entities.Product;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
 @Setter
-@NoArgsConstructor
+@Getter
 @AllArgsConstructor
-public class OrderProductsDto extends BaseDto {
-
-    private Order order;
+@NoArgsConstructor
+public class ProductIngredientDto extends BaseDto {
     private Product product;
+
+    private Ingredient ingredient;
+
     private Long cant;
 }

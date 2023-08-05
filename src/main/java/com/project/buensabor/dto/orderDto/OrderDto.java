@@ -1,14 +1,14 @@
 package com.project.buensabor.dto.orderDto;
 
 import com.project.buensabor.dto.BaseDto;
-import com.project.buensabor.entities.*;
+import com.project.buensabor.entities.Address;
+import com.project.buensabor.entities.Paymode;
+import com.project.buensabor.entities.StatusOrder;
+import com.project.buensabor.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.Instant;
-import java.util.List;
 
 @Getter
 @Setter
@@ -16,18 +16,18 @@ import java.util.List;
 @AllArgsConstructor
 public class OrderDto extends BaseDto {
 
-    private Instant date;
-
-    private User user;
-
-    private Address address;
+    private String date;
 
     private String withdrawalMode;
 
-    private Bill bill;
+    private Double totalPrice;
+
+    private Paymode paymode;
+
+    private Address address;
+
+    private User user;
 
     private StatusOrder statusOrder;
 
-    private List<Product> products;
-//    private Payment formPayment;
 }

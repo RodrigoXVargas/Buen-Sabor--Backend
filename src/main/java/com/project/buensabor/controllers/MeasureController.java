@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Slf4j
-@CrossOrigin(origins = "*",allowedHeaders = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping(path = "/api/measures")
 public class MeasureController extends BaseControllerImpl<Measure, MeasureDto, MeasureServiceImpl> {
 }

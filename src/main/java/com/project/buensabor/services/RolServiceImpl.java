@@ -1,7 +1,7 @@
 package com.project.buensabor.services;
 
+import com.project.buensabor.ModelMappers.RolMapper;
 import com.project.buensabor.dto.userDto.RolDto;
-import com.project.buensabor.entities.ModelMappers.RolMapper;
 import com.project.buensabor.entities.Rol;
 import com.project.buensabor.repositories.Base.BaseRepository;
 import com.project.buensabor.services.Base.BaseServicesDTOImpl;

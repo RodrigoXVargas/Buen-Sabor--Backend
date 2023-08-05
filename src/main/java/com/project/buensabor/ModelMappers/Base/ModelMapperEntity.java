@@ -1,16 +1,14 @@
-package com.project.buensabor.entities.ModelMappers;
+package com.project.buensabor.ModelMappers.Base;
 
 import com.project.buensabor.dto.BaseDto;
-import com.project.buensabor.dto.userDto.LocationDto;
 import com.project.buensabor.entities.Base.Base;
-import com.project.buensabor.entities.Location;
 import org.modelmapper.ModelMapper;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 
-public class ModelMapperEntity<E extends Base, F extends BaseDto>{
+public class ModelMapperEntity<E extends Base, F extends BaseDto> {
 
     private ModelMapper modelMapper;
 

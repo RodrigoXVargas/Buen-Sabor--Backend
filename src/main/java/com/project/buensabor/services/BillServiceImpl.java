@@ -1,8 +1,8 @@
 package com.project.buensabor.services;
 
+import com.project.buensabor.ModelMappers.BillMapper;
 import com.project.buensabor.dto.orderDto.BillDto;
 import com.project.buensabor.entities.Bill;
-import com.project.buensabor.entities.ModelMappers.BillMapper;
 import com.project.buensabor.repositories.Base.BaseRepository;
 import com.project.buensabor.services.Base.BaseServicesDTOImpl;
 import com.project.buensabor.services.interfaces.BillService;

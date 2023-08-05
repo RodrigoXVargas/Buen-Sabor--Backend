@@ -1,6 +1,5 @@
 package com.project.buensabor.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.project.buensabor.entities.Base.Base;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -14,7 +13,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductIngredient  extends Base {
+public class ProductIngredient extends Base {
 
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "product_fk")

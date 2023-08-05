@@ -2,11 +2,10 @@ package com.project.buensabor.dto.productDto;
 
 import com.project.buensabor.dto.BaseDto;
 import com.project.buensabor.entities.Category;
-import com.project.buensabor.entities.Product;
-import jakarta.persistence.*;
-import lombok.*;
-
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -16,6 +15,6 @@ public class CategoryDto extends BaseDto {
 
     private String name;
 
-    private Category subcategory_to;
+    private Category parentCategory;
 
 }

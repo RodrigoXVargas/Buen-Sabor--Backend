@@ -2,25 +2,16 @@ package com.project.buensabor.controllers;
 
 import com.project.buensabor.controllers.Base.BaseControllerImpl;
 import com.project.buensabor.dto.productDto.CategoryDto;
-import com.project.buensabor.entities.Address;
 import com.project.buensabor.entities.Category;
-import com.project.buensabor.services.AddressServiceImpl;
 import com.project.buensabor.services.CategoryServiceImpl;
-import com.project.buensabor.services.interfaces.CategoryService;
-import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Slf4j
-@CrossOrigin(origins = "*",allowedHeaders = "*")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/api/categories")
 public class CategoryController extends BaseControllerImpl<Category, CategoryDto, CategoryServiceImpl> {
 

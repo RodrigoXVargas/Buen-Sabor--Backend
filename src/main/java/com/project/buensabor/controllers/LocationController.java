@@ -7,12 +7,11 @@ import com.project.buensabor.services.LocationServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Slf4j
-@CrossOrigin(origins = "*",allowedHeaders = "*")
-@RequestMapping(path = "/api/locations", method = {RequestMethod.GET, RequestMethod.HEAD, RequestMethod.PATCH, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE})
+@CrossOrigin(origins = "*", allowedHeaders = "*")
+@RequestMapping(path = "/api/locations")
 public class LocationController extends BaseControllerImpl<Location, LocationDto, LocationServiceImpl> {
 }

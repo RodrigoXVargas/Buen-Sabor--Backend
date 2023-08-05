@@ -1,7 +1,7 @@
 package com.project.buensabor.services;
 
+import com.project.buensabor.ModelMappers.StatusOrderMapper;
 import com.project.buensabor.dto.orderDto.StatusOrderDto;
-import com.project.buensabor.entities.ModelMappers.StatusOrderMapper;
 import com.project.buensabor.entities.StatusOrder;
 import com.project.buensabor.repositories.Base.BaseRepository;
 import com.project.buensabor.services.Base.BaseServicesDTOImpl;

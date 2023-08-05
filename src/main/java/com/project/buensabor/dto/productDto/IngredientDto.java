@@ -2,11 +2,10 @@ package com.project.buensabor.dto.productDto;
 
 import com.project.buensabor.dto.BaseDto;
 import com.project.buensabor.entities.Measure;
-import com.project.buensabor.entities.Product;
-import jakarta.persistence.*;
-import lombok.*;
-
-import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -18,9 +17,8 @@ public class IngredientDto extends BaseDto {
 
     private Long stock;
 
-    private Long cost;
+    private Double cost;
 
-    private Measure measure_id;
+    private Measure measure;
 
-    private List<Product> products;
 }

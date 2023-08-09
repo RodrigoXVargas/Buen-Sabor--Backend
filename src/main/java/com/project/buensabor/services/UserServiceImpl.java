@@ -45,15 +45,7 @@ public class UserServiceImpl extends BaseServicesDTOImpl<User, UserDto, UserMapp
     public List<UserDto> findAll() throws Exception {
         try {
             List<User> entities = userRepository.findAll();
-            List<UserDto> entitiesDtos = new ArrayList<>();
-            for (User entity : entities) {
-                entitiesDtos.add(mapper.convertToDto(entity));
-            }
-            for (UserDto entityDto : entitiesDtos){
-                entityDto.setOrders(orderService.ordersByUserId(entityDto.getId()));
-                entityDto.setAddresses(addressService.addressesByUserId(entityDto.getId()));
-            }
-            return entitiesDtos;
+            return getAddressesAndOrders(entities);
         } catch (Exception e) {
             log.info(e.getMessage());
             throw new Exception(e.getMessage());
@@ -74,5 +66,29 @@ public class UserServiceImpl extends BaseServicesDTOImpl<User, UserDto, UserMapp
             log.info(e.getMessage());
             throw new Exception(e.getMessage());
         }
+    }
+
+    @Override
+    public List<UserDto> findEmployees() throws Exception {
+        try {
+            List<User> employees = userRepository.findAllEmployees();
+            return getAddressesAndOrders(employees);
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    public List<UserDto> getAddressesAndOrders(List<User> entities) throws Exception {
+        List<UserDto> entitiesDtos = new ArrayList<>();
+        for (User entity : entities) {
+            entitiesDtos.add(mapper.convertToDto(entity));
+        }
+        for (UserDto entityDto : entitiesDtos){
+            entityDto.setOrders(orderService.ordersByUserId(entityDto.getId()));
+            entityDto.setAddresses(addressService.addressesByUserId(entityDto.getId()));
+        }
+
+        return entitiesDtos;
     }
 }

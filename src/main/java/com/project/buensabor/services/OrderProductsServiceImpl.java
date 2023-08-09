@@ -1,7 +1,7 @@
 package com.project.buensabor.services;
 
 import com.project.buensabor.ModelMappers.OrderProductsMapper;
-import com.project.buensabor.dto.orderDto.OrderProductsDto;
+import com.project.buensabor.dto.orderDto.OrderProductsDtos.OrderProductsDto;
 import com.project.buensabor.entities.OrderProducts;
 import com.project.buensabor.repositories.Base.BaseRepository;
 import com.project.buensabor.services.Base.BaseServicesDTOImpl;

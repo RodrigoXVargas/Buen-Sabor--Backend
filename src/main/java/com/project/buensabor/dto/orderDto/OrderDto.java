@@ -1,6 +1,7 @@
 package com.project.buensabor.dto.orderDto;
 
 import com.project.buensabor.dto.BaseDto;
+import com.project.buensabor.dto.orderDto.OrderProductsDtos.OProductsWithoutOrderDto;
 import com.project.buensabor.entities.Address;
 import com.project.buensabor.entities.Paymode;
 import com.project.buensabor.entities.StatusOrder;
@@ -9,6 +10,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -29,5 +32,7 @@ public class OrderDto extends BaseDto {
     private User user;
 
     private StatusOrder statusOrder;
+
+    private List<OProductsWithoutOrderDto> products;
 
 }

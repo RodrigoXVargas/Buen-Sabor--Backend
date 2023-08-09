@@ -1,7 +1,7 @@
 package com.project.buensabor.controllers;
 
 import com.project.buensabor.controllers.Base.BaseControllerImpl;
-import com.project.buensabor.dto.productDto.ProductIngredientDTOs.ProductIngredientDto;
+import com.project.buensabor.dto.productDto.ProductIngredientDTOs.PIngredientDto;
 import com.project.buensabor.entities.ProductIngredient;
 import com.project.buensabor.services.ProductIngredientServiceImpl;
 import com.project.buensabor.services.interfaces.ProductIngredientService;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping(path = "/api/productingredients")
-public class ProductIngredientController extends BaseControllerImpl<ProductIngredient, ProductIngredientDto, ProductIngredientServiceImpl> {
+public class ProductIngredientController extends BaseControllerImpl<ProductIngredient, PIngredientDto, ProductIngredientServiceImpl> {
 
     @Autowired
     private ProductIngredientService ingredientService;

@@ -2,7 +2,7 @@ package com.project.buensabor.services;
 
 import com.project.buensabor.ModelMappers.ProductIngredientsMapper;
 import com.project.buensabor.dto.productDto.ProductIngredientDTOs.PIngredientsCantDto;
-import com.project.buensabor.dto.productDto.ProductIngredientDTOs.ProductIngredientDto;
+import com.project.buensabor.dto.productDto.ProductIngredientDTOs.PIngredientDto;
 import com.project.buensabor.entities.ProductIngredient;
 import com.project.buensabor.repositories.Base.BaseRepository;
 import com.project.buensabor.repositories.ProductIngredientRepository;
@@ -19,7 +19,7 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class ProductIngredientServiceImpl extends BaseServicesDTOImpl<ProductIngredient, ProductIngredientDto, ProductIngredientsMapper, Long> implements ProductIngredientService {
+public class ProductIngredientServiceImpl extends BaseServicesDTOImpl<ProductIngredient, PIngredientDto, ProductIngredientsMapper, Long> implements ProductIngredientService {
 
 
     public ProductIngredientServiceImpl(BaseRepository<ProductIngredient, Long> baseRepository, ProductIngredientsMapper mapper) {

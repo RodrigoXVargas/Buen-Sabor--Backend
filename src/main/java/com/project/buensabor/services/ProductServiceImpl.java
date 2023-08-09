@@ -3,12 +3,10 @@ package com.project.buensabor.services;
 import com.project.buensabor.ModelMappers.ProductMapper;
 import com.project.buensabor.dto.productDto.ProductDto;
 import com.project.buensabor.dto.productDto.ProductIngredientDTOs.PIngredientsCantDto;
-import com.project.buensabor.dto.productDto.ProductIngredientDTOs.ProductIngredientDto;
 import com.project.buensabor.entities.Ingredient;
 import com.project.buensabor.entities.Product;
 import com.project.buensabor.entities.ProductIngredient;
 import com.project.buensabor.repositories.Base.BaseRepository;
-import com.project.buensabor.repositories.IngredientRepository;
 import com.project.buensabor.repositories.ProductIngredientRepository;
 import com.project.buensabor.repositories.ProductRepository;
 import com.project.buensabor.services.Base.BaseServicesDTOImpl;
@@ -97,8 +95,7 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
     @Transactional
     public ProductDto saveOne(ProductDto entityDto) throws Exception {
         try {
-            Product product = new Product();
-            modelMapper.map(entityDto, product);
+            Product product = mapper.convertToEntity(entityDto);
             product = productRepository.save(product);
 
             List<PIngredientsCantDto> productIngredientList = new ArrayList<>();

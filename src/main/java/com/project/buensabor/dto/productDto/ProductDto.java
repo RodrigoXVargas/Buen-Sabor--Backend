@@ -2,7 +2,6 @@ package com.project.buensabor.dto.productDto;
 
 import com.project.buensabor.dto.BaseDto;
 import com.project.buensabor.dto.productDto.ProductIngredientDTOs.PIngredientsCantDto;
-import com.project.buensabor.dto.productDto.ProductIngredientDTOs.ProductIngredientDto;
 import com.project.buensabor.entities.Category;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

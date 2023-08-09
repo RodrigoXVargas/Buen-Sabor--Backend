@@ -70,8 +70,8 @@ public abstract class BaseServicesDTOImpl<E extends Base, F extends BaseDto, M e
     @Transactional
     public F updateOne(F entity, ID id) throws Exception {
         try {
-            Optional<E> locationOptional = baseRepository.findById(id);
-            E entityUpdate = locationOptional.get();
+            Optional<E> entityOptional = baseRepository.findById(id);
+            E entityUpdate = entityOptional.get();
             entityUpdate = baseRepository.save(mapper.convertToEntity(entity));
             return mapper.convertToDto(entityUpdate);
         } catch (Exception e) {

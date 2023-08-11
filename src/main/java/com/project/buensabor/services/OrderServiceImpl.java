@@ -120,12 +120,16 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
                             oProductsWithoutOrderDto.getCant()
                     );
                     orderProducts = orderProductsRepository.save(orderProducts);
-                    withoutOrderDtoList.add(modelMapper.map(orderProducts, OProductsWithoutOrderDto.class));
+                    oProductsWithoutOrderDto = modelMapper.map(orderProducts, OProductsWithoutOrderDto.class);
+                    withoutOrderDtoList.add(oProductsWithoutOrderDto);
+                    System.out.println(oProductsWithoutOrderDto.getCant());
                 }
             }
+            
             entityDto = mapper.convertToDto(entity);
             entityDto.setProducts(withoutOrderDtoList);
-            return mapper.convertToDto(entity);
+
+            return entityDto;
         } catch (Exception e) {
             log.info(e.getMessage());
             throw new Exception(e.getMessage());

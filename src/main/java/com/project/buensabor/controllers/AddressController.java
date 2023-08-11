@@ -1,7 +1,7 @@
 package com.project.buensabor.controllers;
 
 import com.project.buensabor.controllers.Base.BaseControllerImpl;
-import com.project.buensabor.dto.userDto.AddressDto;
+import com.project.buensabor.dto.userDto.AddressDtos.AddressDto;
 import com.project.buensabor.entities.Address;
 import com.project.buensabor.services.AddressServiceImpl;
 import lombok.extern.slf4j.Slf4j;

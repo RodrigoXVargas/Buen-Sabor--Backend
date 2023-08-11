@@ -28,9 +28,8 @@ public class Order extends Base {
     @JoinColumn(name = "paymode_fk")
     private Paymode paymode;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "address_fk")
-    private Address address;
+    @Column
+    private String address;
 
 
     @ManyToOne(cascade = CascadeType.MERGE)

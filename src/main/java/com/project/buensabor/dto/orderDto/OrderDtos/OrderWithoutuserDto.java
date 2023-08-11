@@ -1,11 +1,11 @@
-package com.project.buensabor.dto.orderDto;
+package com.project.buensabor.dto.orderDto.OrderDtos;
 
 import com.project.buensabor.dto.BaseDto;
 import com.project.buensabor.dto.orderDto.OrderProductsDtos.OProductsWithoutOrderDto;
-import com.project.buensabor.entities.Address;
+import com.project.buensabor.dto.userDto.AddressDtos.AddressWithoutuserDto;
+import com.project.buensabor.dto.userDto.UserDto;
 import com.project.buensabor.entities.Paymode;
 import com.project.buensabor.entities.StatusOrder;
-import com.project.buensabor.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,7 +17,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderDto extends BaseDto {
+public class OrderWithoutuserDto extends BaseDto {
 
     private String date;
 
@@ -27,9 +27,7 @@ public class OrderDto extends BaseDto {
 
     private Paymode paymode;
 
-    private Address address;
-
-    private User user;
+    private String address;
 
     private StatusOrder statusOrder;
 

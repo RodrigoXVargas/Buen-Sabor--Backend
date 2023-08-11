@@ -1,9 +1,9 @@
 package com.project.buensabor.dto.userDto;
 
 import com.project.buensabor.dto.BaseDto;
-import com.project.buensabor.dto.orderDto.OrderDto;
-import com.project.buensabor.entities.Address;
-import com.project.buensabor.entities.Order;
+import com.project.buensabor.dto.orderDto.OrderDtos.OrderDto;
+import com.project.buensabor.dto.orderDto.OrderDtos.OrderWithoutuserDto;
+import com.project.buensabor.dto.userDto.AddressDtos.AddressWithoutuserDto;
 import com.project.buensabor.entities.Rol;
 import com.project.buensabor.enums.StatusUser;
 import lombok.AllArgsConstructor;
@@ -33,7 +33,7 @@ public class UserDto extends BaseDto {
 
     private Rol rol;
 
-    private List<AddressDto> addresses;
+    private List<AddressWithoutuserDto> addresses;
 
-    private List<OrderDto> orders;
+    private List<OrderWithoutuserDto> orders;
 }

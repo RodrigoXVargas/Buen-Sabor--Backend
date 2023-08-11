@@ -1,13 +1,10 @@
 package com.project.buensabor.services;
 
 import com.project.buensabor.ModelMappers.OrderMapper;
-import com.project.buensabor.dto.orderDto.OrderDto;
+import com.project.buensabor.dto.orderDto.OrderDtos.OrderDto;
+import com.project.buensabor.dto.orderDto.OrderDtos.OrderWithoutuserDto;
 import com.project.buensabor.dto.orderDto.OrderProductsDtos.OProductsWithoutOrderDto;
-import com.project.buensabor.dto.userDto.AddressDto;
-import com.project.buensabor.entities.Address;
-import com.project.buensabor.entities.Order;
-import com.project.buensabor.entities.OrderProducts;
-import com.project.buensabor.entities.Product;
+import com.project.buensabor.entities.*;
 import com.project.buensabor.repositories.Base.BaseRepository;
 import com.project.buensabor.repositories.OrderProductsRepository;
 import com.project.buensabor.repositories.OrderRepository;
@@ -21,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -41,13 +39,13 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
     private ModelMapper modelMapper = new ModelMapper();
 
     @Override
-    public List<OrderDto> ordersByUserId(Long id) throws Exception {
+    public List<OrderWithoutuserDto> ordersByUserId(Long id) throws Exception {
         try {
             List<Order> entities = orderRepository.findOrdersByUserId(id);
-            List<OrderDto> entitiesDtos = new ArrayList<>();
+            List<OrderWithoutuserDto> entitiesDtos = new ArrayList<>();
             if (!entities.isEmpty()){
                 for (Order entity: entities) {
-                    entitiesDtos.add(mapper.convertToDto(entity));
+                    entitiesDtos.add(modelMapper.map(entity, OrderWithoutuserDto.class));
                 }
             }
             return entitiesDtos;
@@ -108,7 +106,8 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
     @Transactional
     public OrderDto saveOne(OrderDto entityDto) throws Exception {
         try {
-            Order entity = mapper.convertToEntity(entityDto);
+            Order entity = new Order();
+            modelMapper.map(entityDto, entity);
             entity = orderRepository.save(entity);
 
             List<OProductsWithoutOrderDto> withoutOrderDtoList = new ArrayList<>();
@@ -133,28 +132,79 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
         }
     }
 
-    /*
-
     @Override
     @Transactional
-    public F updateOne(F entity, ID id) throws Exception {
+    public OrderDto updateOne(OrderDto entityDto, Long id) throws Exception {
         try {
-            Optional<E> entityOptional = baseRepository.findById(id);
-            E entityUpdate = entityOptional.get();
-            entityUpdate = baseRepository.save(mapper.convertToEntity(entity));
-            return mapper.convertToDto(entityUpdate);
+            Optional<Order> entityOptional = orderRepository.findById(id);
+            Order entityUpdate = entityOptional.get();
+            modelMapper.map(entityDto, entityUpdate);
+            entityUpdate = orderRepository.save(entityUpdate);
+
+            List<OProductsWithoutOrderDto> withoutOrderDtoList = new ArrayList<>();
+
+            if(entityDto.getProducts().size() == 0){
+                List<OrderProducts> orderProductsList = orderProductsRepository.findOrderProductsByOrderId(entityDto.getId());
+                if (orderProductsList.size() != 0) {
+                    for (OrderProducts orderProducts: orderProductsList) {
+                        orderProductsRepository.deleteById(orderProducts.getId());
+                    }
+                }
+            } else {
+                List<OrderProducts> orderProductsList = orderProductsRepository.findOrderProductsByOrderId(id);
+                if (orderProductsList.size() != 0) {
+                    for (OrderProducts products: orderProductsList) {
+                        long idBuscado = 0;
+                        for (OProductsWithoutOrderDto oProductsWithoutOrderDto: entityDto.getProducts()) {
+                            if (Objects.nonNull(oProductsWithoutOrderDto.getId())){
+                                if (oProductsWithoutOrderDto.getId() == products.getId()){
+                                    idBuscado = oProductsWithoutOrderDto.getId();
+                                }
+                            }
+                        }
+                        if (idBuscado==0){
+                            orderProductsRepository.deleteById(products.getId());
+                        }
+                    }
+                }
+
+                for (OProductsWithoutOrderDto withoutOrderDto: entityDto.getProducts()) {
+                    OrderProducts orderProducts;
+                    if(Objects.isNull(withoutOrderDto.getId())){
+                        orderProducts = new OrderProducts();
+                    }else {
+                        Optional<OrderProducts> orderProductsOptional = orderProductsRepository.findById(withoutOrderDto.getId());
+                        orderProducts = orderProductsOptional.get();
+                    }
+                    orderProducts.setOrder(entityUpdate);
+                    orderProducts.setProduct(modelMapper.map(withoutOrderDto.getProduct(), Product.class));
+                    orderProducts.setCant(withoutOrderDto.getCant());
+                    orderProducts = orderProductsRepository.save(orderProducts);
+                    modelMapper.map(orderProducts, withoutOrderDto);
+                    withoutOrderDtoList.add(withoutOrderDto);
+                }
+            }
+            entityDto = mapper.convertToDto(entityUpdate);
+            entityDto.setProducts(withoutOrderDtoList);
+            return entityDto;
         } catch (Exception e) {
             log.info(e.getMessage());
             throw new Exception(e.getMessage());
         }
     }
 
+
     @Override
     @Transactional
-    public boolean deleteById(ID id) throws Exception {
+    public boolean deleteById(Long id) throws Exception {
         try {
-            if (baseRepository.existsById(id)) {
-                baseRepository.deleteById(id);
+            if (orderRepository.existsById(id)) {
+
+                List<OrderProducts> orderProductsList = orderProductsRepository.findOrderProductsByOrderId(id);
+                for (OrderProducts orderProducts: orderProductsList) {
+                    orderProductsRepository.deleteById(orderProducts.getId());
+                }
+                orderRepository.deleteById(id);
                 return true;
             } else {
                 throw new Exception();
@@ -164,5 +214,5 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
             throw new Exception(e.getMessage());
         }
     }
-*/
+
 }

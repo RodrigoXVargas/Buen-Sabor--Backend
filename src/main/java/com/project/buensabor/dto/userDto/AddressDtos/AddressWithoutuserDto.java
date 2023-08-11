@@ -1,6 +1,7 @@
-package com.project.buensabor.dto.userDto;
+package com.project.buensabor.dto.userDto.AddressDtos;
 
 import com.project.buensabor.dto.BaseDto;
+import com.project.buensabor.dto.userDto.LocationDto;
 import com.project.buensabor.entities.Location;
 import com.project.buensabor.entities.User;
 import lombok.AllArgsConstructor;
@@ -12,12 +13,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddressDto extends BaseDto {
+public class AddressWithoutuserDto extends BaseDto {
 
     private String street;
     private Integer number;
-    private User user;
-    private Location location;
+    private LocationDto location;
 
 
 }

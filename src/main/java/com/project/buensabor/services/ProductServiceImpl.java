@@ -95,7 +95,8 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
     @Transactional
     public ProductDto saveOne(ProductDto entityDto) throws Exception {
         try {
-            Product product = mapper.convertToEntity(entityDto);
+            Product product = new Product();
+            modelMapper.map(entityDto, product);
             product = productRepository.save(product);
 
             List<PIngredientsCantDto> productIngredientList = new ArrayList<>();

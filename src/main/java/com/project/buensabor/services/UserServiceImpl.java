@@ -5,8 +5,10 @@ import com.project.buensabor.dto.productDto.ProductDto;
 import com.project.buensabor.dto.productDto.ProductIngredientDTOs.PIngredientsCantDto;
 import com.project.buensabor.dto.userDto.AddressDtos.AddressDto;
 import com.project.buensabor.dto.userDto.AddressDtos.AddressWithoutuserDto;
+import com.project.buensabor.dto.userDto.RolDto;
 import com.project.buensabor.dto.userDto.UserDto;
 import com.project.buensabor.entities.*;
+import com.project.buensabor.enums.StatusUser;
 import com.project.buensabor.repositories.AddressRepository;
 import com.project.buensabor.repositories.Base.BaseRepository;
 import com.project.buensabor.repositories.OrderRepository;
@@ -77,11 +79,46 @@ public class UserServiceImpl extends BaseServicesDTOImpl<User, UserDto, UserMapp
     }
 
     @Override
+    @Transactional
     public List<UserDto> findEmployees() throws Exception {
         try {
             List<User> employees = userRepository.findAllEmployees();
             return getAddressesAndOrders(employees);
         } catch (Exception e) {
+            log.info(e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    @Override
+    @Transactional
+    public String changeRol(RolDto rol, Long id) throws Exception {
+        try{
+            Optional<User> userOptional = userRepository.findById(id);
+            User user = userOptional.get();
+            user.setRol(modelMapper.map(rol, Rol.class));
+            user = userRepository.save(user);
+            return "Se cambio el rol a "+ user.getRol().getRol();
+        }catch (Exception e){
+            log.info(e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    @Override
+    @Transactional
+    public String changeBlacklist(Long id) throws Exception {
+        try{
+            Optional<User> userOptional = userRepository.findById(id);
+            User user = userOptional.get();
+            if (user.getBlacklist() == StatusUser.Enabled) {
+                user.setBlacklist(StatusUser.Malicious);
+            } else {
+                user.setBlacklist(StatusUser.Enabled);
+            }
+            user = userRepository.save(user);
+            return "Se cambio el blacklist a "+ user.getBlacklist().name();
+        }catch (Exception e){
             log.info(e.getMessage());
             throw new Exception(e.getMessage());
         }
@@ -96,7 +133,6 @@ public class UserServiceImpl extends BaseServicesDTOImpl<User, UserDto, UserMapp
             entityDto.setOrders(orderService.ordersByUserId(entityDto.getId()));
             entityDto.setAddresses(addressService.addressesByUserId(entityDto.getId()));
         }
-
         return entitiesDtos;
     }
 

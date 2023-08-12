@@ -81,6 +81,21 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
         }
     }
 
+    @Override
+    public String changeActive(Long id) throws Exception {
+        try{
+            Optional<Product> optionalProduct = productRepository.findById(id);
+            Product product = optionalProduct.get();
+            product.setActive(!product.isActive());
+            product = productRepository.save(product);
+            return "Se cambio el estado a "+ product.isActive();
+        }catch (Exception e){
+            log.info(e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+    }
+
+
     private List<ProductDto> getProductDtos(List<Product> entities) throws Exception {
         List<ProductDto> entitiesDtos = new ArrayList<>();
         for (Product entity : entities) {

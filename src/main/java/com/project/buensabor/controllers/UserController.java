@@ -1,6 +1,7 @@
 package com.project.buensabor.controllers;
 
 import com.project.buensabor.controllers.Base.BaseControllerImpl;
+import com.project.buensabor.dto.userDto.RolDto;
 import com.project.buensabor.dto.userDto.UserDto;
 import com.project.buensabor.entities.User;
 import com.project.buensabor.services.UserServiceImpl;
@@ -10,10 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Slf4j
@@ -28,6 +26,24 @@ public class UserController extends BaseControllerImpl<User, UserDto, UserServic
     public ResponseEntity<?> getEmployees(){
         try {
             return ResponseEntity.status(HttpStatus.OK).body(userService.findEmployees());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Error. Por favor intente más tarde.\"}");
+        }
+    }
+
+    @GetMapping(value = "/changeBlacklist/{id}")
+    public ResponseEntity<?> changeBlacklistUser(@PathVariable Long id){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(userService.changeBlacklist(id));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Error. Por favor intente más tarde.\"}");
+        }
+    }
+
+    @PutMapping(value = "/changeRol/{id}")
+    public ResponseEntity<?> changeRolUser(@PathVariable Long id, @RequestBody RolDto rol){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(userService.changeRol(rol, id));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Error. Por favor intente más tarde.\"}");
         }

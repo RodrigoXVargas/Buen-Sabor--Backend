@@ -4,6 +4,7 @@ import com.project.buensabor.ModelMappers.OrderMapper;
 import com.project.buensabor.dto.orderDto.OrderDtos.OrderDto;
 import com.project.buensabor.dto.orderDto.OrderDtos.OrderWithoutuserDto;
 import com.project.buensabor.dto.orderDto.OrderProductsDtos.OProductsWithoutOrderDto;
+import com.project.buensabor.dto.orderDto.StatusOrderDto;
 import com.project.buensabor.entities.*;
 import com.project.buensabor.repositories.Base.BaseRepository;
 import com.project.buensabor.repositories.OrderProductsRepository;
@@ -13,6 +14,7 @@ import com.project.buensabor.services.interfaces.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,6 +41,7 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
     private ModelMapper modelMapper = new ModelMapper();
 
     @Override
+    @Transactional
     public List<OrderWithoutuserDto> ordersByUserId(Long id) throws Exception {
         try {
             List<Order> entities = orderRepository.findOrdersByUserId(id);
@@ -54,6 +57,42 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
             throw new Exception(e.getMessage());
         }
     }
+
+    @Override
+    @Transactional
+    public List<OrderDto> getOrdersByStatus(Long id) throws Exception {
+        try {
+            List<Order> entities = orderRepository.findOrdersByStatusOrderId(id);
+            List<OrderDto> entitiesDtos = new ArrayList<>();
+            if (!entities.isEmpty()){
+                for (Order entity: entities) {
+                    entitiesDtos.add(mapper.convertToDto(entity));
+                }
+            }
+            return entitiesDtos;
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    @Override
+    @Transactional
+    public String changeStatus(StatusOrderDto status, Long id) throws Exception {
+        try{
+            Optional<Order> orderOptional = orderRepository.findById(id);
+            Order order = orderOptional.get();
+            order.setStatusOrder(modelMapper.map(status, StatusOrder.class));
+            order = orderRepository.save(order);
+
+            return "Se cambio el status a "+ order.getStatusOrder().getStatusType().name();
+        }catch (Exception e){
+            log.info(e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+    }
+
+
 
     @Override
     @Transactional //Indica que el método es una transacción.
@@ -190,6 +229,7 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
             }
             entityDto = mapper.convertToDto(entityUpdate);
             entityDto.setProducts(withoutOrderDtoList);
+
             return entityDto;
         } catch (Exception e) {
             log.info(e.getMessage());

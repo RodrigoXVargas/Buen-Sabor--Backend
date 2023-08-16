@@ -14,4 +14,8 @@ public interface OrderRepository extends BaseRepository<Order, Long> {
 
     @Query(value = "SELECT * FROM orders WHERE orders.user_fk = :id", nativeQuery = true)
     List<Order> findOrdersByUserId(@Param("id") long id);
+
+    @Query(value = "SELECT * FROM orders WHERE orders.status_fk = :id", nativeQuery = true)
+    List<Order> findOrdersByStatusOrderId(@Param("id") long id);
+
 }

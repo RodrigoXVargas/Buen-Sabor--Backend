@@ -67,18 +67,17 @@
 			<scope>test</scope>
 		</dependency>
 
-
-
-
-
-
 		<dependency>
 			<groupId>org.hibernate.orm</groupId>
 			<artifactId>hibernate-core</artifactId>
 			<version>6.2.3.Final</version>
 		</dependency>
 
-
+<!--		dependencia de web Sockets-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-websocket</artifactId>
+		</dependency>
 
 	</dependencies>
 

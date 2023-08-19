@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import javax.management.relation.Role;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 public class OrderWebSocketController {
@@ -28,13 +29,16 @@ public class OrderWebSocketController {
     @SendTo("/topic/orderslist")
     public List<OrderDto> getOrderListByRol(Rol rol) throws Exception {
         List<OrderDto> orders;
-        int id = Math.toIntExact(rol.getId());
+        int id = 0;
+        if (Objects.nonNull(rol.getId())) id = Math.toIntExact(rol.getId());
         switch (id) {
             case 3:
                 orders = orderService.getOrdersByStatus(1l);
                 List<OrderDto> orders2 = orderService.getOrdersByStatus(3l);
-                for (OrderDto orderDto: orders2) {
-                    orders.add(orderDto);
+                if (orders2.size() != 0) {
+                    for (OrderDto orderDto: orders2) {
+                        orders.add(orderDto);
+                    }
                 }
                 break;
             case 4:
@@ -47,7 +51,6 @@ public class OrderWebSocketController {
                 orders = new ArrayList<>();
                 break;
         }
-
         return orders;
     }
 }

@@ -24,11 +24,30 @@ public class OrderWebSocketController {
     @Autowired
     private OrderService orderService;
 
-    @MessageMapping("/orders/{id}")
-    @SendTo("/topic/orders/{id}")
-    public List<OrderDto> getOrdersForRole(@PathVariable Long id) throws Exception {
-        // Lógica para obtener órdenes según el rol
-        List<OrderDto> orders = orderService.getOrdersByStatus(id);
+    @MessageMapping("/rols")
+    @SendTo("/topic/orderslist")
+    public List<OrderDto> getOrderListByRol(Rol rol) throws Exception {
+        List<OrderDto> orders;
+        int id = Math.toIntExact(rol.getId());
+        switch (id) {
+            case 3:
+                orders = orderService.getOrdersByStatus(1l);
+                List<OrderDto> orders2 = orderService.getOrdersByStatus(3l);
+                for (OrderDto orderDto: orders2) {
+                    orders.add(orderDto);
+                }
+                break;
+            case 4:
+                orders = orderService.getOrdersByStatus(2l);
+                break;
+            case 5:
+                orders = orderService.getOrdersByStatus(4l);
+                break;
+            default:
+                orders = new ArrayList<>();
+                break;
+        }
+
         return orders;
     }
 }

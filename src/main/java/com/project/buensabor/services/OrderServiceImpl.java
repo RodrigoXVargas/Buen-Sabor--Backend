@@ -66,7 +66,9 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
             List<OrderDto> entitiesDtos = new ArrayList<>();
             if (!entities.isEmpty()){
                 for (Order entity: entities) {
-                    entitiesDtos.add(mapper.convertToDto(entity));
+                    OrderDto orderDto = mapper.convertToDto(entity);
+                    orderDto.setProducts(getOrderProductsByOrder(orderDto));
+                    entitiesDtos.add(orderDto);
                 }
             }
             return entitiesDtos;

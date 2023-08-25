@@ -17,11 +17,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -37,6 +35,11 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
     private ProductRepository productRepository;
 
     private ModelMapper modelMapper = new ModelMapper();
+
+    @Autowired
+    private ImageService imageService;
+
+    private static final String CLOUDINARY_FOLDER = "products";
 
     public ProductServiceImpl(BaseRepository<Product, Long> baseRepository, ProductMapper mapper) {
         super(baseRepository, mapper);
@@ -106,10 +109,13 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
         return entitiesDtos;
     }
 
-    @Override
+
     @Transactional
-    public ProductDto saveOne(ProductDto entityDto) throws Exception {
+    public ProductDto saveOne(ProductDto entityDto, MultipartFile image) throws Exception {
         try {
+            if(image.isEmpty()){
+                throw new Exception();
+            }
             Product product = new Product();
             modelMapper.map(entityDto, product);
             product = productRepository.save(product);
@@ -127,6 +133,11 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
                     productIngredientList.add(pIngredientsCantDto);
                 }
             }
+            Map<String, Object> uploadData = imageService.uploadImage(image, product.getId(), CLOUDINARY_FOLDER);
+            product.setImage((String) uploadData.get("url"));
+
+            product = productRepository.save(product);
+
             entityDto = mapper.convertToDto(product);
             entityDto.setIngredients(productIngredientList);
             return entityDto;
@@ -136,9 +147,9 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
         }
     }
 
-    @Override
+
     @Transactional
-    public ProductDto updateOne(ProductDto entity, Long id) throws Exception {
+    public ProductDto updateOne(ProductDto entity, Long id, MultipartFile image) throws Exception {
         try {
             Optional<Product> productOptional = productRepository.findById(id);
             Product productExistente = productOptional.get();
@@ -187,6 +198,14 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
                     productIngredientList.add(pIngredientsCantDto);
                 }
             }
+
+            if (!image.isEmpty() && Objects.nonNull(image)){
+                Map<String, Object> uploadData = imageService.uploadImage(image, productExistente.getId(), CLOUDINARY_FOLDER);
+                productExistente.setImage((String) uploadData.get("url"));
+
+                productExistente = productRepository.save(productExistente);
+            }
+
             entity = mapper.convertToDto(productExistente);
             entity.setIngredients(productIngredientList);
             return entity;
@@ -207,6 +226,7 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
                     productIngredientRepository.deleteById(productIngredient.getId());
                 }
                 productRepository.deleteById(id);
+                imageService.deleteImage(id, CLOUDINARY_FOLDER);
                 return true;
             } else {
                 throw new Exception();

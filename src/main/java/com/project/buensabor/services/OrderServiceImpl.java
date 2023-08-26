@@ -6,6 +6,8 @@ import com.project.buensabor.dto.orderDto.OrderDtos.OrderWithoutuserDto;
 import com.project.buensabor.dto.orderDto.OrderProductsDtos.OProductsWithoutOrderDto;
 import com.project.buensabor.dto.orderDto.StatusOrderDto;
 import com.project.buensabor.entities.*;
+import com.project.buensabor.enums.RolName;
+import com.project.buensabor.enums.StatusType;
 import com.project.buensabor.repositories.Base.BaseRepository;
 import com.project.buensabor.repositories.OrderProductsRepository;
 import com.project.buensabor.repositories.OrderRepository;
@@ -39,6 +41,10 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
     private OrderProductsRepository orderProductsRepository;
 
     private ModelMapper modelMapper = new ModelMapper();
+
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
+
 
     @Override
     @Transactional
@@ -86,6 +92,16 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
             Order order = orderOptional.get();
             order.setStatusOrder(modelMapper.map(status, StatusOrder.class));
             order = orderRepository.save(order);
+
+            Rol rol = new Rol(3l, RolName.Cashier);
+            if (status.getStatusType() == StatusType.Ready || status.getStatusType() == StatusType.In_Queue){
+                rol = new Rol(3l, RolName.Cashier);
+            } else if (status.getStatusType() == StatusType.In_Preparation) {
+                rol = new Rol(4l, RolName.Chef);
+            } else if (status.getStatusType() == StatusType.Out_for_Delivery) {
+                rol = new Rol(5l, RolName.Delivery);
+            }
+            messagingTemplate.convertAndSend("/topic/orderslist", rol);
 
             return "Se cambio el status a "+ order.getStatusOrder().getStatusType().name();
         }catch (Exception e){
@@ -169,6 +185,7 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
 
             entityDto = mapper.convertToDto(entity);
             entityDto.setProducts(withoutOrderDtoList);
+
 
             return entityDto;
         } catch (Exception e) {

@@ -20,5 +20,8 @@ public class Rol extends Base {
     @Column
     private RolName rol;
 
-
+    public Rol(Long id, RolName rol) {
+        super(id);
+        this.rol = rol;
+    }
 }

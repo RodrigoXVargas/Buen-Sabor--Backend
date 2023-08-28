@@ -101,7 +101,7 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
             } else if (status.getStatusType() == StatusType.Out_for_Delivery) {
                 rol = new Rol(5l, RolName.Delivery);
             }
-            messagingTemplate.convertAndSend("/topic/orderslist", rol);
+            messagingTemplate.convertAndSend("/app/rols", rol);
 
             return "Se cambio el status a "+ order.getStatusOrder().getStatusType().name();
         }catch (Exception e){

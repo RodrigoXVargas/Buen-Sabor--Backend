@@ -93,15 +93,22 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
             order.setStatusOrder(modelMapper.map(status, StatusOrder.class));
             order = orderRepository.save(order);
 
-            Rol rol = new Rol(3l, RolName.Cashier);
+            List<OrderDto> orderDtoList = new ArrayList<>();
             if (status.getStatusType() == StatusType.Ready || status.getStatusType() == StatusType.In_Queue){
-                rol = new Rol(3l, RolName.Cashier);
+                orderDtoList = getOrdersByStatus(1l);
+                List<OrderDto> orderDtoList2 = getOrdersByStatus(3l);
+                if (orderDtoList2.size() != 0) {
+                    for (OrderDto orderDto: orderDtoList2) {
+                        orderDtoList2.add(orderDto);
+                    }
+                }
             } else if (status.getStatusType() == StatusType.In_Preparation) {
-                rol = new Rol(4l, RolName.Chef);
+                orderDtoList = getOrdersByStatus(2l);
             } else if (status.getStatusType() == StatusType.Out_for_Delivery) {
-                rol = new Rol(5l, RolName.Delivery);
+                orderDtoList = getOrdersByStatus(4l);
             }
-            messagingTemplate.convertAndSend("/app/rols", rol);
+
+            messagingTemplate.convertAndSend("/topic/orderslist", orderDtoList);
 
             return "Se cambio el status a "+ order.getStatusOrder().getStatusType().name();
         }catch (Exception e){

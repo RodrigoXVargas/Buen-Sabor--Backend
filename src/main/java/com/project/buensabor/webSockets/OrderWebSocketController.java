@@ -11,6 +11,8 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 
@@ -23,34 +25,42 @@ import java.util.Objects;
 public class OrderWebSocketController {
 
     @Autowired
+    private SimpMessagingTemplate messagingTemplate;
+
+    @Autowired
     private OrderService orderService;
 
-    @MessageMapping("/rols")
-    @SendTo("/topic/orderslist")
-    public List<OrderDto> getOrderListByRol(Rol rol) throws Exception {
-        List<OrderDto> orders;
-        int id = 0;
-        if (Objects.nonNull(rol.getId())) id = Math.toIntExact(rol.getId());
-        switch (id) {
-            case 3:
-                orders = orderService.getOrdersByStatus(1l);
-                List<OrderDto> orders2 = orderService.getOrdersByStatus(3l);
-                if (orders2.size() != 0) {
-                    for (OrderDto orderDto: orders2) {
-                        orders.add(orderDto);
-                    }
-                }
-                break;
-            case 4:
-                orders = orderService.getOrdersByStatus(2l);
-                break;
-            case 5:
-                orders = orderService.getOrdersByStatus(4l);
-                break;
-            default:
-                orders = new ArrayList<>();
-                break;
+
+    @SubscribeMapping("/topic/cashiers")
+    public List<OrderDto> cashiersSubscription() throws Exception {
+        List<OrderDto> orderDtoList = orderService.getOrdersByStatus(1l);
+        List<OrderDto> orderDtoList2 = orderService.getOrdersByStatus(3l);
+        if (orderDtoList2.size() != 0) {
+            for (OrderDto orderDto: orderDtoList2) {
+                orderDtoList.add(orderDto);
+            }
         }
-        return orders;
+        return orderDtoList;
     }
+
+    @SubscribeMapping("/topic/chefs")
+    public List<OrderDto> chefsSubscription() throws Exception {
+        List<OrderDto> orderDtoList = orderService.getOrdersByStatus(2l);
+        if (orderDtoList.size() == 0) {
+            orderDtoList = new ArrayList<>();
+        }
+        return orderDtoList;
+    }
+
+    @SubscribeMapping("/topic/deliveries")
+    public List<OrderDto> deliveriesSubscription() throws Exception {
+        List<OrderDto> orderDtoList = orderService.getOrdersByStatus(4l);
+        if (orderDtoList.size() == 0) {
+            orderDtoList = new ArrayList<>();
+        }
+        return orderDtoList;
+    }
+
+
 }
+

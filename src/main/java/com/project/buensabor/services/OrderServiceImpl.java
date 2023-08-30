@@ -93,22 +93,24 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
             order.setStatusOrder(modelMapper.map(status, StatusOrder.class));
             order = orderRepository.save(order);
 
-            List<OrderDto> orderDtoList = new ArrayList<>();
+            List<OrderDto> orderDtoList;
             if (status.getStatusType() == StatusType.Ready || status.getStatusType() == StatusType.In_Queue){
-                orderDtoList = getOrdersByStatus(1l);
-                List<OrderDto> orderDtoList2 = getOrdersByStatus(3l);
+                orderDtoList = this.getOrdersByStatus(1l);
+                List<OrderDto> orderDtoList2 = this.getOrdersByStatus(3l);
                 if (orderDtoList2.size() != 0) {
                     for (OrderDto orderDto: orderDtoList2) {
-                        orderDtoList2.add(orderDto);
+                        orderDtoList.add(orderDto);
                     }
                 }
+                messagingTemplate.convertAndSend("/topic/cashiers", orderDtoList);
             } else if (status.getStatusType() == StatusType.In_Preparation) {
-                orderDtoList = getOrdersByStatus(2l);
+                orderDtoList = this.getOrdersByStatus(2l);
+                messagingTemplate.convertAndSend( "/topic/chefs", orderDtoList);
             } else if (status.getStatusType() == StatusType.Out_for_Delivery) {
-                orderDtoList = getOrdersByStatus(4l);
+                orderDtoList = this.getOrdersByStatus(4l);
+                messagingTemplate.convertAndSend( "/topic/deliveries", orderDtoList);
             }
 
-            messagingTemplate.convertAndSend("/topic/orderslist", orderDtoList);
 
             return "Se cambio el status a "+ order.getStatusOrder().getStatusType().name();
         }catch (Exception e){
@@ -192,6 +194,15 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
 
             entityDto = mapper.convertToDto(entity);
             entityDto.setProducts(withoutOrderDtoList);
+
+            List<OrderDto> orderDtoList = this.getOrdersByStatus(1l);
+            List<OrderDto> orderDtoList2 = this.getOrdersByStatus(3l);
+            if (orderDtoList2.size() != 0) {
+                for (OrderDto orderDto: orderDtoList2) {
+                    orderDtoList.add(orderDto);
+                }
+            }
+            messagingTemplate.convertAndSend("/topic/cashiers", orderDtoList);
 
 
             return entityDto;

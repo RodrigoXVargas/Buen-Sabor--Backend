@@ -90,32 +90,13 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
         try{
             Optional<Order> orderOptional = orderRepository.findById(id);
             Order order = orderOptional.get();
+            StatusOrderDto statusPrevious = modelMapper.map(order.getStatusOrder(), StatusOrderDto.class);
             order.setStatusOrder(modelMapper.map(status, StatusOrder.class));
             order = orderRepository.save(order);
 
-            List<OrderDto> orderDtoList;
-            if (status.getStatusType() == StatusType.Ready || status.getStatusType() == StatusType.In_Queue){
-                orderDtoList = this.getOrdersByStatus(1l);
-                List<OrderDto> orderDtoList2 = this.getOrdersByStatus(3l);
-                if (orderDtoList2.size() != 0) {
-                    for (OrderDto orderDto: orderDtoList2) {
-                        orderDtoList.add(orderDto);
-                    }
-                }
-
-                messagingTemplate.convertAndSend("/topic/cashiers", orderDtoList);
-                System.out.println("notificacion cajeros");
-            } else if (status.getStatusType() == StatusType.In_Preparation) {
-                orderDtoList = this.getOrdersByStatus(2l);
-                messagingTemplate.convertAndSend( "/topic/chefs", orderDtoList);
-                System.out.println("notificacion chefs");
-            } else if (status.getStatusType() == StatusType.Out_for_Delivery) {
-                orderDtoList = this.getOrdersByStatus(4l);
-                messagingTemplate.convertAndSend( "/topic/deliveries", orderDtoList);
-                System.out.println("notificacion deliveries");
-            }
-
-
+            this.notificarTopicos(statusPrevious);
+            this.notificarTopicos(status);
+            
             return "Se cambio el status a "+ order.getStatusOrder().getStatusType().name();
         }catch (Exception e){
             log.info(e.getMessage());
@@ -123,7 +104,29 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
         }
     }
 
+    public void notificarTopicos(StatusOrderDto status) throws Exception {
+        List<OrderDto> orderDtoList;
+        if (status.getStatusType() == StatusType.Ready || status.getStatusType() == StatusType.In_Queue){
+            orderDtoList = this.getOrdersByStatus(1l);
+            List<OrderDto> orderDtoList2 = this.getOrdersByStatus(3l);
+            if (orderDtoList2.size() != 0) {
+                for (OrderDto orderDto: orderDtoList2) {
+                    orderDtoList.add(orderDto);
+                }
+            }
 
+            messagingTemplate.convertAndSend("/topic/cashiers", orderDtoList);
+            System.out.println("notificacion cajeros");
+        } else if (status.getStatusType() == StatusType.In_Preparation) {
+            orderDtoList = this.getOrdersByStatus(2l);
+            messagingTemplate.convertAndSend( "/topic/chefs", orderDtoList);
+            System.out.println("notificacion chefs");
+        } else if (status.getStatusType() == StatusType.Out_for_Delivery) {
+            orderDtoList = this.getOrdersByStatus(4l);
+            messagingTemplate.convertAndSend( "/topic/deliveries", orderDtoList);
+            System.out.println("notificacion deliveries");
+        }
+    }
 
     @Override
     @Transactional //Indica que el método es una transacción.

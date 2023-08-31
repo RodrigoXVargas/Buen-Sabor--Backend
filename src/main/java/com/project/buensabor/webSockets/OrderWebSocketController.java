@@ -2,8 +2,10 @@ package com.project.buensabor.webSockets;
 
 import com.project.buensabor.dto.orderDto.OrderDtos.OrderDto;
 import com.project.buensabor.dto.orderDto.OrderDtos.OrderWithoutuserDto;
+import com.project.buensabor.dto.userDto.UserDto;
 import com.project.buensabor.enums.StatusType;
 import com.project.buensabor.services.interfaces.OrderService;
+import com.project.buensabor.services.interfaces.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -26,6 +28,8 @@ public class OrderWebSocketController {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private UserService userService;
 
     @SubscribeMapping("/topic/cashiers")
     public List<OrderDto> cashiersSubscription() throws Exception {
@@ -105,10 +109,11 @@ public class OrderWebSocketController {
         }
     }
 
-    @MessageMapping("/orderlist")
-    @SendTo("/user/orderlist")
+
+    @MessageMapping("/private-message")
     public List<OrderWithoutuserDto> sendClient(Long id) throws Exception {
         try {
+            UserDto user = userService.findById(id);
             List<StatusType> statusTypes = Arrays.asList(
                     StatusType.In_Queue,
                     StatusType.In_Preparation,
@@ -121,6 +126,7 @@ public class OrderWebSocketController {
                     orderFilters.add(order);
                 }
             }
+            messagingTemplate.convertAndSendToUser(user.getMail(),"/private", orderFilters);
             return orderFilters;
         } catch (Exception e) {
             log.info(e.getMessage());

@@ -5,6 +5,7 @@ import com.project.buensabor.dto.orderDto.OrderDtos.OrderDto;
 import com.project.buensabor.dto.orderDto.OrderDtos.OrderWithoutuserDto;
 import com.project.buensabor.dto.orderDto.OrderProductsDtos.OProductsWithoutOrderDto;
 import com.project.buensabor.dto.orderDto.StatusOrderDto;
+import com.project.buensabor.dto.userDto.UserDto;
 import com.project.buensabor.entities.*;
 import com.project.buensabor.enums.RolName;
 import com.project.buensabor.enums.StatusType;
@@ -13,6 +14,7 @@ import com.project.buensabor.repositories.OrderProductsRepository;
 import com.project.buensabor.repositories.OrderRepository;
 import com.project.buensabor.services.Base.BaseServicesDTOImpl;
 import com.project.buensabor.services.interfaces.OrderService;
+import com.project.buensabor.services.interfaces.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +22,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -96,9 +95,31 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
 
             this.notificarTopicos(statusPrevious);
             this.notificarTopicos(status);
+            this.notificarUsuario(order.getUser());
 
             return "Se cambio el status a "+ order.getStatusOrder().getStatusType().name();
         }catch (Exception e){
+            log.info(e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+    }
+
+    public void notificarUsuario(User user) throws Exception {
+        try {
+            List<StatusType> statusTypes = Arrays.asList(
+                    StatusType.In_Queue,
+                    StatusType.In_Preparation,
+                    StatusType.Ready,
+                    StatusType.Out_for_Delivery);
+            List<OrderWithoutuserDto> orderDtoList = this.ordersByUserId(user.getId());
+            List<OrderWithoutuserDto> orderFilters = new ArrayList<>();
+            for (OrderWithoutuserDto order : orderDtoList) {
+                if (statusTypes.contains(order.getStatusOrder().getStatusType())) {
+                    orderFilters.add(order);
+                }
+            }
+            messagingTemplate.convertAndSendToUser(user.getMail(),"/private", orderFilters);
+        } catch (Exception e) {
             log.info(e.getMessage());
             throw new Exception(e.getMessage());
         }

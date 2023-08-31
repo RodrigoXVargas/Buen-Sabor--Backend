@@ -102,13 +102,17 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
                         orderDtoList.add(orderDto);
                     }
                 }
+
                 messagingTemplate.convertAndSend("/topic/cashiers", orderDtoList);
+                System.out.println("notificacion cajeros");
             } else if (status.getStatusType() == StatusType.In_Preparation) {
                 orderDtoList = this.getOrdersByStatus(2l);
                 messagingTemplate.convertAndSend( "/topic/chefs", orderDtoList);
+                System.out.println("notificacion chefs");
             } else if (status.getStatusType() == StatusType.Out_for_Delivery) {
                 orderDtoList = this.getOrdersByStatus(4l);
                 messagingTemplate.convertAndSend( "/topic/deliveries", orderDtoList);
+                System.out.println("notificacion deliveries");
             }
 
 
@@ -202,6 +206,7 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
                     orderDtoList.add(orderDto);
                 }
             }
+            System.out.println("notificacion cajero");
             messagingTemplate.convertAndSend("/topic/cashiers", orderDtoList);
 
 

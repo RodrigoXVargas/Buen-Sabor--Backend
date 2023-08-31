@@ -61,6 +61,35 @@ public class OrderWebSocketController {
         return orderDtoList;
     }
 
-
+    @MessageMapping("/cashiers")
+    @SendTo("/topic/cashiers")
+    public List<OrderDto> sendCashiers() throws Exception {
+        List<OrderDto> orderDtoList = orderService.getOrdersByStatus(1l);
+        List<OrderDto> orderDtoList2 = orderService.getOrdersByStatus(3l);
+        if (orderDtoList2.size() != 0) {
+            for (OrderDto orderDto: orderDtoList2) {
+                orderDtoList.add(orderDto);
+            }
+        }
+        return orderDtoList;
+    }
+    @MessageMapping("/chefs")
+    @SendTo("/topic/chefs")
+    public List<OrderDto> sendChefs() throws Exception {
+        List<OrderDto> orderDtoList = orderService.getOrdersByStatus(2l);
+        if (orderDtoList.size() == 0) {
+            orderDtoList = new ArrayList<>();
+        }
+        return orderDtoList;
+    }
+    @MessageMapping("/deliveries")
+    @SendTo("/topic/deliveries")
+    public List<OrderDto> sendDeliveries() throws Exception {
+        List<OrderDto> orderDtoList = orderService.getOrdersByStatus(4l);
+        if (orderDtoList.size() == 0) {
+            orderDtoList = new ArrayList<>();
+        }
+        return orderDtoList;
+    }
 }
 

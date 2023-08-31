@@ -96,7 +96,7 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
 
             this.notificarTopicos(statusPrevious);
             this.notificarTopicos(status);
-            
+
             return "Se cambio el status a "+ order.getStatusOrder().getStatusType().name();
         }catch (Exception e){
             log.info(e.getMessage());

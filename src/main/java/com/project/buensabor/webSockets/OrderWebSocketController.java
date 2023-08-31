@@ -1,27 +1,23 @@
 package com.project.buensabor.webSockets;
 
 import com.project.buensabor.dto.orderDto.OrderDtos.OrderDto;
-import com.project.buensabor.dto.userDto.RolDto;
-import com.project.buensabor.entities.Rol;
-import com.project.buensabor.enums.RolName;
+import com.project.buensabor.dto.orderDto.OrderDtos.OrderWithoutuserDto;
 import com.project.buensabor.enums.StatusType;
 import com.project.buensabor.services.interfaces.OrderService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 
-import javax.management.relation.Role;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 @Controller
+@Slf4j
 public class OrderWebSocketController {
 
     @Autowired
@@ -36,7 +32,7 @@ public class OrderWebSocketController {
         List<OrderDto> orderDtoList = orderService.getOrdersByStatus(1l);
         List<OrderDto> orderDtoList2 = orderService.getOrdersByStatus(3l);
         if (orderDtoList2.size() != 0) {
-            for (OrderDto orderDto: orderDtoList2) {
+            for (OrderDto orderDto : orderDtoList2) {
                 orderDtoList.add(orderDto);
             }
         }
@@ -64,32 +60,72 @@ public class OrderWebSocketController {
     @MessageMapping("/cashiers")
     @SendTo("/topic/cashiers")
     public List<OrderDto> sendCashiers() throws Exception {
-        List<OrderDto> orderDtoList = orderService.getOrdersByStatus(1l);
-        List<OrderDto> orderDtoList2 = orderService.getOrdersByStatus(3l);
-        if (orderDtoList2.size() != 0) {
-            for (OrderDto orderDto: orderDtoList2) {
-                orderDtoList.add(orderDto);
+        try {
+            List<OrderDto> orderDtoList = orderService.getOrdersByStatus(1l);
+            List<OrderDto> orderDtoList2 = orderService.getOrdersByStatus(3l);
+            if (orderDtoList2.size() != 0) {
+                for (OrderDto orderDto : orderDtoList2) {
+                    orderDtoList.add(orderDto);
+                }
             }
+            return orderDtoList;
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            throw new Exception(e.getMessage());
         }
-        return orderDtoList;
     }
+
     @MessageMapping("/chefs")
     @SendTo("/topic/chefs")
     public List<OrderDto> sendChefs() throws Exception {
-        List<OrderDto> orderDtoList = orderService.getOrdersByStatus(2l);
-        if (orderDtoList.size() == 0) {
-            orderDtoList = new ArrayList<>();
+        try {
+            List<OrderDto> orderDtoList = orderService.getOrdersByStatus(2l);
+            if (orderDtoList.size() == 0) {
+                orderDtoList = new ArrayList<>();
+            }
+            return orderDtoList;
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            throw new Exception(e.getMessage());
         }
-        return orderDtoList;
     }
+
     @MessageMapping("/deliveries")
     @SendTo("/topic/deliveries")
     public List<OrderDto> sendDeliveries() throws Exception {
-        List<OrderDto> orderDtoList = orderService.getOrdersByStatus(4l);
-        if (orderDtoList.size() == 0) {
-            orderDtoList = new ArrayList<>();
+        try {
+            List<OrderDto> orderDtoList = orderService.getOrdersByStatus(4l);
+            if (orderDtoList.size() == 0) {
+                orderDtoList = new ArrayList<>();
+            }
+            return orderDtoList;
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            throw new Exception(e.getMessage());
         }
-        return orderDtoList;
+    }
+
+    @MessageMapping("/orderlist")
+    @SendTo("/user/orderlist")
+    public List<OrderWithoutuserDto> sendClient(Long id) throws Exception {
+        try {
+            List<StatusType> statusTypes = Arrays.asList(
+                    StatusType.In_Queue,
+                    StatusType.In_Preparation,
+                    StatusType.Ready,
+                    StatusType.Out_for_Delivery);
+            List<OrderWithoutuserDto> orderDtoList = orderService.ordersByUserId(id);
+            List<OrderWithoutuserDto> orderFilters = new ArrayList<>();
+            for (OrderWithoutuserDto order : orderDtoList) {
+                if (statusTypes.contains(order.getStatusOrder().getStatusType())) {
+                    orderFilters.add(order);
+                }
+            }
+            return orderFilters;
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            throw new Exception(e.getMessage());
+        }
     }
 }
 

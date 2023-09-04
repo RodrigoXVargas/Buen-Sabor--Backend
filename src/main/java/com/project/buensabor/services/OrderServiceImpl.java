@@ -53,7 +53,9 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
             List<OrderWithoutuserDto> entitiesDtos = new ArrayList<>();
             if (!entities.isEmpty()){
                 for (Order entity: entities) {
-                    entitiesDtos.add(modelMapper.map(entity, OrderWithoutuserDto.class));
+                    OrderWithoutuserDto orderWithoutuserDto = modelMapper.map(entity, OrderWithoutuserDto.class);
+                    orderWithoutuserDto.setProducts(this.getOrderProductsByOrder(orderWithoutuserDto.getId()));
+                    entitiesDtos.add(orderWithoutuserDto);
                 }
             }
             return entitiesDtos;
@@ -72,7 +74,7 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
             if (!entities.isEmpty()){
                 for (Order entity: entities) {
                     OrderDto orderDto = mapper.convertToDto(entity);
-                    orderDto.setProducts(getOrderProductsByOrder(orderDto));
+                    orderDto.setProducts(getOrderProductsByOrder(orderDto.getId()));
                     entitiesDtos.add(orderDto);
                 }
             }
@@ -157,7 +159,7 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
             List<OrderDto> entitiesDtos = new ArrayList<>();
             for (Order entity : entities) {
                 OrderDto orderDto = mapper.convertToDto(entity);
-                orderDto.setProducts(getOrderProductsByOrder(orderDto));
+                orderDto.setProducts(getOrderProductsByOrder(orderDto.getId()));
                 entitiesDtos.add(orderDto);
             }
             return entitiesDtos;
@@ -176,7 +178,7 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
             Optional<Order> entityOptional = orderRepository.findById(id);
             Order order = entityOptional.get();
             OrderDto orderDto = mapper.convertToDto(order);
-            orderDto.setProducts(getOrderProductsByOrder(orderDto));
+            orderDto.setProducts(getOrderProductsByOrder(orderDto.getId()));
             return orderDto;
         } catch (Exception e) {
             log.info(e.getMessage());
@@ -184,8 +186,8 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
         }
     }
 
-    public List<OProductsWithoutOrderDto> getOrderProductsByOrder(OrderDto orderDto) {
-        List<OrderProducts> orderProductsList = orderProductsRepository.findOrderProductsByOrderId(orderDto.getId());
+    public List<OProductsWithoutOrderDto> getOrderProductsByOrder(Long idOrder) {
+        List<OrderProducts> orderProductsList = orderProductsRepository.findOrderProductsByOrderId(idOrder);
         List<OProductsWithoutOrderDto> oProductsWithoutOrderDtos = new ArrayList<>();
         for (OrderProducts orderProducts: orderProductsList) {
             OProductsWithoutOrderDto withoutOrderDto = modelMapper.map( orderProducts, OProductsWithoutOrderDto.class);

@@ -54,7 +54,11 @@ public class UserServiceImpl extends BaseServicesDTOImpl<User, UserDto, UserMapp
     public List<UserDto> findAll() throws Exception {
         try {
             List<User> entities = userRepository.findAll();
-            return getAddressesAndOrders(entities);
+            List<UserDto> entitiesDtos = new ArrayList<>();
+            for (User user: entities) {
+                entitiesDtos.add(this.getAddressesAndOrders(user));
+            }
+            return entitiesDtos;
         } catch (Exception e) {
             log.info(e.getMessage());
             throw new Exception(e.getMessage());
@@ -67,9 +71,7 @@ public class UserServiceImpl extends BaseServicesDTOImpl<User, UserDto, UserMapp
     public UserDto findById(Long id) throws Exception {
         try {
             Optional<User> entityOptional = userRepository.findById(id);
-            UserDto entityDto = mapper.convertToDto(entityOptional.get());
-            entityDto.setAddresses(addressService.addressesByUserId(entityDto.getId()));
-            entityDto.setOrders(orderService.ordersByUserId(entityDto.getId()));
+            UserDto entityDto = this.getAddressesAndOrders(entityOptional.get());
             return entityDto;
         } catch (Exception e) {
             log.info(e.getMessage());
@@ -82,7 +84,11 @@ public class UserServiceImpl extends BaseServicesDTOImpl<User, UserDto, UserMapp
     public List<UserDto> findEmployees() throws Exception {
         try {
             List<User> employees = userRepository.findAllEmployees();
-            return getAddressesAndOrders(employees);
+            List<UserDto> employeesDtos = new ArrayList<>();
+            for (User user: employees) {
+                employeesDtos.add(this.getAddressesAndOrders(user));
+            }
+            return employeesDtos;
         } catch (Exception e) {
             log.info(e.getMessage());
             throw new Exception(e.getMessage());
@@ -123,16 +129,29 @@ public class UserServiceImpl extends BaseServicesDTOImpl<User, UserDto, UserMapp
         }
     }
 
-    public List<UserDto> getAddressesAndOrders(List<User> entities) throws Exception {
-        List<UserDto> entitiesDtos = new ArrayList<>();
-        for (User entity : entities) {
-            entitiesDtos.add(mapper.convertToDto(entity));
+    @Override
+    public UserDto findUserByEmail(String mail) throws Exception {
+        try{
+            if (userRepository.existsUserByMail(mail)){
+                Optional<User> userOptional = userRepository.findByEmail(mail);
+                User user = userOptional.get();
+                UserDto userDto = this.getAddressesAndOrders(user);
+                return userDto;
+            } else {
+                throw new Exception();
+            }
+        }catch (Exception e){
+            log.info(e.getMessage());
+            throw new Exception(e.getMessage());
         }
-        for (UserDto entityDto : entitiesDtos){
-            entityDto.setOrders(orderService.ordersByUserId(entityDto.getId()));
-            entityDto.setAddresses(addressService.addressesByUserId(entityDto.getId()));
-        }
-        return entitiesDtos;
+    }
+
+    public UserDto getAddressesAndOrders(User entity) throws Exception {
+        UserDto entityDto = mapper.convertToDto(entity);
+        entityDto.setOrders(orderService.ordersByUserId(entityDto.getId()));
+        entityDto.setAddresses(addressService.addressesByUserId(entityDto.getId()));
+
+        return entityDto;
     }
 
 

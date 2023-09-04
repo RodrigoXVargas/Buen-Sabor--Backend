@@ -13,13 +13,13 @@ import java.util.Optional;
 @Repository
 public interface UserRepository extends BaseRepository<User, Long> {
 
-    @Query( value = "SELECT * FROM users WHERE users.email = :email", nativeQuery = true )
+    @Query( value = "SELECT * FROM users WHERE users.mail = :email", nativeQuery = true )
     Optional<User> findByEmail(@Param( "email" ) String email);
 
     @Query(value = "SELECT * FROM users WHERE users.rol_fk <> 6;", nativeQuery = true)
     List<User> findAllEmployees();
 
 
-    //boolean existsByEmail(String email);
+    boolean existsUserByMail(String mail);
 
 }

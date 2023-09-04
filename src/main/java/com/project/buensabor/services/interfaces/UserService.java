@@ -14,4 +14,6 @@ public interface UserService extends BaseServicesDTO<UserDto, Long> {
     String changeRol(RolDto rol, Long id) throws Exception;
 
     String changeBlacklist(Long id) throws Exception;
+
+    UserDto findUserByEmail(String mail) throws Exception;
 }

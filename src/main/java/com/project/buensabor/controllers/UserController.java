@@ -49,4 +49,13 @@ public class UserController extends BaseControllerImpl<User, UserDto, UserServic
         }
     }
 
+    @GetMapping(value = "/getUserByEmail/{mail}")
+    public ResponseEntity<?> getUserByEmail(@PathVariable String mail){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(userService.findUserByEmail(mail));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Error. Usuario no encontrado o peticion invalida.\"}");
+        }
+    }
+
 }

@@ -19,7 +19,7 @@ public class BuenSaborApplication {
 		);
 	}
 
-	@Bean
+	/*@Bean
 	public WebMvcConfigurer corsConfigurer () {
 		return new WebMvcConfigurer() {
 			@Override
@@ -31,6 +31,6 @@ public class BuenSaborApplication {
 			}
 		};
 
-	}
+	}*/
 
 }

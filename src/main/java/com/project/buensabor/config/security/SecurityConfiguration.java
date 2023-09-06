@@ -40,7 +40,8 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-                .cors().and()
+                .cors().configurationSource(corsConfigurationSource())
+                .and()
                 .authorizeHttpRequests()
                 .requestMatchers(HttpMethod.GET, "/api/products/getAll").permitAll()
                 .requestMatchers("/**").authenticated()

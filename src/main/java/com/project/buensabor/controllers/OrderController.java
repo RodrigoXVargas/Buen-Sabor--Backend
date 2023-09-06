@@ -3,14 +3,17 @@ package com.project.buensabor.controllers;
 import com.project.buensabor.controllers.Base.BaseControllerImpl;
 import com.project.buensabor.dto.orderDto.OrderDtos.OrderDto;
 import com.project.buensabor.dto.orderDto.StatusOrderDto;
+import com.project.buensabor.dto.productDto.MeasureDto;
 import com.project.buensabor.dto.userDto.RolDto;
 import com.project.buensabor.entities.Order;
 import com.project.buensabor.services.OrderServiceImpl;
+import com.project.buensabor.services.interfaces.MeasureService;
 import com.project.buensabor.services.interfaces.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,6 +25,7 @@ public class OrderController extends BaseControllerImpl<Order, OrderDto, OrderSe
     @Autowired
     private OrderService orderService;
 
+    @PreAuthorize("hasAnyAuthority('order:getOrdersByStatus','superAdmin')")
     @GetMapping(value = "/getOrdersByStatus/{id}")
     public ResponseEntity<?> getOrdersByStatus(@PathVariable Long id){
         try {
@@ -31,12 +35,65 @@ public class OrderController extends BaseControllerImpl<Order, OrderDto, OrderSe
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('order:changeStatus','superAdmin')")
     @PutMapping(value = "/changeStatus/{id}")
     public ResponseEntity<?> changeStatusOrder(@PathVariable Long id, @RequestBody StatusOrderDto status){
         try {
             return ResponseEntity.status(HttpStatus.OK).body(orderService.changeStatus(status, id));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Error. Por favor intente más tarde.\"}");
+        }
+    }
+
+    @Override
+    @PreAuthorize("hasAnyAuthority('order:getAll','superAdmin')")
+    @GetMapping("/getAll")
+    public ResponseEntity<?> getAll() {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(orderService.findAll());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Error. Por favor intente más tarde.\"}");
+        }
+    }
+
+    @Override
+    @PreAuthorize("hasAnyAuthority('order:getOne','superAdmin')")
+    @GetMapping("/get/{id}")
+    public ResponseEntity<?> getOne(@PathVariable Long id) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(orderService.findById(id));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Error. Por favor intente más tarde.\"}");
+        }
+    }
+
+    @PreAuthorize("hasAnyAuthority('order:save','superAdmin')")
+    @PostMapping("/save")
+    public ResponseEntity<?> saveOne(@RequestBody OrderDto entity) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(orderService.saveOne(entity));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. Por favor intente más tarde.\"}");
+        }
+    }
+
+    @PreAuthorize("hasAnyAuthority('order:update','superAdmin')")
+    @PutMapping("/update/{id}")
+    public ResponseEntity<?> updateOne(@PathVariable Long id, @RequestBody OrderDto entity) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(orderService.updateOne(entity, id));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. Por favor intente más tarde.\"}");
+        }
+    }
+
+    @PreAuthorize("hasAnyAuthority('order:delete','superAdmin')")
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteById(@PathVariable Long id) {
+        try {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(orderService.deleteById(id));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. Por favor intente más tarde.\"}");
         }
     }
 }

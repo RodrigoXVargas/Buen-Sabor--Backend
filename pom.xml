@@ -74,6 +74,21 @@
 			<version>6.2.3.Final</version>
 		</dependency>
 
+<!--		dependencia de seguridad-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
 <!--		dependencia de web Sockets-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

@@ -12,6 +12,7 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SubscribeMapping;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ public class OrderWebSocketController {
     @Autowired
     private UserService userService;
 
+    @PreAuthorize("hasAnyAuthority('ws:cashiers','superAdmin')")
     @SubscribeMapping("/topic/cashiers")
     public List<OrderDto> cashiersSubscription() throws Exception {
         List<OrderDto> orderDtoList = orderService.getOrdersByStatus(1l);
@@ -43,6 +45,7 @@ public class OrderWebSocketController {
         return orderDtoList;
     }
 
+    @PreAuthorize("hasAnyAuthority('ws:chefs','superAdmin')")
     @SubscribeMapping("/topic/chefs")
     public List<OrderDto> chefsSubscription() throws Exception {
         List<OrderDto> orderDtoList = orderService.getOrdersByStatus(2l);
@@ -52,6 +55,7 @@ public class OrderWebSocketController {
         return orderDtoList;
     }
 
+    @PreAuthorize("hasAnyAuthority('ws:deliveries','superAdmin')")
     @SubscribeMapping("/topic/deliveries")
     public List<OrderDto> deliveriesSubscription() throws Exception {
         List<OrderDto> orderDtoList = orderService.getOrdersByStatus(4l);
@@ -61,6 +65,7 @@ public class OrderWebSocketController {
         return orderDtoList;
     }
 
+    @PreAuthorize("hasAnyAuthority('ws:cashiers','superAdmin')")
     @MessageMapping("/cashiers")
     @SendTo("/topic/cashiers")
     public List<OrderDto> sendCashiers() throws Exception {
@@ -79,6 +84,7 @@ public class OrderWebSocketController {
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('ws:chefs','superAdmin')")
     @MessageMapping("/chefs")
     @SendTo("/topic/chefs")
     public List<OrderDto> sendChefs() throws Exception {
@@ -94,6 +100,7 @@ public class OrderWebSocketController {
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('ws:deliveries','superAdmin')")
     @MessageMapping("/deliveries")
     @SendTo("/topic/deliveries")
     public List<OrderDto> sendDeliveries() throws Exception {
@@ -109,7 +116,7 @@ public class OrderWebSocketController {
         }
     }
 
-
+    @PreAuthorize("hasAnyAuthority('ws:users','superAdmin')")
     @MessageMapping("/private-message")
     public List<OrderWithoutuserDto> sendClient(Long id) throws Exception {
         try {

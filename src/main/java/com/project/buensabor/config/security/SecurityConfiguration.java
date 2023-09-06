@@ -40,10 +40,10 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
+                .cors().disable()
                 .authorizeHttpRequests()
                 .requestMatchers(HttpMethod.OPTIONS).permitAll()
                 .requestMatchers("/**").authenticated()
-                .and().cors().configurationSource(corsConfigurationSource())
                 .and().oauth2ResourceServer()
                 .jwt()
                 .decoder(jwtDecoder())
@@ -81,7 +81,7 @@ public class SecurityConfiguration {
     @Bean
     JwtAuthenticationConverter jwtAuthenticationConverter() {
         JwtGrantedAuthoritiesConverter converter = new JwtGrantedAuthoritiesConverter();
-        converter.setAuthoritiesClaimName("http://buen-sabor-api.com/roles");
+        converter.setAuthoritiesClaimName("permissions");
         converter.setAuthorityPrefix("");
 
         JwtAuthenticationConverter jwtConverter = new JwtAuthenticationConverter();

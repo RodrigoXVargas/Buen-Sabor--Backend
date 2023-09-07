@@ -43,6 +43,7 @@ public class SecurityConfiguration {
                 .cors().configurationSource(corsConfigurationSource()).and()
                 .authorizeHttpRequests()
                 .requestMatchers(HttpMethod.OPTIONS).permitAll()
+                .requestMatchers(HttpMethod.GET).permitAll()
                 .requestMatchers("/**").authenticated()
                 .and().oauth2ResourceServer()
                 .jwt()

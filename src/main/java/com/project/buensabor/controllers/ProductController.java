@@ -34,6 +34,16 @@ public class ProductController extends BaseControllerImpl<Product, ProductDto, P
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('product:getByQuanSold','superAdmin')")
+    @GetMapping(value = "/getByQuanSold")
+    public ResponseEntity<?> getByQuanSold(){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(productService.findProductsByQDesc());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Error. Por favor intente más tarde.\"}");
+        }
+    }
+
     @PreAuthorize("hasAnyAuthority('product:changeActive','superAdmin')")
     @GetMapping(value = "/changeActive/{id}")
     public ResponseEntity<?> changeActiveProduct(@PathVariable Long id){

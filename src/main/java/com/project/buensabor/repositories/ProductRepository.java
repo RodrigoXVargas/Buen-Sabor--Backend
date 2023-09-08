@@ -15,10 +15,8 @@ public interface ProductRepository extends BaseRepository<Product, Long> {
     @Query(value = "SELECT * FROM products WHERE products.active = true", nativeQuery = true)
     List<Product> findAllByActive();
 
-    /*
-    query para activar o desactivar producto por id
-    @Query(value = "SELECT * FROM products WHERE products.active = true", nativeQuery = true)
-    List<Product> ();
+    @Query(value = "SELECT * FROM products order by products.quantity_sold desc", nativeQuery = true)
+    List<Product> getProductsOrderByQuantitySoldDesc();
 
-     */
+
 }

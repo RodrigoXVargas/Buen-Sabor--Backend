@@ -5,6 +5,7 @@ import com.project.buensabor.dto.orderDto.OrderDtos.OrderDto;
 import com.project.buensabor.dto.orderDto.OrderDtos.OrderWithoutuserDto;
 import com.project.buensabor.dto.orderDto.OrderProductsDtos.OProductsWithoutOrderDto;
 import com.project.buensabor.dto.orderDto.StatusOrderDto;
+import com.project.buensabor.dto.productDto.ProductDto;
 import com.project.buensabor.dto.userDto.UserDto;
 import com.project.buensabor.entities.*;
 import com.project.buensabor.enums.RolName;
@@ -14,6 +15,7 @@ import com.project.buensabor.repositories.OrderProductsRepository;
 import com.project.buensabor.repositories.OrderRepository;
 import com.project.buensabor.services.Base.BaseServicesDTOImpl;
 import com.project.buensabor.services.interfaces.OrderService;
+import com.project.buensabor.services.interfaces.ProductService;
 import com.project.buensabor.services.interfaces.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -43,6 +45,9 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
 
     @Autowired
     private SimpMessagingTemplate messagingTemplate;
+
+    @Autowired
+    private ProductService productService;
 
 
     @Override
@@ -218,7 +223,7 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
                     orderProducts = orderProductsRepository.save(orderProducts);
                     oProductsWithoutOrderDto = modelMapper.map(orderProducts, OProductsWithoutOrderDto.class);
                     withoutOrderDtoList.add(oProductsWithoutOrderDto);
-                    System.out.println(oProductsWithoutOrderDto.getCant());
+                    updateQuantityProduct(oProductsWithoutOrderDto.getProduct().getId());
                 }
             }
 
@@ -327,4 +332,15 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
         }
     }
 
+
+    public void updateQuantityProduct(Long idProduct) throws Exception{
+        try {
+            ProductDto productDto = productService.findById(idProduct);
+            productDto.setQuantitySold(productDto.getQuantitySold()+1);
+            ProductDto productDtoUpdated = productService.updateOne(productDto, idProduct);
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+    }
 }

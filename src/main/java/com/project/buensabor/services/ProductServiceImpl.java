@@ -98,6 +98,18 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
         }
     }
 
+    @Override
+    @Transactional //Indica que el método es una transacción.
+    public List<ProductDto> findProductsByQDesc() throws Exception {
+        try {
+            List<Product> entities = productRepository.getProductsOrderByQuantitySoldDesc();
+            return getProductDtos(entities);
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+    }
+
 
     private List<ProductDto> getProductDtos(List<Product> entities) throws Exception {
         List<ProductDto> entitiesDtos = new ArrayList<>();

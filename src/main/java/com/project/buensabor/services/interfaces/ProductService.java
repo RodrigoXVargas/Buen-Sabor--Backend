@@ -15,4 +15,6 @@ public interface ProductService extends BaseServicesDTO<ProductDto, Long> {
     ProductDto saveOne(ProductDto productDto, MultipartFile image) throws Exception;
 
     ProductDto updateOne(ProductDto productDto, Long id, MultipartFile image) throws Exception;
+
+    List<ProductDto> findProductsByQDesc() throws Exception;
 }

@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Table(name = "PRODUCTS")
@@ -28,6 +29,9 @@ public class Product extends Base {
 
     @Column
     private String image;
+
+    @Column
+    private int quantitySold = 0;
 
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "subcategory_fk")

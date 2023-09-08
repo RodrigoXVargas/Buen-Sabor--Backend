@@ -3,6 +3,7 @@ package com.project.buensabor.dto.productDto;
 import com.project.buensabor.dto.BaseDto;
 import com.project.buensabor.dto.productDto.ProductIngredientDTOs.PIngredientsCantDto;
 import com.project.buensabor.entities.Category;
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,6 +28,8 @@ public class ProductDto extends BaseDto {
     private String image;
 
     private Category subcategory;
+
+    private int quantitySold = 0;
 
     private List<PIngredientsCantDto> ingredients;
 

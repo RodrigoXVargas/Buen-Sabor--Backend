@@ -1,15 +1,19 @@
 package com.project.buensabor.services;
 
 import com.project.buensabor.ModelMappers.ProductMapper;
+import com.project.buensabor.dto.orderDto.OrderProductsDtos.OProductsWithoutOrderDto;
+import com.project.buensabor.dto.productDto.IngredientDto;
 import com.project.buensabor.dto.productDto.ProductDto;
 import com.project.buensabor.dto.productDto.ProductIngredientDTOs.PIngredientsCantDto;
 import com.project.buensabor.entities.Ingredient;
 import com.project.buensabor.entities.Product;
 import com.project.buensabor.entities.ProductIngredient;
+import com.project.buensabor.exceptions.CustomException;
 import com.project.buensabor.repositories.Base.BaseRepository;
 import com.project.buensabor.repositories.ProductIngredientRepository;
 import com.project.buensabor.repositories.ProductRepository;
 import com.project.buensabor.services.Base.BaseServicesDTOImpl;
+import com.project.buensabor.services.interfaces.IngredientService;
 import com.project.buensabor.services.interfaces.ProductIngredientService;
 import com.project.buensabor.services.interfaces.ProductService;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +28,9 @@ import java.util.*;
 @Service
 @Slf4j
 public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto, ProductMapper, Long> implements ProductService {
+
+    @Autowired
+    private IngredientService ingredientService;
 
     @Autowired
     private ProductIngredientRepository productIngredientRepository;
@@ -107,6 +114,78 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
         } catch (Exception e) {
             log.info(e.getMessage());
             throw new Exception(e.getMessage());
+        }
+    }
+
+    public List<IngredientDto> extraerIngredientes(List<OProductsWithoutOrderDto> productosAValidar) throws CustomException {
+        try{
+            List<IngredientDto> ingredientList = ingredientService.findAll();
+            for (IngredientDto ingredient: ingredientList) {
+                ingredient.setStock(0L);
+            }
+
+            for (OProductsWithoutOrderDto product: productosAValidar) {
+                List<PIngredientsCantDto> ingredientsProduct = productIngredientService.ingredientsByProductId(product.getProduct().getId());
+                if(!(ingredientsProduct.size()==0)){
+                    for (PIngredientsCantDto ingredientsCant : ingredientsProduct) {
+                        for (IngredientDto ingredient: ingredientList) {
+                            if (ingredient.getId()== ingredientsCant.getIngredient().getId()){
+                                ingredient.setStock(ingredient.getStock() + (ingredientsCant.getCant()*product.getCant()));
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            return ingredientList;
+        }catch (Exception e){
+            log.info(e.getMessage());
+            throw new CustomException(e.getMessage());
+        }
+
+    }
+
+
+    @Override
+    public boolean validarStock(List<OProductsWithoutOrderDto> productosAValidar) throws CustomException {
+        try{
+            boolean bandera = true;
+            List<IngredientDto> ingredientList = extraerIngredientes(productosAValidar);
+
+            for (IngredientDto ingredient: ingredientList) {
+                if (!(ingredient.getStock()==0L)){
+                    if (!ingredientService.validarStock(ingredient.getId(), ingredient.getStock())){
+                        //System.out.println("No hay stock para "+ ingredient.getName());
+                        bandera = false;
+                        break;
+                    } else {
+                        //System.out.println("si hay stock para "+ ingredient.getName());
+                    }
+                }
+
+            }
+            return bandera;
+        }catch (Exception e){
+            log.info(e.getMessage());
+            throw new CustomException(e.getMessage());
+        }
+    }
+
+    @Override
+    public void descontarStock(List<OProductsWithoutOrderDto> productosAValidar) throws CustomException {
+        try {
+            List<IngredientDto> ingredientList = extraerIngredientes(productosAValidar);
+
+            for (IngredientDto ingredient: ingredientList) {
+                if (!(ingredient.getStock()==0L)){
+                    ingredientService.descontarStock(ingredient.getId(), ingredient.getStock());
+                }
+
+            }
+
+        }catch (Exception e){
+            log.info(e.getMessage());
+            throw new CustomException(e.getMessage());
         }
     }
 

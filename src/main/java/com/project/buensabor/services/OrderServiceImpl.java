@@ -212,7 +212,7 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
             if (!productService.validarStock(entityDto.getProducts())){
                 throw new CustomException("No hay stock para cumplir con el pedido completo");
             }
-            
+
             Order entity = new Order();
             modelMapper.map(entityDto, entity);
             entity = orderRepository.save(entity);

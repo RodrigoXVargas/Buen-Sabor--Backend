@@ -245,6 +245,11 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
             Optional<Product> productOptional = productRepository.findById(id);
             Product productExistente = productOptional.get();
             modelMapper.map(entity, productExistente);
+            if (!(Objects.nonNull(image))){
+                Map<String, Object> uploadData = imageService.uploadImage(image, productExistente.getId(), CLOUDINARY_FOLDER);
+                productExistente.setImage((String) uploadData.get("url"));
+
+            }
             productExistente = productRepository.save(productExistente);
 
             List<PIngredientsCantDto> productIngredientList = new ArrayList<>();
@@ -290,12 +295,7 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
                 }
             }
 
-            if (!image.isEmpty() && Objects.nonNull(image)){
-                Map<String, Object> uploadData = imageService.uploadImage(image, productExistente.getId(), CLOUDINARY_FOLDER);
-                productExistente.setImage((String) uploadData.get("url"));
 
-                productExistente = productRepository.save(productExistente);
-            }
 
             entity = mapper.convertToDto(productExistente);
             entity.setIngredients(productIngredientList);

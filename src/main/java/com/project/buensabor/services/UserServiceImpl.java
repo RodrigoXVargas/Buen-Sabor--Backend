@@ -11,6 +11,7 @@ import com.project.buensabor.dto.userDto.UserDto;
 import com.project.buensabor.entities.*;
 import com.project.buensabor.enums.StatusType;
 import com.project.buensabor.enums.StatusUser;
+import com.project.buensabor.exceptions.CustomException;
 import com.project.buensabor.repositories.AddressRepository;
 import com.project.buensabor.repositories.Base.BaseRepository;
 import com.project.buensabor.repositories.OrderRepository;
@@ -130,7 +131,7 @@ public class UserServiceImpl extends BaseServicesDTOImpl<User, UserDto, UserMapp
     }
 
     @Override
-    public UserDto findUserByEmail(String mail) throws Exception {
+    public UserDto findUserByEmail(String mail) throws CustomException {
         try{
             if (userRepository.existsUserByMail(mail)){
                 Optional<User> userOptional = userRepository.findByEmail(mail);
@@ -138,20 +139,26 @@ public class UserServiceImpl extends BaseServicesDTOImpl<User, UserDto, UserMapp
                 UserDto userDto = this.getAddressesAndOrders(user);
                 return userDto;
             } else {
-                throw new Exception();
+                throw new CustomException("Usuario no existe");
             }
         }catch (Exception e){
             log.info(e.getMessage());
-            throw new Exception(e.getMessage());
+            throw new CustomException(e.getMessage());
         }
     }
 
-    public UserDto getAddressesAndOrders(User entity) throws Exception {
-        UserDto entityDto = mapper.convertToDto(entity);
-        entityDto.setOrders(orderService.ordersByUserId(entityDto.getId()));
-        entityDto.setAddresses(addressService.addressesByUserId(entityDto.getId()));
+    public UserDto getAddressesAndOrders(User entity) throws CustomException {
+        try{
+            UserDto entityDto = mapper.convertToDto(entity);
+            entityDto.setOrders(orderService.ordersByUserId(entityDto.getId()));
+            entityDto.setAddresses(addressService.addressesByUserId(entityDto.getId()));
 
-        return entityDto;
+            return entityDto;
+        }catch (Exception e){
+            log.info(e.getMessage());
+            throw new CustomException(e.getMessage());
+        }
+
     }
 
 

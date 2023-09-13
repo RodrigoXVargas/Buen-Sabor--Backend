@@ -10,6 +10,7 @@ import com.project.buensabor.dto.userDto.UserDto;
 import com.project.buensabor.entities.*;
 import com.project.buensabor.enums.RolName;
 import com.project.buensabor.enums.StatusType;
+import com.project.buensabor.exceptions.CustomException;
 import com.project.buensabor.repositories.Base.BaseRepository;
 import com.project.buensabor.repositories.OrderProductsRepository;
 import com.project.buensabor.repositories.OrderRepository;
@@ -205,8 +206,13 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
 
     @Override
     @Transactional
-    public OrderDto saveOne(OrderDto entityDto) throws Exception {
+    public OrderDto saveOne(OrderDto entityDto) throws CustomException {
         try {
+
+            if (!productService.validarStock(entityDto.getProducts())){
+                throw new CustomException("No hay stock para cumplir con el pedido completo");
+            }
+            
             Order entity = new Order();
             modelMapper.map(entityDto, entity);
             entity = orderRepository.save(entity);
@@ -223,10 +229,11 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
                     orderProducts = orderProductsRepository.save(orderProducts);
                     oProductsWithoutOrderDto = modelMapper.map(orderProducts, OProductsWithoutOrderDto.class);
                     withoutOrderDtoList.add(oProductsWithoutOrderDto);
-                    updateQuantityProduct(oProductsWithoutOrderDto.getProduct().getId());
+                    int cant = Long.valueOf(oProductsWithoutOrderDto.getCant()).intValue();
+                    updateQuantityProduct(oProductsWithoutOrderDto.getProduct().getId(), cant);
                 }
             }
-
+            productService.descontarStock(entityDto.getProducts());
             entityDto = mapper.convertToDto(entity);
             entityDto.setProducts(withoutOrderDtoList);
 
@@ -240,11 +247,10 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
             System.out.println("notificacion cajero");
             messagingTemplate.convertAndSend("/topic/cashiers", orderDtoList);
 
-
             return entityDto;
         } catch (Exception e) {
             log.info(e.getMessage());
-            throw new Exception(e.getMessage());
+            throw new CustomException(e.getMessage());
         }
     }
 
@@ -333,10 +339,10 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
     }
 
 
-    public void updateQuantityProduct(Long idProduct) throws Exception{
+    public void updateQuantityProduct(Long idProduct, int cant) throws Exception{
         try {
             ProductDto productDto = productService.findById(idProduct);
-            productDto.setQuantitySold(productDto.getQuantitySold()+1);
+            productDto.setQuantitySold(productDto.getQuantitySold()+ cant);
             ProductDto productDtoUpdated = productService.updateOne(productDto, idProduct);
         } catch (Exception e) {
             log.info(e.getMessage());

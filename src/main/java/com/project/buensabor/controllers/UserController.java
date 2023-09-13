@@ -5,6 +5,7 @@ import com.project.buensabor.dto.orderDto.StatusOrderDto;
 import com.project.buensabor.dto.userDto.RolDto;
 import com.project.buensabor.dto.userDto.UserDto;
 import com.project.buensabor.entities.User;
+import com.project.buensabor.exceptions.CustomException;
 import com.project.buensabor.services.UserServiceImpl;
 import com.project.buensabor.services.interfaces.ProductService;
 import com.project.buensabor.services.interfaces.StatusService;
@@ -82,8 +83,8 @@ public class UserController extends BaseControllerImpl<User, UserDto, UserServic
     public ResponseEntity<?> getUserByEmail(@PathVariable String mail){
         try {
             return ResponseEntity.status(HttpStatus.OK).body(userService.findUserByEmail(mail));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Error. Usuario no encontrado o peticion invalida.\"}");
+        } catch (CustomException e) {
+            return ResponseEntity.internalServerError().body("Error al buscar usuario por email: "+ System.lineSeparator()+ e.getMessage());
         }
     }
 

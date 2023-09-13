@@ -73,7 +73,7 @@ public class OrderController extends BaseControllerImpl<Order, OrderDto, OrderSe
         try {
             return ResponseEntity.status(HttpStatus.OK).body(orderService.saveOne(entity));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. Por favor intente más tarde.\"}");
+            return ResponseEntity.internalServerError().body("Error al guardar la orden"+e.getMessage());
         }
     }
 

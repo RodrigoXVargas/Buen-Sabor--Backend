@@ -1,6 +1,8 @@
 package com.project.buensabor.services.interfaces;
 
+import com.project.buensabor.dto.orderDto.OrderProductsDtos.OProductsWithoutOrderDto;
 import com.project.buensabor.dto.productDto.ProductDto;
+import com.project.buensabor.exceptions.CustomException;
 import com.project.buensabor.services.Base.BaseServicesDTO;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,4 +19,8 @@ public interface ProductService extends BaseServicesDTO<ProductDto, Long> {
     ProductDto updateOne(ProductDto productDto, Long id, MultipartFile image) throws Exception;
 
     List<ProductDto> findProductsByQDesc() throws Exception;
+
+    boolean validarStock(List<OProductsWithoutOrderDto> productosAValidar) throws CustomException;
+
+    void descontarStock(List<OProductsWithoutOrderDto> productosAValidar) throws CustomException;
 }

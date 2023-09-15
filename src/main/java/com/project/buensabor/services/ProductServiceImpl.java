@@ -306,7 +306,7 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
                 productExistente.setImage((String) uploadData.get("url"));
 
             }
-            if (productExistente.getSubcategory().getParentCategory().getName().equals("Bebidas")){
+            if (!(productExistente.getSubcategory().getParentCategory().getName().equals("Bebidas"))){
                 productExistente.setCost(this.getProductCost(productExistente.getId()));
             }
 

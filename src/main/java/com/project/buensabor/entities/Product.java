@@ -33,6 +33,9 @@ public class Product extends Base {
     @Column
     private int quantitySold = 0;
 
+    @Column
+    private double cost;
+
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "subcategory_fk")
     private Category subcategory;

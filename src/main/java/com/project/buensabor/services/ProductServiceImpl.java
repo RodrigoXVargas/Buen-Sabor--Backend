@@ -205,7 +205,7 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
     public ProductDto saveOne(ProductDto entityDto, MultipartFile image) throws Exception {
         try {
             if(image.isEmpty()){
-                throw new Exception();
+                throw new CustomException("Imagen requerida");
             }
             Product product = new Product();
             modelMapper.map(entityDto, product);
@@ -226,7 +226,7 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
             }
             Map<String, Object> uploadData = imageService.uploadImage(image, product.getId(), CLOUDINARY_FOLDER);
             product.setImage((String) uploadData.get("url"));
-
+            product.setCost(this.getProductCost(product.getId()));
             product = productRepository.save(product);
 
             entityDto = mapper.convertToDto(product);
@@ -245,11 +245,7 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
             Optional<Product> productOptional = productRepository.findById(id);
             Product productExistente = productOptional.get();
             modelMapper.map(entity, productExistente);
-            if (!(Objects.nonNull(image))){
-                Map<String, Object> uploadData = imageService.uploadImage(image, productExistente.getId(), CLOUDINARY_FOLDER);
-                productExistente.setImage((String) uploadData.get("url"));
 
-            }
             productExistente = productRepository.save(productExistente);
 
             List<PIngredientsCantDto> productIngredientList = new ArrayList<>();
@@ -294,8 +290,13 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
                     productIngredientList.add(pIngredientsCantDto);
                 }
             }
+            if (Objects.nonNull(image) && !image.isEmpty()){
+                Map<String, Object> uploadData = imageService.uploadImage(image, productExistente.getId(), CLOUDINARY_FOLDER);
+                productExistente.setImage((String) uploadData.get("url"));
 
-
+            }
+            productExistente.setCost(this.getProductCost(productExistente.getId()));
+            productExistente = productRepository.save(productExistente);
 
             entity = mapper.convertToDto(productExistente);
             entity.setIngredients(productIngredientList);
@@ -328,4 +329,19 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
         }
     }
 
+
+    public double getProductCost(Long idProduct) throws CustomException{
+        try{
+            double costProduct = 0;
+            List<ProductIngredient> ingredientList = productIngredientRepository.findProductIngredientsByProductId(idProduct);
+            for (ProductIngredient productIngredient: ingredientList) {
+                costProduct+= productIngredient.getIngredient().getCost() * productIngredient.getCant();
+            }
+            return costProduct;
+
+        }catch (Exception e){
+            log.info(e.getMessage());
+            throw new CustomException(e.getMessage());
+        }
+    }
 }

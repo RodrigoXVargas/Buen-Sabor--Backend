@@ -226,7 +226,9 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
             }
             Map<String, Object> uploadData = imageService.uploadImage(image, product.getId(), CLOUDINARY_FOLDER);
             product.setImage((String) uploadData.get("url"));
-            product.setCost(this.getProductCost(product.getId()));
+            if (product.getSubcategory().getParentCategory().getName().equals("Bebidas")){
+                product.setCost(this.getProductCost(product.getId()));
+            }
             product = productRepository.save(product);
 
             entityDto = mapper.convertToDto(product);
@@ -295,7 +297,10 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
                 productExistente.setImage((String) uploadData.get("url"));
 
             }
-            productExistente.setCost(this.getProductCost(productExistente.getId()));
+            if (productExistente.getSubcategory().getParentCategory().getName().equals("Bebidas")){
+                productExistente.setCost(this.getProductCost(productExistente.getId()));
+            }
+
             productExistente = productRepository.save(productExistente);
 
             entity = mapper.convertToDto(productExistente);

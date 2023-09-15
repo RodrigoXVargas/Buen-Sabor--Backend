@@ -31,6 +31,8 @@ public class ProductDto extends BaseDto {
 
     private int quantitySold = 0;
 
+    private Double cost;
+
     private List<PIngredientsCantDto> ingredients;
 
 }

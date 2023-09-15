@@ -54,20 +54,20 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
 
     @Override
     @Transactional //Indica que el método es una transacción.
-    public List<ProductDto> findAll() throws Exception {
+    public List<ProductDto> findAll() throws CustomException {
         try {
             List<Product> entities = productRepository.findAll();
             return getProductDtos(entities);
         } catch (Exception e) {
             log.info(e.getMessage());
-            throw new Exception(e.getMessage());
+            throw new CustomException(e.getMessage());
         }
     }
 
 
     @Override
     @Transactional
-    public ProductDto findById(Long id) throws Exception {
+    public ProductDto findById(Long id) throws CustomException {
         try {
             Optional<Product> entityOptional = baseRepository.findById(id);
             ProductDto entityDto = mapper.convertToDto(entityOptional.get());
@@ -75,24 +75,24 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
             return entityDto;
         } catch (Exception e) {
             log.info(e.getMessage());
-            throw new Exception(e.getMessage());
+            throw new CustomException(e.getMessage());
         }
     }
 
     @Override
     @Transactional
-    public List<ProductDto> findProductsActive() throws Exception {
+    public List<ProductDto> findProductsActive() throws CustomException {
         try {
             List<Product> entities = productRepository.findAllByActive();
             return getProductDtos(entities);
         } catch (Exception e) {
             log.info(e.getMessage());
-            throw new Exception(e.getMessage());
+            throw new CustomException(e.getMessage());
         }
     }
 
     @Override
-    public String changeActive(Long id) throws Exception {
+    public String changeActive(Long id) throws CustomException {
         try{
             Optional<Product> optionalProduct = productRepository.findById(id);
             Product product = optionalProduct.get();
@@ -101,19 +101,19 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
             return "Se cambio el estado a "+ product.isActive();
         }catch (Exception e){
             log.info(e.getMessage());
-            throw new Exception(e.getMessage());
+            throw new CustomException(e.getMessage());
         }
     }
 
     @Override
     @Transactional //Indica que el método es una transacción.
-    public List<ProductDto> findProductsByQDesc() throws Exception {
+    public List<ProductDto> findProductsByQDesc() throws CustomException {
         try {
             List<Product> entities = productRepository.getProductsOrderByQuantitySoldDesc();
             return getProductDtos(entities);
         } catch (Exception e) {
             log.info(e.getMessage());
-            throw new Exception(e.getMessage());
+            throw new CustomException(e.getMessage());
         }
     }
 
@@ -202,10 +202,13 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
 
 
     @Transactional
-    public ProductDto saveOne(ProductDto entityDto, MultipartFile image) throws Exception {
+    public ProductDto saveOne(ProductDto entityDto, MultipartFile image) throws CustomException {
         try {
             if(image.isEmpty()){
                 throw new CustomException("Imagen requerida");
+            }
+            if (entityDto.getSubcategory().getParentCategory() == null) {
+                throw new CustomException("No hay categoria padre");
             }
             Product product = new Product();
             modelMapper.map(entityDto, product);
@@ -226,9 +229,11 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
             }
             Map<String, Object> uploadData = imageService.uploadImage(image, product.getId(), CLOUDINARY_FOLDER);
             product.setImage((String) uploadData.get("url"));
+
             if (product.getSubcategory().getParentCategory().getName().equals("Bebidas")){
                 product.setCost(this.getProductCost(product.getId()));
             }
+
             product = productRepository.save(product);
 
             entityDto = mapper.convertToDto(product);
@@ -236,13 +241,13 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
             return entityDto;
         } catch (Exception e) {
             log.info(e.getMessage());
-            throw new Exception(e.getMessage());
+            throw new CustomException(e.getMessage());
         }
     }
 
 
     @Transactional
-    public ProductDto updateOne(ProductDto entity, Long id, MultipartFile image) throws Exception {
+    public ProductDto updateOne(ProductDto entity, Long id, MultipartFile image) throws CustomException {
         try {
             Optional<Product> productOptional = productRepository.findById(id);
             Product productExistente = productOptional.get();
@@ -308,13 +313,13 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
             return entity;
         } catch (Exception e) {
             log.info(e.getMessage());
-            throw new Exception(e.getMessage());
+            throw new CustomException(e.getMessage());
         }
     }
 
     @Override
     @Transactional
-    public boolean deleteById(Long id) throws Exception {
+    public boolean deleteById(Long id) throws CustomException {
         try {
             if (productRepository.existsById(id)) {
 
@@ -330,7 +335,7 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
             }
         } catch (Exception e) {
             log.info(e.getMessage());
-            throw new Exception(e.getMessage());
+            throw new CustomException(e.getMessage());
         }
     }
 

@@ -10,15 +10,15 @@ import java.util.List;
 
 public interface ProductService extends BaseServicesDTO<ProductDto, Long> {
 
-    List<ProductDto> findProductsActive() throws Exception;
+    List<ProductDto> findProductsActive() throws CustomException;
 
-    String changeActive(Long id) throws Exception;
+    String changeActive(Long id) throws CustomException;
 
-    ProductDto saveOne(ProductDto productDto, MultipartFile image) throws Exception;
+    ProductDto saveOne(ProductDto productDto, MultipartFile image) throws CustomException;
 
-    ProductDto updateOne(ProductDto productDto, Long id, MultipartFile image) throws Exception;
+    ProductDto updateOne(ProductDto productDto, Long id, MultipartFile image) throws CustomException;
 
-    List<ProductDto> findProductsByQDesc() throws Exception;
+    List<ProductDto> findProductsByQDesc() throws CustomException;
 
     boolean validarStock(List<OProductsWithoutOrderDto> productosAValidar) throws CustomException;
 

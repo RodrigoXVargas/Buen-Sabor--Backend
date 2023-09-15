@@ -30,7 +30,7 @@ public class ProductController extends BaseControllerImpl<Product, ProductDto, P
         try {
             return ResponseEntity.status(HttpStatus.OK).body(productService.findProductsActive());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Error. Por favor intente más tarde.\"}");
+            return ResponseEntity.internalServerError().body("Error al obtener los productos activos: "+ System.lineSeparator()+ e.getMessage());
         }
     }
 
@@ -40,7 +40,7 @@ public class ProductController extends BaseControllerImpl<Product, ProductDto, P
         try {
             return ResponseEntity.status(HttpStatus.OK).body(productService.findProductsByQDesc());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Error. Por favor intente más tarde.\"}");
+            return ResponseEntity.internalServerError().body("Error al obtener los productos por cantidad vendida: "+ System.lineSeparator()+ e.getMessage());
         }
     }
 
@@ -50,7 +50,7 @@ public class ProductController extends BaseControllerImpl<Product, ProductDto, P
         try {
             return ResponseEntity.status(HttpStatus.OK).body(productService.changeActive(id));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Error. Por favor intente más tarde.\"}");
+            return ResponseEntity.internalServerError().body("Error al cambiar el estado del producto: "+ System.lineSeparator()+ e.getMessage());
         }
     }
 
@@ -62,7 +62,7 @@ public class ProductController extends BaseControllerImpl<Product, ProductDto, P
         try {
             return ResponseEntity.status(HttpStatus.OK).body(productService.saveOne(productDto, image));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. Por favor intente más tarde.\"}");
+            return ResponseEntity.internalServerError().body("Error al guardar el producto: "+ System.lineSeparator()+ e.getMessage());
         }
     }
 
@@ -75,7 +75,7 @@ public class ProductController extends BaseControllerImpl<Product, ProductDto, P
         try {
             return ResponseEntity.status(HttpStatus.OK).body(productService.updateOne(productDto, id, image));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. Por favor intente más tarde.\"}");
+            return ResponseEntity.internalServerError().body("Error al actualizar el producto: "+ System.lineSeparator()+ e.getMessage());
         }
     }
 
@@ -86,7 +86,7 @@ public class ProductController extends BaseControllerImpl<Product, ProductDto, P
         try {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(productService.deleteById(id));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. Por favor intente más tarde.\"}");
+            return ResponseEntity.internalServerError().body("Error al borrar el producto: "+ System.lineSeparator()+ e.getMessage());
         }
     }
 }

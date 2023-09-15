@@ -207,9 +207,7 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
             if(image.isEmpty()){
                 throw new CustomException("Imagen requerida");
             }
-            if (entityDto.getSubcategory().getParentCategory() == null) {
-                throw new CustomException("No hay categoria padre");
-            }
+
             Product product = new Product();
             modelMapper.map(entityDto, product);
             product = productRepository.save(product);
@@ -230,7 +228,7 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
             Map<String, Object> uploadData = imageService.uploadImage(image, product.getId(), CLOUDINARY_FOLDER);
             product.setImage((String) uploadData.get("url"));
 
-            if (product.getSubcategory().getParentCategory().getName().equals("Bebidas")){
+            if (!product.getSubcategory().getParentCategory().getName().equals("Bebidas")){
                 product.setCost(this.getProductCost(product.getId()));
             }
 
@@ -249,10 +247,7 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
     @Transactional
     public ProductDto updateOne(ProductDto entity, Long id, MultipartFile image) throws CustomException {
         try {
-            System.out.println("Costo del producto"+entity.getCost());
-            if (entity.getSubcategory().getParentCategory() == null) {
-                throw new CustomException("No hay categoria padre");
-            }
+            
             Optional<Product> productOptional = productRepository.findById(id);
             Product productExistente = productOptional.get();
             modelMapper.map(entity, productExistente);

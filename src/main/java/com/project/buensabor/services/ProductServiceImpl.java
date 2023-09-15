@@ -249,6 +249,7 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
     @Transactional
     public ProductDto updateOne(ProductDto entity, Long id, MultipartFile image) throws CustomException {
         try {
+            System.out.println("Costo del producto"+entity.getCost());
             if (entity.getSubcategory().getParentCategory() == null) {
                 throw new CustomException("No hay categoria padre");
             }

@@ -249,6 +249,9 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
     @Transactional
     public ProductDto updateOne(ProductDto entity, Long id, MultipartFile image) throws CustomException {
         try {
+            if (entity.getSubcategory().getParentCategory() == null) {
+                throw new CustomException("No hay categoria padre");
+            }
             Optional<Product> productOptional = productRepository.findById(id);
             Product productExistente = productOptional.get();
             modelMapper.map(entity, productExistente);

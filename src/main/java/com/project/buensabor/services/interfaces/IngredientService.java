@@ -4,9 +4,13 @@ import com.project.buensabor.dto.productDto.IngredientDto;
 import com.project.buensabor.exceptions.CustomException;
 import com.project.buensabor.services.Base.BaseServicesDTO;
 
+import java.util.List;
+
 public interface IngredientService extends BaseServicesDTO<IngredientDto, Long> {
 
     boolean validarStock(Long idIngredient, Long cantRequerida) throws CustomException;
 
     void descontarStock(Long idIngredient, Long cantADescontar) throws CustomException;
+
+    List<IngredientDto> getIngOrderStockMin() throws CustomException;
 }

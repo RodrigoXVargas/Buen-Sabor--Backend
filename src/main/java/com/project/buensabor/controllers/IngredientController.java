@@ -53,4 +53,14 @@ public class IngredientController extends BaseControllerImpl<Ingredient, Ingredi
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. Por favor intente más tarde.\"}");
         }
     }
+
+    @PreAuthorize("hasAnyAuthority('ingredient:getAllOrderStockMin', 'superAdmin')")
+    @GetMapping("/getAllOrderStockMin")
+    public ResponseEntity<?> getAllOrderStockMin() {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(ingredientService.getIngOrderStockMin());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Error al obtener los ingredientes ordenados por stockMin: "+ System.lineSeparator()+ e.getMessage());
+        }
+    }
 }

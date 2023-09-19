@@ -11,7 +11,10 @@ import com.project.buensabor.services.interfaces.IngredientService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -63,4 +66,21 @@ public class IngredientServiceImpl extends BaseServicesDTOImpl<Ingredient, Ingre
             throw new CustomException(e.getMessage());
         }
     }
+
+    @Override
+    public List<IngredientDto> getIngOrderStockMin() throws CustomException {
+        try{
+            List<Ingredient> ingredientList = ingredientRepository.getIngredientsOrderStockMin();
+            List<IngredientDto> ingredientDtoList = new ArrayList<>();
+            for (Ingredient ingredient: ingredientList) {
+                ingredientDtoList.add(mapper.convertToDto(ingredient));
+            }
+            return ingredientDtoList;
+        }catch (Exception e){
+            log.info(e.getMessage());
+            throw new CustomException(e.getMessage());
+        }
+    }
+
+
 }

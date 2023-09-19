@@ -19,6 +19,8 @@ public class IngredientDto extends BaseDto {
 
     private Double cost;
 
+    private Long stockMin;
+
     private Measure measure;
 
 }

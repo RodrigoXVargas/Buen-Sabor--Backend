@@ -24,6 +24,9 @@ public class Ingredient extends Base {
     @Column
     private Double cost;
 
+    @Column
+    private Long stockMin = 0l;
+
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "measure_fk")
     private Measure measure;

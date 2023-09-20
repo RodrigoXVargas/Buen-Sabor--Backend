@@ -2,10 +2,8 @@ package com.project.buensabor.controllers;
 
 import com.project.buensabor.controllers.Base.BaseControllerImpl;
 import com.project.buensabor.dto.orderDto.PaymodeDto;
-import com.project.buensabor.dto.productDto.MeasureDto;
 import com.project.buensabor.entities.Paymode;
 import com.project.buensabor.services.PaymodeServiceImpl;
-import com.project.buensabor.services.interfaces.MeasureService;
 import com.project.buensabor.services.interfaces.PaymodeService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +22,7 @@ public class PaymodeController extends BaseControllerImpl<Paymode, PaymodeDto, P
     private PaymodeService paymodeService;
 
     @Override
-    @PreAuthorize("hasAnyAuthority('paymode:getAll','superAdmin')")
+    @PreAuthorize("hasAnyAuthority('paymode:getAll','_superAdmin')")
     @GetMapping("/getAll")
     public ResponseEntity<?> getAll() {
         try {
@@ -35,7 +33,7 @@ public class PaymodeController extends BaseControllerImpl<Paymode, PaymodeDto, P
     }
 
     @Override
-    @PreAuthorize("hasAnyAuthority('paymode:getOne','superAdmin')")
+    @PreAuthorize("hasAnyAuthority('paymode:getOne','_superAdmin')")
     @GetMapping("/get/{id}")
     public ResponseEntity<?> getOne(@PathVariable Long id) {
         try {
@@ -45,7 +43,7 @@ public class PaymodeController extends BaseControllerImpl<Paymode, PaymodeDto, P
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('paymode:save','superAdmin')")
+    @PreAuthorize("hasAnyAuthority('paymode:save','_superAdmin')")
     @PostMapping("/save")
     public ResponseEntity<?> saveOne(@RequestBody PaymodeDto entity) {
         try {
@@ -55,7 +53,7 @@ public class PaymodeController extends BaseControllerImpl<Paymode, PaymodeDto, P
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('paymode:update','superAdmin')")
+    @PreAuthorize("hasAnyAuthority('paymode:update','_superAdmin')")
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateOne(@PathVariable Long id, @RequestBody PaymodeDto entity) {
         try {
@@ -65,7 +63,7 @@ public class PaymodeController extends BaseControllerImpl<Paymode, PaymodeDto, P
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('paymode:delete','superAdmin')")
+    @PreAuthorize("hasAnyAuthority('paymode:delete','_superAdmin')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteById(@PathVariable Long id) {
         try {

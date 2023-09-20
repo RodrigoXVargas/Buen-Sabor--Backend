@@ -2,10 +2,8 @@ package com.project.buensabor.controllers;
 
 import com.project.buensabor.controllers.Base.BaseControllerImpl;
 import com.project.buensabor.dto.orderDto.StatusOrderDto;
-import com.project.buensabor.dto.userDto.RolDto;
 import com.project.buensabor.entities.StatusOrder;
 import com.project.buensabor.services.StatusServiceImpl;
-import com.project.buensabor.services.interfaces.RolService;
 import com.project.buensabor.services.interfaces.StatusService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +22,7 @@ public class StatusController extends BaseControllerImpl<StatusOrder, StatusOrde
     private StatusService statusService;
 
     @Override
-    @PreAuthorize("hasAnyAuthority('statusorder:getAll','superAdmin')")
+    @PreAuthorize("hasAnyAuthority('statusorder:getAll','_superAdmin')")
     @GetMapping("/getAll")
     public ResponseEntity<?> getAll() {
         try {
@@ -35,7 +33,7 @@ public class StatusController extends BaseControllerImpl<StatusOrder, StatusOrde
     }
 
     @Override
-    @PreAuthorize("hasAnyAuthority('statusorder:getOne','superAdmin')")
+    @PreAuthorize("hasAnyAuthority('statusorder:getOne','_superAdmin')")
     @GetMapping("/get/{id}")
     public ResponseEntity<?> getOne(@PathVariable Long id) {
         try {
@@ -45,7 +43,7 @@ public class StatusController extends BaseControllerImpl<StatusOrder, StatusOrde
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('statusorder:save','superAdmin')")
+    @PreAuthorize("hasAnyAuthority('statusorder:save','_superAdmin')")
     @PostMapping("/save")
     public ResponseEntity<?> saveOne(@RequestBody StatusOrderDto entity) {
         try {
@@ -55,7 +53,7 @@ public class StatusController extends BaseControllerImpl<StatusOrder, StatusOrde
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('statusorder:update','superAdmin')")
+    @PreAuthorize("hasAnyAuthority('statusorder:update','_superAdmin')")
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateOne(@PathVariable Long id, @RequestBody StatusOrderDto entity) {
         try {
@@ -65,7 +63,7 @@ public class StatusController extends BaseControllerImpl<StatusOrder, StatusOrde
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('statusorder:delete','superAdmin')")
+    @PreAuthorize("hasAnyAuthority('statusorder:delete','_superAdmin')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteById(@PathVariable Long id) {
         try {

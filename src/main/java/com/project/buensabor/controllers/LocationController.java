@@ -1,11 +1,9 @@
 package com.project.buensabor.controllers;
 
 import com.project.buensabor.controllers.Base.BaseControllerImpl;
-import com.project.buensabor.dto.productDto.IngredientDto;
 import com.project.buensabor.dto.userDto.LocationDto;
 import com.project.buensabor.entities.Location;
 import com.project.buensabor.services.LocationServiceImpl;
-import com.project.buensabor.services.interfaces.IngredientService;
 import com.project.buensabor.services.interfaces.LocationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +21,7 @@ public class LocationController extends BaseControllerImpl<Location, LocationDto
     @Autowired
     private LocationService locationService;
 
-    @PreAuthorize("hasAnyAuthority('location:save', 'superAdmin')")
+    @PreAuthorize("hasAnyAuthority('location:save', '_superAdmin')")
     @PostMapping("/save")
     public ResponseEntity<?> saveOne(@RequestBody LocationDto entity) {
         try {
@@ -33,7 +31,7 @@ public class LocationController extends BaseControllerImpl<Location, LocationDto
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('location:update', 'superAdmin')")
+    @PreAuthorize("hasAnyAuthority('location:update', '_superAdmin')")
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateOne(@PathVariable Long id, @RequestBody LocationDto entity) {
         try {
@@ -43,7 +41,7 @@ public class LocationController extends BaseControllerImpl<Location, LocationDto
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('location:delete', 'superAdmin')")
+    @PreAuthorize("hasAnyAuthority('location:delete', '_superAdmin')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteById(@PathVariable Long id) {
         try {

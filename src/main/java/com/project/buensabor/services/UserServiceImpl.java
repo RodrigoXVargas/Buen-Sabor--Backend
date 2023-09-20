@@ -1,20 +1,17 @@
 package com.project.buensabor.services;
 
 import com.project.buensabor.ModelMappers.UserMapper;
-import com.project.buensabor.dto.orderDto.OrderDtos.OrderWithoutuserDto;
-import com.project.buensabor.dto.productDto.ProductDto;
-import com.project.buensabor.dto.productDto.ProductIngredientDTOs.PIngredientsCantDto;
-import com.project.buensabor.dto.userDto.AddressDtos.AddressDto;
 import com.project.buensabor.dto.userDto.AddressDtos.AddressWithoutuserDto;
 import com.project.buensabor.dto.userDto.RolDto;
 import com.project.buensabor.dto.userDto.UserDto;
-import com.project.buensabor.entities.*;
-import com.project.buensabor.enums.StatusType;
+import com.project.buensabor.entities.Address;
+import com.project.buensabor.entities.Location;
+import com.project.buensabor.entities.Rol;
+import com.project.buensabor.entities.User;
 import com.project.buensabor.enums.StatusUser;
 import com.project.buensabor.exceptions.CustomException;
 import com.project.buensabor.repositories.AddressRepository;
 import com.project.buensabor.repositories.Base.BaseRepository;
-import com.project.buensabor.repositories.OrderRepository;
 import com.project.buensabor.repositories.UserRepository;
 import com.project.buensabor.services.Base.BaseServicesDTOImpl;
 import com.project.buensabor.services.interfaces.AddressService;
@@ -26,7 +23,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @Slf4j

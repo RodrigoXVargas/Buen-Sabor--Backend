@@ -2,7 +2,6 @@ package com.project.buensabor.controllers;
 
 import com.project.buensabor.controllers.Base.BaseControllerImpl;
 import com.project.buensabor.dto.orderDto.BillDto;
-import com.project.buensabor.dto.userDto.AddressDtos.AddressDto;
 import com.project.buensabor.entities.Bill;
 import com.project.buensabor.services.BillServiceImpl;
 import com.project.buensabor.services.interfaces.BillService;
@@ -23,7 +22,7 @@ public class BillController extends BaseControllerImpl<Bill, BillDto, BillServic
     private BillService billService;
 
     @Override
-    @PreAuthorize("hasAnyAuthority('bill:getAll', 'superAdmin')")
+    @PreAuthorize("hasAnyAuthority('bill:getAll', '_superAdmin')")
     @GetMapping("/getAll")
     public ResponseEntity<?> getAll() {
         try {
@@ -34,7 +33,7 @@ public class BillController extends BaseControllerImpl<Bill, BillDto, BillServic
     }
 
     @Override
-    @PreAuthorize("hasAnyAuthority('bill:getOne', 'superAdmin')")
+    @PreAuthorize("hasAnyAuthority('bill:getOne', '_superAdmin')")
     @GetMapping("/get/{id}")
     public ResponseEntity<?> getOne(@PathVariable Long id) {
         try {
@@ -44,7 +43,7 @@ public class BillController extends BaseControllerImpl<Bill, BillDto, BillServic
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('bill:save', 'superAdmin')")
+    @PreAuthorize("hasAnyAuthority('bill:save', '_superAdmin')")
     @PostMapping("/save")
     public ResponseEntity<?> saveOne(@RequestBody BillDto entity) {
         try {
@@ -55,7 +54,7 @@ public class BillController extends BaseControllerImpl<Bill, BillDto, BillServic
     }
 
 
-    @PreAuthorize("hasAnyAuthority('bill:update', 'superAdmin')")
+    @PreAuthorize("hasAnyAuthority('bill:update', '_superAdmin')")
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateOne(@PathVariable Long id, @RequestBody BillDto entity) {
         try {
@@ -66,7 +65,7 @@ public class BillController extends BaseControllerImpl<Bill, BillDto, BillServic
     }
 
 
-    @PreAuthorize("hasAnyAuthority('bill:delete', 'superAdmin')")
+    @PreAuthorize("hasAnyAuthority('bill:delete', '_superAdmin')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteById(@PathVariable Long id) {
         try {

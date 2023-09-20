@@ -1,7 +1,6 @@
 package com.project.buensabor.dto.userDto;
 
 import com.project.buensabor.dto.BaseDto;
-import com.project.buensabor.dto.orderDto.OrderDtos.OrderDto;
 import com.project.buensabor.dto.orderDto.OrderDtos.OrderWithoutuserDto;
 import com.project.buensabor.dto.userDto.AddressDtos.AddressWithoutuserDto;
 import com.project.buensabor.entities.Rol;

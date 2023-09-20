@@ -22,7 +22,7 @@ public class AddressController extends BaseControllerImpl<Address, AddressDto, A
     private AddressService addressService;
 
     @Override
-    @PreAuthorize("hasAnyAuthority('address:getAll', 'superAdmin')")
+    @PreAuthorize("hasAnyAuthority('address:getAll', '_superAdmin')")
     @GetMapping("/getAll")
     public ResponseEntity<?> getAll() {
         try {
@@ -33,7 +33,7 @@ public class AddressController extends BaseControllerImpl<Address, AddressDto, A
     }
 
     @Override
-    @PreAuthorize("hasAnyAuthority('address:getOne', 'superAdmin')")
+    @PreAuthorize("hasAnyAuthority('address:getOne', '_superAdmin')")
     @GetMapping("/get/{id}")
     public ResponseEntity<?> getOne(@PathVariable Long id) {
         try {
@@ -43,7 +43,7 @@ public class AddressController extends BaseControllerImpl<Address, AddressDto, A
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('address:save', 'superAdmin')")
+    @PreAuthorize("hasAnyAuthority('address:save', '_superAdmin')")
     @PostMapping("/save")
     public ResponseEntity<?> saveOne(@RequestBody AddressDto address) {
         try {
@@ -53,7 +53,7 @@ public class AddressController extends BaseControllerImpl<Address, AddressDto, A
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('address:update', 'superAdmin')")
+    @PreAuthorize("hasAnyAuthority('address:update', '_superAdmin')")
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateOne(@PathVariable Long id, @RequestBody AddressDto entity) {
         try {
@@ -63,7 +63,7 @@ public class AddressController extends BaseControllerImpl<Address, AddressDto, A
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('address:delete', 'superAdmin')")
+    @PreAuthorize("hasAnyAuthority('address:delete', '_superAdmin')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteById(@PathVariable Long id) {
         try {

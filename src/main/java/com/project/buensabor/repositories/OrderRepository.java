@@ -1,6 +1,5 @@
 package com.project.buensabor.repositories;
 
-import com.project.buensabor.entities.Address;
 import com.project.buensabor.entities.Order;
 import com.project.buensabor.repositories.Base.BaseRepository;
 import org.springframework.data.jpa.repository.Query;

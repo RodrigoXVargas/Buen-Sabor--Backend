@@ -1,11 +1,9 @@
 package com.project.buensabor.controllers;
 
 import com.project.buensabor.controllers.Base.BaseControllerImpl;
-import com.project.buensabor.dto.productDto.MeasureDto;
 import com.project.buensabor.dto.productDto.ProductIngredientDTOs.PIngredientDto;
 import com.project.buensabor.entities.ProductIngredient;
 import com.project.buensabor.services.ProductIngredientServiceImpl;
-import com.project.buensabor.services.interfaces.MeasureService;
 import com.project.buensabor.services.interfaces.ProductIngredientService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +31,7 @@ public class ProductIngredientController extends BaseControllerImpl<ProductIngre
     }
 
 
-    @PreAuthorize("hasAnyAuthority('productingredients:save','superAdmin')")
+    @PreAuthorize("hasAnyAuthority('productingredients:save','_superAdmin')")
     @PostMapping("/save")
     public ResponseEntity<?> saveOne(@RequestBody PIngredientDto entity) {
         try {
@@ -43,7 +41,7 @@ public class ProductIngredientController extends BaseControllerImpl<ProductIngre
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('productingredients:update','superAdmin')")
+    @PreAuthorize("hasAnyAuthority('productingredients:update','_superAdmin')")
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateOne(@PathVariable Long id, @RequestBody PIngredientDto entity) {
         try {
@@ -53,7 +51,7 @@ public class ProductIngredientController extends BaseControllerImpl<ProductIngre
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('productingredients:delete','superAdmin')")
+    @PreAuthorize("hasAnyAuthority('productingredients:delete','_superAdmin')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteById(@PathVariable Long id) {
         try {

@@ -3,11 +3,8 @@ package com.project.buensabor.controllers;
 import com.project.buensabor.controllers.Base.BaseControllerImpl;
 import com.project.buensabor.dto.orderDto.OrderDtos.OrderDto;
 import com.project.buensabor.dto.orderDto.StatusOrderDto;
-import com.project.buensabor.dto.productDto.MeasureDto;
-import com.project.buensabor.dto.userDto.RolDto;
 import com.project.buensabor.entities.Order;
 import com.project.buensabor.services.OrderServiceImpl;
-import com.project.buensabor.services.interfaces.MeasureService;
 import com.project.buensabor.services.interfaces.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +22,7 @@ public class OrderController extends BaseControllerImpl<Order, OrderDto, OrderSe
     @Autowired
     private OrderService orderService;
 
-    @PreAuthorize("hasAnyAuthority('order:getOrdersByStatus','superAdmin')")
+    @PreAuthorize("hasAnyAuthority('order:getOrdersByStatus','_superAdmin')")
     @GetMapping(value = "/getOrdersByStatus/{id}")
     public ResponseEntity<?> getOrdersByStatus(@PathVariable Long id){
         try {
@@ -35,7 +32,7 @@ public class OrderController extends BaseControllerImpl<Order, OrderDto, OrderSe
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('order:changeStatus','superAdmin')")
+    @PreAuthorize("hasAnyAuthority('order:changeStatus','_superAdmin')")
     @PutMapping(value = "/changeStatus/{id}")
     public ResponseEntity<?> changeStatusOrder(@PathVariable Long id, @RequestBody StatusOrderDto status){
         try {
@@ -46,7 +43,7 @@ public class OrderController extends BaseControllerImpl<Order, OrderDto, OrderSe
     }
 
     @Override
-    @PreAuthorize("hasAnyAuthority('order:getAll','superAdmin')")
+    @PreAuthorize("hasAnyAuthority('order:getAll','_superAdmin')")
     @GetMapping("/getAll")
     public ResponseEntity<?> getAll() {
         try {
@@ -57,7 +54,7 @@ public class OrderController extends BaseControllerImpl<Order, OrderDto, OrderSe
     }
 
     @Override
-    @PreAuthorize("hasAnyAuthority('order:getOne','superAdmin')")
+    @PreAuthorize("hasAnyAuthority('order:getOne','_superAdmin')")
     @GetMapping("/get/{id}")
     public ResponseEntity<?> getOne(@PathVariable Long id) {
         try {
@@ -67,7 +64,7 @@ public class OrderController extends BaseControllerImpl<Order, OrderDto, OrderSe
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('order:save','superAdmin')")
+    @PreAuthorize("hasAnyAuthority('order:save','_superAdmin')")
     @PostMapping("/save")
     public ResponseEntity<?> saveOne(@RequestBody OrderDto entity) {
         try {
@@ -77,7 +74,7 @@ public class OrderController extends BaseControllerImpl<Order, OrderDto, OrderSe
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('order:update','superAdmin')")
+    @PreAuthorize("hasAnyAuthority('order:update','_superAdmin')")
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateOne(@PathVariable Long id, @RequestBody OrderDto entity) {
         try {
@@ -87,7 +84,7 @@ public class OrderController extends BaseControllerImpl<Order, OrderDto, OrderSe
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('order:delete','superAdmin')")
+    @PreAuthorize("hasAnyAuthority('order:delete','_superAdmin')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteById(@PathVariable Long id) {
         try {

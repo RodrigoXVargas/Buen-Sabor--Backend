@@ -1,11 +1,9 @@
 package com.project.buensabor.controllers;
 
 import com.project.buensabor.controllers.Base.BaseControllerImpl;
-import com.project.buensabor.dto.productDto.MeasureDto;
 import com.project.buensabor.dto.userDto.RolDto;
 import com.project.buensabor.entities.Rol;
 import com.project.buensabor.services.RolServiceImpl;
-import com.project.buensabor.services.interfaces.MeasureService;
 import com.project.buensabor.services.interfaces.RolService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +22,7 @@ public class RolController extends BaseControllerImpl<Rol, RolDto, RolServiceImp
     private RolService rolService;
 
     @Override
-    @PreAuthorize("hasAnyAuthority('rol:getAll','superAdmin')")
+    @PreAuthorize("hasAnyAuthority('rol:getAll','_superAdmin')")
     @GetMapping("/getAll")
     public ResponseEntity<?> getAll() {
         try {
@@ -35,7 +33,7 @@ public class RolController extends BaseControllerImpl<Rol, RolDto, RolServiceImp
     }
 
     @Override
-    @PreAuthorize("hasAnyAuthority('rol:getOne','superAdmin')")
+    @PreAuthorize("hasAnyAuthority('rol:getOne','_superAdmin')")
     @GetMapping("/get/{id}")
     public ResponseEntity<?> getOne(@PathVariable Long id) {
         try {
@@ -45,7 +43,7 @@ public class RolController extends BaseControllerImpl<Rol, RolDto, RolServiceImp
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('rol:save','superAdmin')")
+    @PreAuthorize("hasAnyAuthority('rol:save','_superAdmin')")
     @PostMapping("/save")
     public ResponseEntity<?> saveOne(@RequestBody RolDto entity) {
         try {
@@ -55,7 +53,7 @@ public class RolController extends BaseControllerImpl<Rol, RolDto, RolServiceImp
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('rol:update','superAdmin')")
+    @PreAuthorize("hasAnyAuthority('rol:update','_superAdmin')")
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateOne(@PathVariable Long id, @RequestBody RolDto entity) {
         try {
@@ -65,7 +63,7 @@ public class RolController extends BaseControllerImpl<Rol, RolDto, RolServiceImp
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('rol:delete','superAdmin')")
+    @PreAuthorize("hasAnyAuthority('rol:delete','_superAdmin')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteById(@PathVariable Long id) {
         try {

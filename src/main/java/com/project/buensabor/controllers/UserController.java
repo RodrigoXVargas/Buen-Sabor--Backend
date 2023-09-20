@@ -1,14 +1,11 @@
 package com.project.buensabor.controllers;
 
 import com.project.buensabor.controllers.Base.BaseControllerImpl;
-import com.project.buensabor.dto.orderDto.StatusOrderDto;
 import com.project.buensabor.dto.userDto.RolDto;
 import com.project.buensabor.dto.userDto.UserDto;
 import com.project.buensabor.entities.User;
 import com.project.buensabor.exceptions.CustomException;
 import com.project.buensabor.services.UserServiceImpl;
-import com.project.buensabor.services.interfaces.ProductService;
-import com.project.buensabor.services.interfaces.StatusService;
 import com.project.buensabor.services.interfaces.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +23,7 @@ public class UserController extends BaseControllerImpl<User, UserDto, UserServic
     @Autowired
     private UserService userService;
 
-    @PreAuthorize("hasAnyAuthority('user:getEmployees','superAdmin')")
+    @PreAuthorize("hasAnyAuthority('user:getEmployees','_superAdmin')")
     @GetMapping(value = "/getEmployees")
     public ResponseEntity<?> getEmployees(){
         try {
@@ -36,7 +33,7 @@ public class UserController extends BaseControllerImpl<User, UserDto, UserServic
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('user:changeBlacklist','superAdmin')")
+    @PreAuthorize("hasAnyAuthority('user:changeBlacklist','_superAdmin')")
     @GetMapping(value = "/changeBlacklist/{id}")
     public ResponseEntity<?> changeBlacklistUser(@PathVariable Long id){
         try {
@@ -46,7 +43,7 @@ public class UserController extends BaseControllerImpl<User, UserDto, UserServic
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('user:changeRol','superAdmin')")
+    @PreAuthorize("hasAnyAuthority('user:changeRol','_superAdmin')")
     @PutMapping(value = "/changeRol/{id}")
     public ResponseEntity<?> changeRolUser(@PathVariable Long id, @RequestBody RolDto rol){
         try {
@@ -57,7 +54,7 @@ public class UserController extends BaseControllerImpl<User, UserDto, UserServic
     }
 
     @Override
-    @PreAuthorize("hasAnyAuthority('user:getAll','superAdmin')")
+    @PreAuthorize("hasAnyAuthority('user:getAll','_superAdmin')")
     @GetMapping("/getAll")
     public ResponseEntity<?> getAll() {
         try {
@@ -68,7 +65,7 @@ public class UserController extends BaseControllerImpl<User, UserDto, UserServic
     }
 
     @Override
-    @PreAuthorize("hasAnyAuthority('user:getOne','superAdmin')")
+    @PreAuthorize("hasAnyAuthority('user:getOne','_superAdmin')")
     @GetMapping("/get/{id}")
     public ResponseEntity<?> getOne(@PathVariable Long id) {
         try {
@@ -78,7 +75,7 @@ public class UserController extends BaseControllerImpl<User, UserDto, UserServic
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('user:getUserByEmail','superAdmin')")
+    @PreAuthorize("hasAnyAuthority('user:getUserByEmail','_superAdmin')")
     @GetMapping(value = "/getUserByEmail/{mail}")
     public ResponseEntity<?> getUserByEmail(@PathVariable String mail){
         try {
@@ -89,7 +86,7 @@ public class UserController extends BaseControllerImpl<User, UserDto, UserServic
     }
 
 
-    @PreAuthorize("hasAnyAuthority('user:save','superAdmin')")
+    @PreAuthorize("hasAnyAuthority('user:save','_superAdmin')")
     @PostMapping("/save")
     public ResponseEntity<?> saveOne(@RequestBody UserDto entity) {
         try {
@@ -99,7 +96,7 @@ public class UserController extends BaseControllerImpl<User, UserDto, UserServic
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('user:update','superAdmin')")
+    @PreAuthorize("hasAnyAuthority('user:update','_superAdmin')")
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateOne(@PathVariable Long id, @RequestBody UserDto entity) {
         try {
@@ -109,7 +106,7 @@ public class UserController extends BaseControllerImpl<User, UserDto, UserServic
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('user:delete','superAdmin')")
+    @PreAuthorize("hasAnyAuthority('user:delete','_superAdmin')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteById(@PathVariable Long id) {
         try {

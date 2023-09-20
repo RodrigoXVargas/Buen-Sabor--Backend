@@ -2,10 +2,8 @@ package com.project.buensabor.controllers;
 
 import com.project.buensabor.controllers.Base.BaseControllerImpl;
 import com.project.buensabor.dto.orderDto.OrderProductsDtos.OrderProductsDto;
-import com.project.buensabor.dto.productDto.MeasureDto;
 import com.project.buensabor.entities.OrderProducts;
 import com.project.buensabor.services.OrderProductsServiceImpl;
-import com.project.buensabor.services.interfaces.MeasureService;
 import com.project.buensabor.services.interfaces.OrderProductsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +22,7 @@ public class OrderProductsController extends BaseControllerImpl<OrderProducts, O
     private OrderProductsService orderProductsService;
 
     @Override
-    @PreAuthorize("hasAnyAuthority('orderProducts:getAll','superAdmin')")
+    @PreAuthorize("hasAnyAuthority('orderProducts:getAll','_superAdmin')")
     @GetMapping("/getAll")
     public ResponseEntity<?> getAll() {
         try {
@@ -35,7 +33,7 @@ public class OrderProductsController extends BaseControllerImpl<OrderProducts, O
     }
 
     @Override
-    @PreAuthorize("hasAnyAuthority('orderProducts:getOne','superAdmin')")
+    @PreAuthorize("hasAnyAuthority('orderProducts:getOne','_superAdmin')")
     @GetMapping("/get/{id}")
     public ResponseEntity<?> getOne(@PathVariable Long id) {
         try {
@@ -45,7 +43,7 @@ public class OrderProductsController extends BaseControllerImpl<OrderProducts, O
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('orderProducts:save','superAdmin')")
+    @PreAuthorize("hasAnyAuthority('orderProducts:save','_superAdmin')")
     @PostMapping("/save")
     public ResponseEntity<?> saveOne(@RequestBody OrderProductsDto entity) {
         try {
@@ -55,7 +53,7 @@ public class OrderProductsController extends BaseControllerImpl<OrderProducts, O
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('orderProducts:update','superAdmin')")
+    @PreAuthorize("hasAnyAuthority('orderProducts:update','_superAdmin')")
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateOne(@PathVariable Long id, @RequestBody OrderProductsDto entity) {
         try {
@@ -65,7 +63,7 @@ public class OrderProductsController extends BaseControllerImpl<OrderProducts, O
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('orderProducts:delete','superAdmin')")
+    @PreAuthorize("hasAnyAuthority('orderProducts:delete','_superAdmin')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteById(@PathVariable Long id) {
         try {

@@ -23,7 +23,7 @@ public class CategoryController extends BaseControllerImpl<Category, CategoryDto
     @Autowired
     private CategoryService categoryService;
 
-    @PreAuthorize("hasAnyAuthority('category:save', 'superAdmin')")
+    @PreAuthorize("hasAnyAuthority('category:save', '_superAdmin')")
     @PostMapping("/save")
     public ResponseEntity<?> saveOne(@RequestBody CategoryDto entity) {
         try {
@@ -33,7 +33,7 @@ public class CategoryController extends BaseControllerImpl<Category, CategoryDto
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('category:update', 'superAdmin')")
+    @PreAuthorize("hasAnyAuthority('category:update', '_superAdmin')")
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateOne(@PathVariable Long id, @RequestBody CategoryDto entity) {
         try {
@@ -43,7 +43,7 @@ public class CategoryController extends BaseControllerImpl<Category, CategoryDto
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('category:delete', 'superAdmin')")
+    @PreAuthorize("hasAnyAuthority('category:delete', '_superAdmin')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteById(@PathVariable Long id) {
         try {

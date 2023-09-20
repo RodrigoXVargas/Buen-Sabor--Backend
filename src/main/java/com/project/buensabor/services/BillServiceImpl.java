@@ -3,19 +3,11 @@ package com.project.buensabor.services;
 import com.project.buensabor.ModelMappers.BillMapper;
 import com.project.buensabor.dto.orderDto.BillDto;
 import com.project.buensabor.dto.orderDto.OrderDtos.OrderDto;
-import com.project.buensabor.dto.orderDto.OrderDtos.OrderWithoutuserDto;
-import com.project.buensabor.dto.orderDto.OrderProductsDtos.OProductsWithoutOrderDto;
 import com.project.buensabor.entities.Bill;
-import com.project.buensabor.entities.Order;
-import com.project.buensabor.entities.OrderProducts;
-import com.project.buensabor.entities.Product;
 import com.project.buensabor.repositories.Base.BaseRepository;
 import com.project.buensabor.repositories.BillRepository;
-import com.project.buensabor.repositories.OrderProductsRepository;
-import com.project.buensabor.repositories.OrderRepository;
 import com.project.buensabor.services.Base.BaseServicesDTOImpl;
 import com.project.buensabor.services.interfaces.BillService;
-import com.project.buensabor.services.interfaces.OrderProductsService;
 import com.project.buensabor.services.interfaces.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -25,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @Service

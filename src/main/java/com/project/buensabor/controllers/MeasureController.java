@@ -2,10 +2,8 @@ package com.project.buensabor.controllers;
 
 import com.project.buensabor.controllers.Base.BaseControllerImpl;
 import com.project.buensabor.dto.productDto.MeasureDto;
-import com.project.buensabor.dto.userDto.LocationDto;
 import com.project.buensabor.entities.Measure;
 import com.project.buensabor.services.MeasureServiceImpl;
-import com.project.buensabor.services.interfaces.LocationService;
 import com.project.buensabor.services.interfaces.MeasureService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +22,7 @@ public class MeasureController extends BaseControllerImpl<Measure, MeasureDto, M
     private MeasureService measureService;
 
     @Override
-    @PreAuthorize("hasAnyAuthority('measure:getAll', 'superAdmin')")
+    @PreAuthorize("hasAnyAuthority('measure:getAll', '_superAdmin')")
     @GetMapping("/getAll")
     public ResponseEntity<?> getAll() {
         try {
@@ -35,7 +33,7 @@ public class MeasureController extends BaseControllerImpl<Measure, MeasureDto, M
     }
 
     @Override
-    @PreAuthorize("hasAnyAuthority('measure:getOne', 'superAdmin')")
+    @PreAuthorize("hasAnyAuthority('measure:getOne', '_superAdmin')")
     @GetMapping("/get/{id}")
     public ResponseEntity<?> getOne(@PathVariable Long id) {
         try {
@@ -45,7 +43,7 @@ public class MeasureController extends BaseControllerImpl<Measure, MeasureDto, M
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('measure:save', 'superAdmin')")
+    @PreAuthorize("hasAnyAuthority('measure:save', '_superAdmin')")
     @PostMapping("/save")
     public ResponseEntity<?> saveOne(@RequestBody MeasureDto entity) {
         try {
@@ -55,7 +53,7 @@ public class MeasureController extends BaseControllerImpl<Measure, MeasureDto, M
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('measure:update', 'superAdmin')")
+    @PreAuthorize("hasAnyAuthority('measure:update', '_superAdmin')")
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateOne(@PathVariable Long id, @RequestBody MeasureDto entity) {
         try {
@@ -65,7 +63,7 @@ public class MeasureController extends BaseControllerImpl<Measure, MeasureDto, M
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('measure:delete', 'superAdmin')")
+    @PreAuthorize("hasAnyAuthority('measure:delete', '_superAdmin')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteById(@PathVariable Long id) {
         try {

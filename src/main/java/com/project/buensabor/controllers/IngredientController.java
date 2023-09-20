@@ -1,11 +1,9 @@
 package com.project.buensabor.controllers;
 
 import com.project.buensabor.controllers.Base.BaseControllerImpl;
-import com.project.buensabor.dto.productDto.CategoryDto;
 import com.project.buensabor.dto.productDto.IngredientDto;
 import com.project.buensabor.entities.Ingredient;
 import com.project.buensabor.services.IngredientServiceImpl;
-import com.project.buensabor.services.interfaces.CategoryService;
 import com.project.buensabor.services.interfaces.IngredientService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +22,7 @@ public class IngredientController extends BaseControllerImpl<Ingredient, Ingredi
     private IngredientService ingredientService;
 
 
-    @PreAuthorize("hasAnyAuthority('ingredient:save', 'superAdmin')")
+    @PreAuthorize("hasAnyAuthority('ingredient:save', '_superAdmin')")
     @PostMapping("/save")
     public ResponseEntity<?> saveOne(@RequestBody IngredientDto entity) {
         try {
@@ -34,7 +32,7 @@ public class IngredientController extends BaseControllerImpl<Ingredient, Ingredi
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('ingredient:update', 'superAdmin')")
+    @PreAuthorize("hasAnyAuthority('ingredient:update', '_superAdmin')")
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateOne(@PathVariable Long id, @RequestBody IngredientDto entity) {
         try {
@@ -44,7 +42,7 @@ public class IngredientController extends BaseControllerImpl<Ingredient, Ingredi
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('ingredient:delete', 'superAdmin')")
+    @PreAuthorize("hasAnyAuthority('ingredient:delete', '_superAdmin')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteById(@PathVariable Long id) {
         try {
@@ -54,7 +52,7 @@ public class IngredientController extends BaseControllerImpl<Ingredient, Ingredi
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('ingredient:getAllOrderStockMin', 'superAdmin')")
+    @PreAuthorize("hasAnyAuthority('ingredient:getAllOrderStockMin', '_superAdmin')")
     @GetMapping("/getAllOrderStockMin")
     public ResponseEntity<?> getAllOrderStockMin() {
         try {

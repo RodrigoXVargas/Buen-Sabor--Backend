@@ -3,7 +3,6 @@ package com.project.buensabor.services.interfaces;
 import com.project.buensabor.dto.orderDto.OrderDtos.OrderDto;
 import com.project.buensabor.dto.orderDto.OrderDtos.OrderWithoutuserDto;
 import com.project.buensabor.dto.orderDto.StatusOrderDto;
-import com.project.buensabor.dto.userDto.RolDto;
 import com.project.buensabor.services.Base.BaseServicesDTO;
 
 import java.util.List;

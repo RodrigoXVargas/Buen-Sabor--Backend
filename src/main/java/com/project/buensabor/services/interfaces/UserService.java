@@ -2,7 +2,6 @@ package com.project.buensabor.services.interfaces;
 
 import com.project.buensabor.dto.userDto.RolDto;
 import com.project.buensabor.dto.userDto.UserDto;
-import com.project.buensabor.entities.Rol;
 import com.project.buensabor.exceptions.CustomException;
 import com.project.buensabor.services.Base.BaseServicesDTO;
 

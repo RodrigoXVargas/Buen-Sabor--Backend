@@ -43,7 +43,7 @@ public class OrderController extends BaseControllerImpl<Order, OrderDto, OrderSe
     }
 
     @PreAuthorize("hasAnyAuthority('order:plusMinutes','_superAdmin')")
-    @PutMapping(value = "/plusMinutes/{idOrder}")
+    @PutMapping(value = "/plusMinutes/{idOrder}&{minutes}")
     public ResponseEntity<?> plusMinutesOrder(@PathVariable Long idOrder, @PathVariable Long minutes){
         try {
             return ResponseEntity.status(HttpStatus.OK).body(orderService.plusMinutesOrder(idOrder, minutes));

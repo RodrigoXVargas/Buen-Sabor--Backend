@@ -25,6 +25,8 @@ public class OrderWithoutuserDto extends BaseDto {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "America/Buenos_Aires")
     private LocalDateTime creationDate;
 
+    private Long totalCookingTime;
+
     private String withdrawalMode;
 
     private Double totalPrice;

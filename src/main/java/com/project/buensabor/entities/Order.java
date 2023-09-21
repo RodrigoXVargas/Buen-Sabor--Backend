@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+
 @Entity
 @Table(name = "ORDERS")
 @Getter
@@ -15,8 +18,10 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Order extends Base {
 
+
     @Column
-    private String date;
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime creationDate;
 
     @Column
     private String withdrawalMode;
@@ -30,6 +35,9 @@ public class Order extends Base {
 
     @Column
     private String address;
+
+    @Column
+    private Long totalCookingTime = 0L;
 
 
     @ManyToOne(cascade = CascadeType.MERGE)

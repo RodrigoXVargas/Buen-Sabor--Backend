@@ -42,6 +42,16 @@ public class OrderController extends BaseControllerImpl<Order, OrderDto, OrderSe
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('order:plusMinutes','_superAdmin')")
+    @PutMapping(value = "/plusMinutes/{idOrder}")
+    public ResponseEntity<?> plusMinutesOrder(@PathVariable Long idOrder, @PathVariable Long minutes){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(orderService.plusMinutesOrder(idOrder, minutes));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Error. Por favor intente más tarde.\"}");
+        }
+    }
+
     @Override
     @PreAuthorize("hasAnyAuthority('order:getAll','_superAdmin')")
     @GetMapping("/getAll")

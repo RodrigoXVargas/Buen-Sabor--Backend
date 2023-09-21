@@ -12,6 +12,7 @@ import com.project.buensabor.exceptions.CustomException;
 import com.project.buensabor.repositories.Base.BaseRepository;
 import com.project.buensabor.repositories.OrderProductsRepository;
 import com.project.buensabor.repositories.OrderRepository;
+import com.project.buensabor.repositories.ProductRepository;
 import com.project.buensabor.services.Base.BaseServicesDTOImpl;
 import com.project.buensabor.services.interfaces.OrderService;
 import com.project.buensabor.services.interfaces.ProductService;
@@ -27,6 +28,8 @@ import java.util.*;
 @Service
 @Slf4j
 public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, OrderMapper, Long> implements OrderService {
+    @Autowired
+    private ProductRepository productRepository;
 
 
     public OrderServiceImpl(BaseRepository<Order, Long> baseRepository, OrderMapper mapper) {
@@ -48,9 +51,12 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
     private ProductService productService;
 
 
+    @Autowired
+    private DateService dateService;
+
     @Override
     @Transactional
-    public List<OrderWithoutuserDto> ordersByUserId(Long id) throws Exception {
+    public List<OrderWithoutuserDto> ordersByUserId(Long id) throws CustomException {
         try {
             List<Order> entities = orderRepository.findOrdersByUserId(id);
             List<OrderWithoutuserDto> entitiesDtos = new ArrayList<>();
@@ -64,13 +70,13 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
             return entitiesDtos;
         } catch (Exception e) {
             log.info(e.getMessage());
-            throw new Exception(e.getMessage());
+            throw new CustomException(e.getMessage());
         }
     }
 
     @Override
     @Transactional
-    public List<OrderDto> getOrdersByStatus(Long id) throws Exception {
+    public List<OrderDto> getOrdersByStatus(Long id) throws CustomException {
         try {
             List<Order> entities = orderRepository.findOrdersByStatusOrderId(id);
             List<OrderDto> entitiesDtos = new ArrayList<>();
@@ -84,13 +90,13 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
             return entitiesDtos;
         } catch (Exception e) {
             log.info(e.getMessage());
-            throw new Exception(e.getMessage());
+            throw new CustomException(e.getMessage());
         }
     }
 
     @Override
     @Transactional
-    public String changeStatus(StatusOrderDto status, Long id) throws Exception {
+    public String changeStatus(StatusOrderDto status, Long id) throws CustomException {
         try{
             Optional<Order> orderOptional = orderRepository.findById(id);
             Order order = orderOptional.get();
@@ -105,11 +111,27 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
             return "Se cambio el status a "+ order.getStatusOrder().getStatusType().name();
         }catch (Exception e){
             log.info(e.getMessage());
-            throw new Exception(e.getMessage());
+            throw new CustomException(e.getMessage());
         }
     }
 
-    public void notificarUsuario(User user) throws Exception {
+    @Override
+    @Transactional
+    public String plusMinutesOrder(Long idOrder, Long minutes) throws CustomException {
+        try{
+            Optional<Order> orderOptional = orderRepository.findById(idOrder);
+            Order order = orderOptional.get();
+            order.setTotalCookingTime(order.getTotalCookingTime()+minutes);
+            order = orderRepository.save(order);
+
+            return "Se añadió "+ minutes + " a la orden "+ idOrder;
+        }catch (Exception e){
+            log.info(e.getMessage());
+            throw new CustomException(e.getMessage());
+        }
+    }
+
+    public void notificarUsuario(User user) throws CustomException {
         try {
             List<StatusType> statusTypes = Arrays.asList(
                     StatusType.In_Queue,
@@ -126,37 +148,42 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
             messagingTemplate.convertAndSendToUser(user.getMail(),"/private", orderFilters);
         } catch (Exception e) {
             log.info(e.getMessage());
-            throw new Exception(e.getMessage());
+            throw new CustomException(e.getMessage());
         }
     }
 
-    public void notificarTopicos(StatusOrderDto status) throws Exception {
-        List<OrderDto> orderDtoList;
-        if (status.getStatusType() == StatusType.Ready || status.getStatusType() == StatusType.In_Queue){
-            orderDtoList = this.getOrdersByStatus(1l);
-            List<OrderDto> orderDtoList2 = this.getOrdersByStatus(3l);
-            if (orderDtoList2.size() != 0) {
-                for (OrderDto orderDto: orderDtoList2) {
-                    orderDtoList.add(orderDto);
+    public void notificarTopicos(StatusOrderDto status) throws CustomException {
+        try{
+            List<OrderDto> orderDtoList;
+            if (status.getStatusType() == StatusType.Ready || status.getStatusType() == StatusType.In_Queue){
+                orderDtoList = this.getOrdersByStatus(1l);
+                List<OrderDto> orderDtoList2 = this.getOrdersByStatus(3l);
+                if (orderDtoList2.size() != 0) {
+                    for (OrderDto orderDto: orderDtoList2) {
+                        orderDtoList.add(orderDto);
+                    }
                 }
-            }
 
-            messagingTemplate.convertAndSend("/topic/cashiers", orderDtoList);
-            System.out.println("notificacion cajeros");
-        } else if (status.getStatusType() == StatusType.In_Preparation) {
-            orderDtoList = this.getOrdersByStatus(2l);
-            messagingTemplate.convertAndSend( "/topic/chefs", orderDtoList);
-            System.out.println("notificacion chefs");
-        } else if (status.getStatusType() == StatusType.Out_for_Delivery) {
-            orderDtoList = this.getOrdersByStatus(4l);
-            messagingTemplate.convertAndSend( "/topic/deliveries", orderDtoList);
-            System.out.println("notificacion deliveries");
+                messagingTemplate.convertAndSend("/topic/cashiers", orderDtoList);
+                System.out.println("notificacion cajeros");
+            } else if (status.getStatusType() == StatusType.In_Preparation) {
+                orderDtoList = this.getOrdersByStatus(2l);
+                messagingTemplate.convertAndSend( "/topic/chefs", orderDtoList);
+                System.out.println("notificacion chefs");
+            } else if (status.getStatusType() == StatusType.Out_for_Delivery) {
+                orderDtoList = this.getOrdersByStatus(4l);
+                messagingTemplate.convertAndSend( "/topic/deliveries", orderDtoList);
+                System.out.println("notificacion deliveries");
+            }
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            throw new CustomException(e.getMessage());
         }
     }
 
     @Override
     @Transactional //Indica que el método es una transacción.
-    public List<OrderDto> findAll() throws Exception {
+    public List<OrderDto> findAll() throws CustomException {
         try {
             List<Order> entities = baseRepository.findAll();
             List<OrderDto> entitiesDtos = new ArrayList<>();
@@ -168,7 +195,7 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
             return entitiesDtos;
         } catch (Exception e) {
             log.info(e.getMessage());
-            throw new Exception(e.getMessage());
+            throw new CustomException(e.getMessage());
         }
     }
 
@@ -176,7 +203,7 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
 
     @Override
     @Transactional
-    public OrderDto findById(Long id) throws Exception {
+    public OrderDto findById(Long id) throws CustomException {
         try {
             Optional<Order> entityOptional = orderRepository.findById(id);
             Order order = entityOptional.get();
@@ -185,18 +212,23 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
             return orderDto;
         } catch (Exception e) {
             log.info(e.getMessage());
-            throw new Exception(e.getMessage());
+            throw new CustomException(e.getMessage());
         }
     }
 
-    public List<OProductsWithoutOrderDto> getOrderProductsByOrder(Long idOrder) {
-        List<OrderProducts> orderProductsList = orderProductsRepository.findOrderProductsByOrderId(idOrder);
-        List<OProductsWithoutOrderDto> oProductsWithoutOrderDtos = new ArrayList<>();
-        for (OrderProducts orderProducts: orderProductsList) {
-            OProductsWithoutOrderDto withoutOrderDto = modelMapper.map( orderProducts, OProductsWithoutOrderDto.class);
-            oProductsWithoutOrderDtos.add(withoutOrderDto);
+    public List<OProductsWithoutOrderDto> getOrderProductsByOrder(Long idOrder) throws CustomException {
+        try{
+            List<OrderProducts> orderProductsList = orderProductsRepository.findOrderProductsByOrderId(idOrder);
+            List<OProductsWithoutOrderDto> oProductsWithoutOrderDtos = new ArrayList<>();
+            for (OrderProducts orderProducts: orderProductsList) {
+                OProductsWithoutOrderDto withoutOrderDto = modelMapper.map( orderProducts, OProductsWithoutOrderDto.class);
+                oProductsWithoutOrderDtos.add(withoutOrderDto);
+            }
+            return oProductsWithoutOrderDtos;
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            throw new CustomException(e.getMessage());
         }
-        return oProductsWithoutOrderDtos;
     }
 
 
@@ -212,6 +244,9 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
 
             Order entity = new Order();
             modelMapper.map(entityDto, entity);
+            entity.setCreationDate(dateService.dateNow());
+            entity.setTotalCookingTime(getTotalCookingTime(entityDto));
+
             entity = orderRepository.save(entity);
 
             List<OProductsWithoutOrderDto> withoutOrderDtoList = new ArrayList<>();
@@ -253,7 +288,7 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
 
     @Override
     @Transactional
-    public OrderDto updateOne(OrderDto entityDto, Long id) throws Exception {
+    public OrderDto updateOne(OrderDto entityDto, Long id) throws CustomException {
         try {
             Optional<Order> entityOptional = orderRepository.findById(id);
             Order entityUpdate = entityOptional.get();
@@ -309,14 +344,14 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
             return entityDto;
         } catch (Exception e) {
             log.info(e.getMessage());
-            throw new Exception(e.getMessage());
+            throw new CustomException(e.getMessage());
         }
     }
 
 
     @Override
     @Transactional
-    public boolean deleteById(Long id) throws Exception {
+    public boolean deleteById(Long id) throws CustomException {
         try {
             if (orderRepository.existsById(id)) {
 
@@ -331,19 +366,44 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
             }
         } catch (Exception e) {
             log.info(e.getMessage());
-            throw new Exception(e.getMessage());
+            throw new CustomException(e.getMessage());
         }
     }
 
 
-    public void updateQuantityProduct(Long idProduct, int cant) throws Exception{
+    public void updateQuantityProduct(Long idProduct, int cant) throws CustomException{
         try {
             ProductDto productDto = productService.findById(idProduct);
             productDto.setQuantitySold(productDto.getQuantitySold()+ cant);
             ProductDto productDtoUpdated = productService.updateOne(productDto, idProduct);
         } catch (Exception e) {
             log.info(e.getMessage());
-            throw new Exception(e.getMessage());
+            throw new CustomException(e.getMessage());
         }
     }
+
+
+    public Long getTotalCookingTime(OrderDto orderDto) throws CustomException {
+        try{
+            Long totalCookingTime = 0L;
+            for (OProductsWithoutOrderDto productOrderCant: orderDto.getProducts()) {
+                ProductDto productFound = productService.findById(productOrderCant.getProduct().getId());
+                if (totalCookingTime < productFound.getCookingTime()){
+                    totalCookingTime = productFound.getCookingTime();
+                }
+            }
+
+            totalCookingTime+=5L;
+
+            if (orderDto.getWithdrawalMode().equals("Delivery")){
+                totalCookingTime+=10L;
+            }
+
+            return totalCookingTime;
+        }catch (Exception e){
+            log.info(e.getMessage());
+            throw new CustomException(e.getMessage());
+        }
+    }
+
 }

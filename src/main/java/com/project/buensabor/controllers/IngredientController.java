@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+
 @RestController
 @Slf4j
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -58,7 +60,17 @@ public class IngredientController extends BaseControllerImpl<Ingredient, Ingredi
         try {
             return ResponseEntity.status(HttpStatus.OK).body(ingredientService.getIngOrderStockMin());
         } catch (Exception e) {
-            return ResponseEntity.internalServerError().body("Error al obtener los ingredientes ordenados por stockMin: "+ System.lineSeparator()+ e.getMessage());
+            return ResponseEntity.internalServerError().body("Error al obtener los ingredientes ordenados por stockMin: " + System.lineSeparator() + e.getMessage());
+        }
+    }
+
+    @PreAuthorize("hasAnyAuthority('ingredient:excelDownload', '_superAdmin')")
+    @PostMapping("/excelDownload")
+    public ResponseEntity<?> excelDownload(@RequestBody ArrayList<IngredientDto> entities) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(ingredientService.excelDownload(entities));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. Por favor intente más tarde.\"}");
         }
     }
 }

@@ -1,9 +1,11 @@
 package com.project.buensabor.services.interfaces;
 
 import com.project.buensabor.dto.productDto.IngredientDto;
+import com.project.buensabor.entities.Ingredient;
 import com.project.buensabor.exceptions.CustomException;
 import com.project.buensabor.services.Base.BaseServicesDTO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface IngredientService extends BaseServicesDTO<IngredientDto, Long> {
@@ -13,4 +15,6 @@ public interface IngredientService extends BaseServicesDTO<IngredientDto, Long> 
     void descontarStock(Long idIngredient, Long cantADescontar) throws CustomException;
 
     List<IngredientDto> getIngOrderStockMin() throws CustomException;
+
+    String excelDownload(ArrayList<IngredientDto> ingredientsDto) throws Exception;
 }

@@ -5,7 +5,7 @@ import com.project.buensabor.dto.orderDto.OrderDtos.OrderDto;
 import com.project.buensabor.dto.orderDto.OrderDtos.OrderWithoutuserDto;
 import com.project.buensabor.dto.orderDto.OrderProductsDtos.OProductsWithoutOrderDto;
 import com.project.buensabor.dto.orderDto.StatusOrderDto;
-import com.project.buensabor.dto.productDto.ProductDto;
+import com.project.buensabor.dto.productDto.ProductDtos.ProductDto;
 import com.project.buensabor.entities.*;
 import com.project.buensabor.enums.StatusType;
 import com.project.buensabor.exceptions.CustomException;
@@ -262,7 +262,6 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
                     oProductsWithoutOrderDto = modelMapper.map(orderProducts, OProductsWithoutOrderDto.class);
                     withoutOrderDtoList.add(oProductsWithoutOrderDto);
                     int cant = Long.valueOf(oProductsWithoutOrderDto.getCant()).intValue();
-                    updateQuantityProduct(oProductsWithoutOrderDto.getProduct().getId(), cant);
                 }
             }
             productService.descontarStock(entityDto.getProducts());
@@ -371,16 +370,6 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
     }
 
 
-    public void updateQuantityProduct(Long idProduct, int cant) throws CustomException{
-        try {
-            ProductDto productDto = productService.findById(idProduct);
-            productDto.setQuantitySold(productDto.getQuantitySold()+ cant);
-            ProductDto productDtoUpdated = productService.updateOne(productDto, idProduct);
-        } catch (Exception e) {
-            log.info(e.getMessage());
-            throw new CustomException(e.getMessage());
-        }
-    }
 
 
     public Long getTotalCookingTime(OrderDto orderDto) throws CustomException {

@@ -21,16 +21,13 @@ public class Product extends Base {
     private boolean active;
 
     @Column
-    private Long price;
+    private Double price;
 
     @Column
     private Long cookingTime;
 
     @Column
     private String image;
-
-    @Column
-    private int quantitySold = 0;
 
     @Column
     private Double cost;

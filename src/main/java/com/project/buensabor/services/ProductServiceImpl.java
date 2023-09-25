@@ -3,8 +3,11 @@ package com.project.buensabor.services;
 import com.project.buensabor.ModelMappers.ProductMapper;
 import com.project.buensabor.dto.orderDto.OrderProductsDtos.OProductsWithoutOrderDto;
 import com.project.buensabor.dto.productDto.IngredientDto;
-import com.project.buensabor.dto.productDto.ProductDto;
+import com.project.buensabor.dto.productDto.ProductDtos.ProductDto;
+import com.project.buensabor.dto.productDto.ProductDtos.ProductRanking;
+import com.project.buensabor.dto.productDto.ProductDtos.ProductRankingDto;
 import com.project.buensabor.dto.productDto.ProductIngredientDTOs.PIngredientsCantDto;
+import com.project.buensabor.entities.Category;
 import com.project.buensabor.entities.Ingredient;
 import com.project.buensabor.entities.Product;
 import com.project.buensabor.entities.ProductIngredient;
@@ -23,7 +26,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigInteger;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -183,6 +190,21 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
 
             }
 
+        }catch (Exception e){
+            log.info(e.getMessage());
+            throw new CustomException(e.getMessage());
+        }
+    }
+
+    @Override
+    public List<ProductRanking> getBestSellingProducts(String desde, String hasta) throws CustomException {
+        try{
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate desdeLD = LocalDate.parse(desde, formatter);
+            LocalDate hastaLD = LocalDate.parse(hasta, formatter);
+            List<ProductRanking> objects = productRepository.rankingProductsByDates(desdeLD, hastaLD);
+
+            return objects;
         }catch (Exception e){
             log.info(e.getMessage());
             throw new CustomException(e.getMessage());

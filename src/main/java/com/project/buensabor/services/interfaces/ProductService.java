@@ -1,11 +1,15 @@
 package com.project.buensabor.services.interfaces;
 
 import com.project.buensabor.dto.orderDto.OrderProductsDtos.OProductsWithoutOrderDto;
-import com.project.buensabor.dto.productDto.ProductDto;
+import com.project.buensabor.dto.productDto.ProductDtos.ProductDto;
+import com.project.buensabor.dto.productDto.ProductDtos.ProductRanking;
+import com.project.buensabor.dto.productDto.ProductDtos.ProductRankingDto;
 import com.project.buensabor.exceptions.CustomException;
 import com.project.buensabor.services.Base.BaseServicesDTO;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 public interface ProductService extends BaseServicesDTO<ProductDto, Long> {
@@ -23,4 +27,6 @@ public interface ProductService extends BaseServicesDTO<ProductDto, Long> {
     boolean validarStock(List<OProductsWithoutOrderDto> productosAValidar) throws CustomException;
 
     void descontarStock(List<OProductsWithoutOrderDto> productosAValidar) throws CustomException;
+
+    List<ProductRanking> getBestSellingProducts(String desde, String hasta) throws CustomException;
 }

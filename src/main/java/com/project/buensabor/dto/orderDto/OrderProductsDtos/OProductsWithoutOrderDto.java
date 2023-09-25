@@ -1,7 +1,7 @@
 package com.project.buensabor.dto.orderDto.OrderProductsDtos;
 
 import com.project.buensabor.dto.BaseDto;
-import com.project.buensabor.dto.productDto.ProductDto;
+import com.project.buensabor.dto.productDto.ProductDtos.ProductDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

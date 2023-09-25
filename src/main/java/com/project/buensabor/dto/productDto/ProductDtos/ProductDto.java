@@ -1,4 +1,4 @@
-package com.project.buensabor.dto.productDto;
+package com.project.buensabor.dto.productDto.ProductDtos;
 
 import com.project.buensabor.dto.BaseDto;
 import com.project.buensabor.dto.productDto.ProductIngredientDTOs.PIngredientsCantDto;
@@ -20,15 +20,13 @@ public class ProductDto extends BaseDto {
 
     private boolean active;
 
-    private Long price;
+    private Double price;
 
     private Long cookingTime;
 
     private String image;
 
     private Category subcategory;
-
-    private int quantitySold = 0;
 
     private Double cost;
 

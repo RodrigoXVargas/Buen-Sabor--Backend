@@ -1,18 +1,23 @@
 package com.project.buensabor.controllers;
 
 import com.project.buensabor.controllers.Base.BaseControllerImpl;
-import com.project.buensabor.dto.productDto.ProductDto;
+import com.project.buensabor.dto.productDto.ProductDtos.ProductDto;
 import com.project.buensabor.entities.Product;
 import com.project.buensabor.services.ProductServiceImpl;
 import com.project.buensabor.services.interfaces.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 @RestController
 @Slf4j
@@ -29,6 +34,17 @@ public class ProductController extends BaseControllerImpl<Product, ProductDto, P
             return ResponseEntity.status(HttpStatus.OK).body(productService.findProductsActive());
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("Error al obtener los productos activos: "+ System.lineSeparator()+ e.getMessage());
+        }
+    }
+
+    @GetMapping(value = "/getProductsByQuantity/{desde}&{hasta}")
+    public ResponseEntity<?> getProductsByQuantity(
+            @PathVariable String desde,
+            @PathVariable String hasta){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(productService.getBestSellingProducts(desde, hasta));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Error al obtener los productos por cantidad vendida por fechas: "+ System.lineSeparator()+ e.getMessage());
         }
     }
 

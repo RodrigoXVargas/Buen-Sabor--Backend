@@ -21,7 +21,7 @@ public interface ProductRepository extends BaseRepository<Product, Long> {
     @Query(value = "SELECT * FROM products order by products.quantity_sold desc", nativeQuery = true)
     List<Product> getProductsOrderByQuantitySoldDesc();
 
-    @Query(value = "SELECT p.id, p.name, p.active, p.cost, p.price, " +
+    @Query(value = "SELECT p.id, p.name, p.subcategory_fk, p.active, p.cost, p.price, " +
             "SUM(op.cantidad) as 'quantity_sold', ((SUM(op.cantidad))*p.cost) as 'total_cost', ((p.price-p.cost)*SUM(op.cantidad)) as 'total_profit' " +
             "FROM products p " +
             "inner join order_products op on p.id = op.product_fk " +

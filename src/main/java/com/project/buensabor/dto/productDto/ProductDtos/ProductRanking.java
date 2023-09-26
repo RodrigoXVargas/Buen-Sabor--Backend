@@ -9,6 +9,8 @@ public interface ProductRanking {
 
     String getName();
 
+    BigInteger getSubcategory_fk();
+
     Boolean getActive();
 
     BigDecimal getCost();

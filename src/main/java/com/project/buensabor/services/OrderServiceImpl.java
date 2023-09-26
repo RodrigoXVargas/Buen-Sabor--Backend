@@ -261,7 +261,6 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
                     orderProducts = orderProductsRepository.save(orderProducts);
                     oProductsWithoutOrderDto = modelMapper.map(orderProducts, OProductsWithoutOrderDto.class);
                     withoutOrderDtoList.add(oProductsWithoutOrderDto);
-                    int cant = Long.valueOf(oProductsWithoutOrderDto.getCant()).intValue();
                 }
             }
             productService.descontarStock(entityDto.getProducts());
@@ -275,7 +274,7 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
                     orderDtoList.add(orderDto);
                 }
             }
-            System.out.println("notificacion cajero");
+            //System.out.println("notificacion cajero");
             messagingTemplate.convertAndSend("/topic/cashiers", orderDtoList);
 
             return entityDto;

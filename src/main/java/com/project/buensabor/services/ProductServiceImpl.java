@@ -7,18 +7,14 @@ import com.project.buensabor.dto.productDto.ProductDtos.ProductDto;
 import com.project.buensabor.dto.productDto.ProductDtos.ProductRanking;
 import com.project.buensabor.dto.productDto.ProductDtos.ProductRankingDto;
 import com.project.buensabor.dto.productDto.ProductIngredientDTOs.PIngredientsCantDto;
-import com.project.buensabor.entities.Category;
-import com.project.buensabor.entities.Ingredient;
-import com.project.buensabor.entities.Product;
-import com.project.buensabor.entities.ProductIngredient;
+import com.project.buensabor.entities.*;
 import com.project.buensabor.exceptions.CustomException;
 import com.project.buensabor.repositories.Base.BaseRepository;
+import com.project.buensabor.repositories.CategoryRepository;
 import com.project.buensabor.repositories.ProductIngredientRepository;
 import com.project.buensabor.repositories.ProductRepository;
 import com.project.buensabor.services.Base.BaseServicesDTOImpl;
-import com.project.buensabor.services.interfaces.IngredientService;
-import com.project.buensabor.services.interfaces.ProductIngredientService;
-import com.project.buensabor.services.interfaces.ProductService;
+import com.project.buensabor.services.interfaces.*;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,11 +22,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -47,6 +41,9 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     private ModelMapper modelMapper = new ModelMapper();
 
@@ -197,14 +194,31 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
     }
 
     @Override
-    public List<ProductRanking> getBestSellingProducts(String desde, String hasta) throws CustomException {
+    public List<ProductRankingDto> getBestSellingProducts(String desde, String hasta) throws CustomException {
         try{
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate desdeLD = LocalDate.parse(desde, formatter);
             LocalDate hastaLD = LocalDate.parse(hasta, formatter);
             List<ProductRanking> objects = productRepository.rankingProductsByDates(desdeLD, hastaLD);
+            List<ProductRankingDto> productRankingDtoList = new ArrayList<>();
+            for (ProductRanking object: objects) {
+                Optional<Category> optionalCategory = categoryRepository.findById(object.getSubcategory_fk().longValue());
+                Category category = optionalCategory.get();
+                ProductRankingDto productRankingDto = new ProductRankingDto(
+                        object.getName(),
+                        object.getActive(),
+                        category,
+                        object.getCost().doubleValue(),
+                        object.getPrice().doubleValue(),
+                        object.getQuantity_sold().longValue(),
+                        object.getTotal_cost().doubleValue(),
+                        object.getTotal_profit().doubleValue()
+                );
+                productRankingDto.setId(object.getId().longValue());
+                productRankingDtoList.add(productRankingDto);
+            }
 
-            return objects;
+            return productRankingDtoList;
         }catch (Exception e){
             log.info(e.getMessage());
             throw new CustomException(e.getMessage());

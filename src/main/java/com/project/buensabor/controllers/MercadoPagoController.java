@@ -12,7 +12,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path = "api/mp")
+@RequestMapping(path = "/api/mp")
 @Slf4j
 public class MercadoPagoController {
 

@@ -21,7 +21,7 @@ public class ProductRankingDto extends BaseDto {
 
     private Double cost;
 
-    private Long price;
+    private Double price;
 
     private Long quantity_sold;
 

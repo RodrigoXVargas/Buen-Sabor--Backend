@@ -3,7 +3,8 @@ package com.project.buensabor.services;
 import com.project.buensabor.ModelMappers.UserMapper;
 import com.project.buensabor.dto.userDto.AddressDtos.AddressWithoutuserDto;
 import com.project.buensabor.dto.userDto.RolDto;
-import com.project.buensabor.dto.userDto.UserDto;
+import com.project.buensabor.dto.userDto.UserDtos.UserDto;
+import com.project.buensabor.dto.userDto.UserDtos.UserRanking;
 import com.project.buensabor.entities.Address;
 import com.project.buensabor.entities.Location;
 import com.project.buensabor.entities.Rol;
@@ -23,6 +24,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -141,6 +144,20 @@ public class UserServiceImpl extends BaseServicesDTOImpl<User, UserDto, UserMapp
             } else {
                 throw new CustomException("Usuario no existe");
             }
+        }catch (Exception e){
+            log.info(e.getMessage());
+            throw new CustomException(e.getMessage());
+        }
+    }
+
+    @Override
+    public List<UserRanking> getUserRanking(String desde, String hasta) throws CustomException {
+        try{
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate desdeLD = LocalDate.parse(desde, formatter);
+            LocalDate hastaLD = LocalDate.parse(hasta, formatter);
+            List<UserRanking> userRankingList = userRepository.usersRankingByDates(desdeLD, hastaLD);
+            return userRankingList;
         }catch (Exception e){
             log.info(e.getMessage());
             throw new CustomException(e.getMessage());

@@ -2,7 +2,7 @@ package com.project.buensabor.dto.userDto.AddressDtos;
 
 import com.project.buensabor.dto.BaseDto;
 import com.project.buensabor.dto.userDto.LocationDto;
-import com.project.buensabor.dto.userDto.UserDto;
+import com.project.buensabor.dto.userDto.UserDtos.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

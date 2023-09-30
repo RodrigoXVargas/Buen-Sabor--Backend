@@ -37,6 +37,7 @@ public class ProductController extends BaseControllerImpl<Product, ProductDto, P
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('product:getProductsByQuantity','_superAdmin')")
     @GetMapping(value = "/getProductsByQuantity/{desde}&{hasta}")
     public ResponseEntity<?> getProductsByQuantity(
             @PathVariable String desde,

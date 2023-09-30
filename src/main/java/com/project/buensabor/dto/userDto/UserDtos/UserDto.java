@@ -1,4 +1,4 @@
-package com.project.buensabor.dto.userDto;
+package com.project.buensabor.dto.userDto.UserDtos;
 
 import com.project.buensabor.dto.BaseDto;
 import com.project.buensabor.dto.orderDto.OrderDtos.OrderWithoutuserDto;

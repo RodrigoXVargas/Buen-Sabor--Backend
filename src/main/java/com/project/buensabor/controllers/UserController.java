@@ -2,7 +2,7 @@ package com.project.buensabor.controllers;
 
 import com.project.buensabor.controllers.Base.BaseControllerImpl;
 import com.project.buensabor.dto.userDto.RolDto;
-import com.project.buensabor.dto.userDto.UserDto;
+import com.project.buensabor.dto.userDto.UserDtos.UserDto;
 import com.project.buensabor.entities.User;
 import com.project.buensabor.exceptions.CustomException;
 import com.project.buensabor.services.UserServiceImpl;
@@ -30,6 +30,18 @@ public class UserController extends BaseControllerImpl<User, UserDto, UserServic
             return ResponseEntity.status(HttpStatus.OK).body(userService.findEmployees());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Error. Por favor intente más tarde.\"}");
+        }
+    }
+
+    @PreAuthorize("hasAnyAuthority('user:getUserRanking','_superAdmin')")
+    @GetMapping(value = "/getUserRanking/{desde}&{hasta}")
+    public ResponseEntity<?> getUserRanking(
+            @PathVariable String desde,
+            @PathVariable String hasta){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(userService.getUserRanking(desde, hasta));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Error al obtener el ranking por fechas: "+ System.lineSeparator()+ e.getMessage());
         }
     }
 

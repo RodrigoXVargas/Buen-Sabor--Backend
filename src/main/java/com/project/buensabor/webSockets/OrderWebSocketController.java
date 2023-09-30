@@ -2,7 +2,7 @@ package com.project.buensabor.webSockets;
 
 import com.project.buensabor.dto.orderDto.OrderDtos.OrderDto;
 import com.project.buensabor.dto.orderDto.OrderDtos.OrderWithoutuserDto;
-import com.project.buensabor.dto.userDto.UserDto;
+import com.project.buensabor.dto.userDto.UserDtos.UserDto;
 import com.project.buensabor.enums.StatusType;
 import com.project.buensabor.services.interfaces.OrderService;
 import com.project.buensabor.services.interfaces.UserService;

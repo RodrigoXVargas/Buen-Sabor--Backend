@@ -63,7 +63,7 @@ public class IngredientController extends BaseControllerImpl<Ingredient, Ingredi
             for (PIngredientsCantDto ingredientCant: ingredientList) {
                 ingredientService.descontarOReponerStock(ingredientCant.getIngredient().getId(), ingredientCant.getCant(), true);
             }
-            return ResponseEntity.status(HttpStatus.OK).body("{\"Reposición:true\"}");
+            return ResponseEntity.status(HttpStatus.OK).body("{\"reposicion\":true}");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. Por favor intente más tarde.\"}");
         }

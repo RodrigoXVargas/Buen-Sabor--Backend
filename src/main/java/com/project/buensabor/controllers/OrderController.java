@@ -32,6 +32,16 @@ public class OrderController extends BaseControllerImpl<Order, OrderDto, OrderSe
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('order:getOrdersByUser','_superAdmin')")
+    @GetMapping(value = "/getOrdersByUser/{id}")
+    public ResponseEntity<?> getOrdersByUser(@PathVariable Long id){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(orderService.ordersByUserId(id));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Error al buscar las ordenes por usuario: "+ System.lineSeparator()+ e.getMessage());
+        }
+    }
+
     @PreAuthorize("hasAnyAuthority('order:changeStatus','_superAdmin')")
     @PutMapping(value = "/changeStatus/{id}")
     public ResponseEntity<?> changeStatusOrder(@PathVariable Long id, @RequestBody StatusOrderDto status){
@@ -103,4 +113,7 @@ public class OrderController extends BaseControllerImpl<Order, OrderDto, OrderSe
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. Por favor intente más tarde.\"}");
         }
     }
+
+
+
 }

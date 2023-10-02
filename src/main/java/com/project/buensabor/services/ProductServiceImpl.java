@@ -182,7 +182,7 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
 
             for (IngredientDto ingredient: ingredientList) {
                 if (!(ingredient.getStock()==0L)){
-                    ingredientService.descontarStock(ingredient.getId(), ingredient.getStock(), descontarOReponer);
+                    ingredientService.descontarOReponerStock(ingredient.getId(), ingredient.getStock(), descontarOReponer);
                 }
 
             }

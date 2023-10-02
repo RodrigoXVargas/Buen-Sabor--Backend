@@ -2,6 +2,7 @@ package com.project.buensabor.controllers;
 
 import com.project.buensabor.controllers.Base.BaseControllerImpl;
 import com.project.buensabor.dto.productDto.IngredientDto;
+import com.project.buensabor.dto.productDto.ProductIngredientDTOs.PIngredientsCantDto;
 import com.project.buensabor.entities.Ingredient;
 import com.project.buensabor.services.IngredientServiceImpl;
 import com.project.buensabor.services.interfaces.IngredientService;
@@ -13,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -49,6 +51,19 @@ public class IngredientController extends BaseControllerImpl<Ingredient, Ingredi
     public ResponseEntity<?> deleteById(@PathVariable Long id) {
         try {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ingredientService.deleteById(id));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. Por favor intente más tarde.\"}");
+        }
+    }
+
+    @PreAuthorize("hasAnyAuthority('ingredient:reponerStock', '_superAdmin')")
+    @PutMapping("/reponerStock")
+    public ResponseEntity<?> reponerStock(@RequestBody List<PIngredientsCantDto> ingredientList) {
+        try {
+            for (PIngredientsCantDto ingredientCant: ingredientList) {
+                ingredientService.descontarOReponerStock(ingredientCant.getIngredient().getId(), ingredientCant.getCant(), true);
+            }
+            return ResponseEntity.status(HttpStatus.OK).body(true);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. Por favor intente más tarde.\"}");
         }

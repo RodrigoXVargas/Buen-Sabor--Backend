@@ -66,7 +66,7 @@ public class MercadoPagoService {
                     .autoReturn("approved")
                     .backUrls(
                             PreferenceBackUrlsRequest.builder()
-                                    .success(mpSuccessBackUrl)
+                                    .success(mpSuccessBackUrl+idOrder)
                                     .pending(mpPendingBackUrl)
                                     .failure(mpFailureBackUrl)
                                     .build()

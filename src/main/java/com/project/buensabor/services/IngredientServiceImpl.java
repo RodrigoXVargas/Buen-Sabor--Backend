@@ -55,7 +55,7 @@ public class IngredientServiceImpl extends BaseServicesDTOImpl<Ingredient, Ingre
     }
 
     @Override
-    public void descontarStock(Long idIngredient, Long cantADescontar, boolean descontarOreponer) throws CustomException {
+    public void descontarOReponerStock(Long idIngredient, Long cantADescontar, boolean descontarOreponer) throws CustomException {
         try{
             Optional<Ingredient> ingredientOptional = ingredientRepository.findById(idIngredient);
             if (!ingredientOptional.isPresent()){

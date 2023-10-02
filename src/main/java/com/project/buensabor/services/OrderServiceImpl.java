@@ -103,10 +103,15 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
             StatusOrderDto statusPrevious = modelMapper.map(order.getStatusOrder(), StatusOrderDto.class);
             order.setStatusOrder(modelMapper.map(status, StatusOrder.class));
             order = orderRepository.save(order);
+            List<OProductsWithoutOrderDto> oProductsWithoutOrderDtoList = this.getOrderProductsByOrder(order.getId());
 
             if(statusPrevious.getStatusType().equals(StatusType.In_Queue)) {
                 if (status.getStatusType().equals(StatusType.In_Preparation) || status.getStatusType().equals(StatusType.Ready)){
-                    //descuento de stock
+                    productService.descontarOReponerStock(oProductsWithoutOrderDtoList, false);
+                }
+            } else {
+                if (status.getStatusType().equals(StatusType.Cancelled)){
+                    productService.descontarOReponerStock(oProductsWithoutOrderDtoList, true);
                 }
             }
 
@@ -269,7 +274,7 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
                     withoutOrderDtoList.add(oProductsWithoutOrderDto);
                 }
             }
-            productService.descontarStock(entityDto.getProducts());
+
 
             //creacion de la factura
 

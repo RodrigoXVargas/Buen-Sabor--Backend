@@ -23,7 +23,7 @@ public interface ProductService extends BaseServicesDTO<ProductDto, Long> {
 
     boolean validarStock(List<OProductsWithoutOrderDto> productosAValidar) throws CustomException;
 
-    void descontarStock(List<OProductsWithoutOrderDto> productosAValidar) throws CustomException;
+    void descontarOReponerStock(List<OProductsWithoutOrderDto> productosAValidar, boolean reponerOdescontar) throws CustomException;
 
     List<ProductRankingDto> getBestSellingProducts(String desde, String hasta) throws CustomException;
 }

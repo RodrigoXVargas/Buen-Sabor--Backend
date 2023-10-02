@@ -55,14 +55,18 @@ public class IngredientServiceImpl extends BaseServicesDTOImpl<Ingredient, Ingre
     }
 
     @Override
-    public void descontarStock(Long idIngredient, Long cantADescontar) throws CustomException {
+    public void descontarStock(Long idIngredient, Long cantADescontar, boolean descontarOreponer) throws CustomException {
         try{
             Optional<Ingredient> ingredientOptional = ingredientRepository.findById(idIngredient);
             if (!ingredientOptional.isPresent()){
                 new CustomException("No se encuentra el ingrediente");
             }
             Ingredient ingredient = ingredientOptional.get();
-            ingredient.setStock(ingredient.getStock()-cantADescontar);
+            if(descontarOreponer==false){
+                ingredient.setStock(ingredient.getStock()-cantADescontar);
+            } else {
+                ingredient.setStock(ingredient.getStock()+cantADescontar);
+            }
             ingredient = ingredientRepository.save(ingredient);
             //System.out.println("se desconto "+ cantADescontar+" del ingrediente "+ ingredient.getName());
 

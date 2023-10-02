@@ -1,6 +1,7 @@
 package com.project.buensabor.controllers;
 
 import com.project.buensabor.controllers.Base.BaseControllerImpl;
+import com.project.buensabor.dto.orderDto.OrderProductsDtos.OProductsWithoutOrderDto;
 import com.project.buensabor.dto.productDto.ProductDtos.ProductDto;
 import com.project.buensabor.entities.Product;
 import com.project.buensabor.services.ProductServiceImpl;
@@ -18,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -66,6 +68,16 @@ public class ProductController extends BaseControllerImpl<Product, ProductDto, P
             return ResponseEntity.status(HttpStatus.OK).body(productService.changeActive(id));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("Error al cambiar el estado del producto: "+ System.lineSeparator()+ e.getMessage());
+        }
+    }
+
+    @PreAuthorize("hasAnyAuthority('product:validarStock','_superAdmin')")
+    @GetMapping(value = "/validarStock")
+    public ResponseEntity<?> validarStock(@RequestBody List<OProductsWithoutOrderDto> productosAValidar){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(productService.validarStock(productosAValidar));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Error al validar Stock: "+ e.getMessage());
         }
     }
 

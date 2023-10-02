@@ -12,7 +12,7 @@ public interface IngredientService extends BaseServicesDTO<IngredientDto, Long> 
 
     boolean validarStock(Long idIngredient, Long cantRequerida) throws CustomException;
 
-    void descontarStock(Long idIngredient, Long cantADescontar) throws CustomException;
+    void descontarStock(Long idIngredient, Long cantADescontar, boolean descontarOreponer) throws CustomException;
 
     List<IngredientDto> getIngOrderStockMin() throws CustomException;
 

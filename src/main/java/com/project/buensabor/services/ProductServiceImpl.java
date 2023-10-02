@@ -176,13 +176,13 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
     }
 
     @Override
-    public void descontarStock(List<OProductsWithoutOrderDto> productosAValidar) throws CustomException {
+    public void descontarOReponerStock(List<OProductsWithoutOrderDto> productosAValidar, boolean descontarOReponer) throws CustomException {
         try {
             List<IngredientDto> ingredientList = extraerIngredientes(productosAValidar);
 
             for (IngredientDto ingredient: ingredientList) {
                 if (!(ingredient.getStock()==0L)){
-                    ingredientService.descontarStock(ingredient.getId(), ingredient.getStock());
+                    ingredientService.descontarStock(ingredient.getId(), ingredient.getStock(), descontarOReponer);
                 }
 
             }

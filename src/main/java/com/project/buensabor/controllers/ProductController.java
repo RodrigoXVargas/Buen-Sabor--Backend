@@ -72,7 +72,7 @@ public class ProductController extends BaseControllerImpl<Product, ProductDto, P
     }
 
     @PreAuthorize("hasAnyAuthority('product:validarStock','_superAdmin')")
-    @GetMapping(value = "/validarStock")
+    @PostMapping(value = "/validarStock")
     public ResponseEntity<?> validarStock(@RequestBody List<OProductsWithoutOrderDto> productosAValidar){
         try {
             return ResponseEntity.status(HttpStatus.OK).body(productService.validarStock(productosAValidar));

@@ -22,6 +22,9 @@ public class OrderController extends BaseControllerImpl<Order, OrderDto, OrderSe
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private OrderServiceImpl orderServiceImpl;
+
     @PreAuthorize("hasAnyAuthority('order:getOrdersByStatus','_superAdmin')")
     @GetMapping(value = "/getOrdersByStatus/{id}")
     public ResponseEntity<?> getOrdersByStatus(@PathVariable Long id){
@@ -47,6 +50,16 @@ public class OrderController extends BaseControllerImpl<Order, OrderDto, OrderSe
     public ResponseEntity<?> changeStatusOrder(@PathVariable Long id, @RequestBody StatusOrderDto status){
         try {
             return ResponseEntity.status(HttpStatus.OK).body(orderService.changeStatus(status, id));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Error. Por favor intente más tarde.\"}");
+        }
+    }
+
+    @PreAuthorize("hasAnyAuthority('order:cancelOrder','_superAdmin')")
+    @PutMapping(value = "/cancelOrder/{id}")
+    public ResponseEntity<?> cancelOrder(@PathVariable Long id, @RequestBody String description){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(orderServiceImpl.cancelOrder(id, description));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Error. Por favor intente más tarde.\"}");
         }

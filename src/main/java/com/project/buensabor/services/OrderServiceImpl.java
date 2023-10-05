@@ -1,6 +1,7 @@
 package com.project.buensabor.services;
 
 import com.project.buensabor.ModelMappers.OrderMapper;
+import com.project.buensabor.dto.orderDto.MovementDto;
 import com.project.buensabor.dto.orderDto.OrderDtos.OrderDto;
 import com.project.buensabor.dto.orderDto.OrderDtos.OrderWithoutuserDto;
 import com.project.buensabor.dto.orderDto.OrderProductsDtos.OProductsWithoutOrderDto;
@@ -8,12 +9,12 @@ import com.project.buensabor.dto.orderDto.StatusOrderDto;
 import com.project.buensabor.dto.productDto.ProductDtos.ProductDto;
 import com.project.buensabor.entities.*;
 import com.project.buensabor.enums.StatusType;
+import com.project.buensabor.enums.TypeMovement;
 import com.project.buensabor.exceptions.CustomException;
+import com.project.buensabor.repositories.*;
 import com.project.buensabor.repositories.Base.BaseRepository;
-import com.project.buensabor.repositories.OrderProductsRepository;
-import com.project.buensabor.repositories.OrderRepository;
-import com.project.buensabor.repositories.ProductRepository;
 import com.project.buensabor.services.Base.BaseServicesDTOImpl;
+import com.project.buensabor.services.interfaces.MovementService;
 import com.project.buensabor.services.interfaces.OrderService;
 import com.project.buensabor.services.interfaces.ProductService;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,14 @@ import java.util.*;
 public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, OrderMapper, Long> implements OrderService {
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private MovementRepository movementRepository;
+
+    @Autowired
+    private StatusRepository statusRepository;
 
 
     public OrderServiceImpl(BaseRepository<Order, Long> baseRepository, OrderMapper mapper) {
@@ -117,6 +126,39 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
 
             this.notificarTopicos(statusPrevious);
             this.notificarTopicos(status);
+            this.notificarUsuario(order.getUser());
+
+            return "Se cambio el status a "+ order.getStatusOrder().getStatusType().name();
+        }catch (Exception e){
+            log.info(e.getMessage());
+            throw new CustomException(e.getMessage());
+        }
+    }
+
+    @Transactional
+    public String cancelOrder(Long id, String description) throws CustomException {
+        try{
+            Optional<Order> orderOptional = orderRepository.findById(id);
+            Order order = orderOptional.get();
+            Optional<StatusOrder> optional = statusRepository.findByStatusType(StatusType.Cancelled.name());
+            StatusOrder statusOrder = optional.get();
+            StatusOrder statusPrevious = order.getStatusOrder();
+            order.setStatusOrder(statusOrder);
+            order = orderRepository.save(order);
+            List<OProductsWithoutOrderDto> oProductsWithoutOrderDtoList = this.getOrderProductsByOrder(order.getId());
+
+            productService.descontarOReponerStock(oProductsWithoutOrderDtoList, true);
+
+            Movement movement = new Movement(
+                    TypeMovement.Credit_Note,
+                    dateService.dateNow(),
+                    description,
+                    order.getTotalPrice(),
+                    order);
+            movement = movementRepository.save(movement);
+
+            this.notificarTopicos(modelMapper.map(statusPrevious, StatusOrderDto.class));
+            this.notificarTopicos(modelMapper.map(statusOrder, StatusOrderDto.class));
             this.notificarUsuario(order.getUser());
 
             return "Se cambio el status a "+ order.getStatusOrder().getStatusType().name();
@@ -257,29 +299,40 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
             modelMapper.map(entityDto, entity);
             entity.setCreationDate(dateService.dateNow());
             entity.setTotalCookingTime(getTotalCookingTime(entityDto));
-
+            Optional<User> user = userRepository.findById(entityDto.getUser().getId());
+            entity.setUser(user.get());
             entity = orderRepository.save(entity);
 
             List<OProductsWithoutOrderDto> withoutOrderDtoList = new ArrayList<>();
-
+            double totalOrder =0;
             if (entityDto.getProducts().size()!=0) {
                 for (OProductsWithoutOrderDto oProductsWithoutOrderDto : entityDto.getProducts()) {
+                    Optional<Product> optionalProduct = productRepository.findById(oProductsWithoutOrderDto.getProduct().getId());
+                    Product product = optionalProduct.get();
                     OrderProducts orderProducts = new OrderProducts(
                             entity,
-                            modelMapper.map(oProductsWithoutOrderDto.getProduct(), Product.class),
+                            product,
                             oProductsWithoutOrderDto.getCant()
                     );
                     orderProducts = orderProductsRepository.save(orderProducts);
                     oProductsWithoutOrderDto = modelMapper.map(orderProducts, OProductsWithoutOrderDto.class);
                     withoutOrderDtoList.add(oProductsWithoutOrderDto);
+                    totalOrder = product.getPrice()*oProductsWithoutOrderDto.getCant();
                 }
             }
-
-
-            //creacion de la factura
+            entity.setTotalPrice(totalOrder);
+            entity = orderRepository.save(entity);
 
             entityDto = mapper.convertToDto(entity);
             entityDto.setProducts(withoutOrderDtoList);
+
+            Movement movement = new Movement(
+                    TypeMovement.Bill,
+                    dateService.dateNow(),
+                    "Order: "+entity.getId(),
+                    entity.getTotalPrice(),
+                    entity);
+            movement = movementRepository.save(movement);
 
             List<OrderDto> orderDtoList = this.getOrdersByStatus(1l);
             List<OrderDto> orderDtoList2 = this.getOrdersByStatus(3l);

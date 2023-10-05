@@ -2,6 +2,7 @@ package com.project.buensabor.services;
 
 import com.project.buensabor.ModelMappers.IngredientMapper;
 import com.project.buensabor.dto.productDto.IngredientDto;
+import com.project.buensabor.dto.productDto.ProductIngredientDTOs.PIngredientsCantDto;
 import com.project.buensabor.entities.Ingredient;
 import com.project.buensabor.entities.Product;
 import com.project.buensabor.exceptions.CustomException;
@@ -55,19 +56,22 @@ public class IngredientServiceImpl extends BaseServicesDTOImpl<Ingredient, Ingre
     }
 
     @Override
-    public void descontarOReponerStock(Long idIngredient, Long cantADescontar, boolean descontarOreponer) throws CustomException {
+    public void descontarOReponerStock(List<PIngredientsCantDto> ingredientsCantDtoList, boolean descontarOreponer) throws CustomException {
         try{
-            Optional<Ingredient> ingredientOptional = ingredientRepository.findById(idIngredient);
-            if (!ingredientOptional.isPresent()){
-                new CustomException("No se encuentra el ingrediente");
+            for (PIngredientsCantDto ingredientsCantDto: ingredientsCantDtoList) {
+                Optional<Ingredient> ingredientOptional = ingredientRepository.findById(ingredientsCantDto.getIngredient().getId());
+                if (ingredientOptional.isEmpty()){
+                    throw new CustomException("No se encuentra el ingrediente");
+                }
+                Ingredient ingredient = ingredientOptional.get();
+                if(descontarOreponer){
+                    ingredient.setStock(ingredient.getStock()+ingredientsCantDto.getCant());
+                } else {
+                    ingredient.setStock(ingredient.getStock()-ingredientsCantDto.getCant());
+                }
+                ingredient = ingredientRepository.save(ingredient);
             }
-            Ingredient ingredient = ingredientOptional.get();
-            if(descontarOreponer==false){
-                ingredient.setStock(ingredient.getStock()-cantADescontar);
-            } else {
-                ingredient.setStock(ingredient.getStock()+cantADescontar);
-            }
-            ingredient = ingredientRepository.save(ingredient);
+
             //System.out.println("se desconto "+ cantADescontar+" del ingrediente "+ ingredient.getName());
 
         }catch (Exception e){

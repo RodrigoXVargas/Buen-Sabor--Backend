@@ -1,10 +1,10 @@
 package com.project.buensabor.controllers;
 
 import com.project.buensabor.controllers.Base.BaseControllerImpl;
-import com.project.buensabor.dto.orderDto.BillDto;
-import com.project.buensabor.entities.Bill;
-import com.project.buensabor.services.BillServiceImpl;
-import com.project.buensabor.services.interfaces.BillService;
+import com.project.buensabor.dto.orderDto.MovementDto;
+import com.project.buensabor.entities.Movement;
+import com.project.buensabor.services.MovementServiceImpl;
+import com.project.buensabor.services.interfaces.MovementService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,61 +15,61 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @Slf4j
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-@RequestMapping(path = "/api/bills")
-public class BillController extends BaseControllerImpl<Bill, BillDto, BillServiceImpl> {
+@RequestMapping(path = "/api/movements")
+public class MovementController extends BaseControllerImpl<Movement, MovementDto, MovementServiceImpl> {
 
     @Autowired
-    private BillService billService;
+    private MovementService movementService;
 
     @Override
-    @PreAuthorize("hasAnyAuthority('bill:getAll', '_superAdmin')")
+    @PreAuthorize("hasAnyAuthority('movement:getAll', '_superAdmin')")
     @GetMapping("/getAll")
     public ResponseEntity<?> getAll() {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(billService.findAll());
+            return ResponseEntity.status(HttpStatus.OK).body(movementService.findAll());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Error. Por favor intente más tarde.\"}");
         }
     }
 
     @Override
-    @PreAuthorize("hasAnyAuthority('bill:getOne', '_superAdmin')")
+    @PreAuthorize("hasAnyAuthority('movement:getOne', '_superAdmin')")
     @GetMapping("/get/{id}")
     public ResponseEntity<?> getOne(@PathVariable Long id) {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(billService.findById(id));
+            return ResponseEntity.status(HttpStatus.OK).body(movementService.findById(id));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Error. Por favor intente más tarde.\"}");
         }
     }
 
-    @PreAuthorize("hasAnyAuthority('bill:save', '_superAdmin')")
+    @PreAuthorize("hasAnyAuthority('movement:save', '_superAdmin')")
     @PostMapping("/save")
-    public ResponseEntity<?> saveOne(@RequestBody BillDto entity) {
+    public ResponseEntity<?> saveOne(@RequestBody MovementDto entity) {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(billService.saveOne(entity));
+            return ResponseEntity.status(HttpStatus.OK).body(movementService.saveOne(entity));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. Por favor intente más tarde.\"}");
         }
     }
 
 
-    @PreAuthorize("hasAnyAuthority('bill:update', '_superAdmin')")
+    @PreAuthorize("hasAnyAuthority('movement:update', '_superAdmin')")
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateOne(@PathVariable Long id, @RequestBody BillDto entity) {
+    public ResponseEntity<?> updateOne(@PathVariable Long id, @RequestBody MovementDto entity) {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(billService.updateOne(entity, id));
+            return ResponseEntity.status(HttpStatus.OK).body(movementService.updateOne(entity, id));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. Por favor intente más tarde.\"}");
         }
     }
 
 
-    @PreAuthorize("hasAnyAuthority('bill:delete', '_superAdmin')")
+    @PreAuthorize("hasAnyAuthority('movement:delete', '_superAdmin')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteById(@PathVariable Long id) {
         try {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(billService.deleteById(id));
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(movementService.deleteById(id));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. Por favor intente más tarde.\"}");
         }

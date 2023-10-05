@@ -1,11 +1,9 @@
 package com.project.buensabor.controllers;
 
 import com.project.buensabor.controllers.Base.BaseControllerImpl;
-import com.project.buensabor.dto.orderDto.BillDto;
 import com.project.buensabor.dto.productDto.CategoryDto;
 import com.project.buensabor.entities.Category;
 import com.project.buensabor.services.CategoryServiceImpl;
-import com.project.buensabor.services.interfaces.BillService;
 import com.project.buensabor.services.interfaces.CategoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

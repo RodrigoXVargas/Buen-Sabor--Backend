@@ -32,6 +32,7 @@ public class User extends Base {
     private String password;
 
     @Column
+    //@Enumerated(EnumType.STRING)
     private StatusUser blacklist;
 
     @ManyToOne(cascade = CascadeType.MERGE)

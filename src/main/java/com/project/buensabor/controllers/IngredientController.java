@@ -6,6 +6,7 @@ import com.project.buensabor.dto.productDto.ProductIngredientDTOs.PIngredientsCa
 import com.project.buensabor.entities.Ingredient;
 import com.project.buensabor.services.IngredientServiceImpl;
 import com.project.buensabor.services.interfaces.IngredientService;
+import com.project.buensabor.services.interfaces.MovementService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,6 +25,9 @@ public class IngredientController extends BaseControllerImpl<Ingredient, Ingredi
 
     @Autowired
     private IngredientService ingredientService;
+
+    @Autowired
+    private MovementService movementService;
 
 
     @PreAuthorize("hasAnyAuthority('ingredient:save', '_superAdmin')")
@@ -60,9 +64,8 @@ public class IngredientController extends BaseControllerImpl<Ingredient, Ingredi
     @PutMapping("/reponerStock")
     public ResponseEntity<?> reponerStock(@RequestBody List<PIngredientsCantDto> ingredientList) {
         try {
-            for (PIngredientsCantDto ingredientCant: ingredientList) {
-                ingredientService.descontarOReponerStock(ingredientCant.getIngredient().getId(), ingredientCant.getCant(), true);
-            }
+            ingredientService.descontarOReponerStock(ingredientList , true);
+            movementService.saveRestoking(ingredientList);
             return ResponseEntity.status(HttpStatus.OK).body("{\"reposicion\":true}");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("{\"error\":\"Error. Por favor intente más tarde.\"}");

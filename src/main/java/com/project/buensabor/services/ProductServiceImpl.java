@@ -8,13 +8,17 @@ import com.project.buensabor.dto.productDto.ProductDtos.ProductRanking;
 import com.project.buensabor.dto.productDto.ProductDtos.ProductRankingDto;
 import com.project.buensabor.dto.productDto.ProductIngredientDTOs.PIngredientsCantDto;
 import com.project.buensabor.entities.*;
+import com.project.buensabor.enums.TypeMovement;
 import com.project.buensabor.exceptions.CustomException;
 import com.project.buensabor.repositories.Base.BaseRepository;
 import com.project.buensabor.repositories.CategoryRepository;
+import com.project.buensabor.repositories.MovementRepository;
 import com.project.buensabor.repositories.ProductIngredientRepository;
 import com.project.buensabor.repositories.ProductRepository;
 import com.project.buensabor.services.Base.BaseServicesDTOImpl;
-import com.project.buensabor.services.interfaces.*;
+import com.project.buensabor.services.interfaces.IngredientService;
+import com.project.buensabor.services.interfaces.ProductIngredientService;
+import com.project.buensabor.services.interfaces.ProductService;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +53,12 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
 
     @Autowired
     private ImageService imageService;
+
+    @Autowired
+    private DateService dateService;
+
+    @Autowired
+    private MovementRepository movementRepository;
 
     private static final String CLOUDINARY_FOLDER = "products";
 
@@ -121,8 +131,9 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
         }
     }
 
-    public List<IngredientDto> extraerIngredientes(List<OProductsWithoutOrderDto> productosAValidar) throws CustomException {
+    public List<PIngredientsCantDto> extraerIngredientes(List<OProductsWithoutOrderDto> productosAValidar) throws CustomException {
         try{
+            List<PIngredientsCantDto> ingredientesTotales = new ArrayList<>();
             List<IngredientDto> ingredientList = ingredientService.findAll();
             for (IngredientDto ingredient: ingredientList) {
                 ingredient.setStock(0L);
@@ -130,7 +141,7 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
 
             for (OProductsWithoutOrderDto product: productosAValidar) {
                 List<PIngredientsCantDto> ingredientsProduct = productIngredientService.ingredientsByProductId(product.getProduct().getId());
-                if(!(ingredientsProduct.size()==0)){
+                if(ingredientsProduct.size()!=0){
                     for (PIngredientsCantDto ingredientsCant : ingredientsProduct) {
                         for (IngredientDto ingredient: ingredientList) {
                             if (ingredient.getId()== ingredientsCant.getIngredient().getId()){
@@ -141,7 +152,14 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
                     }
                 }
             }
-            return ingredientList;
+
+            for (IngredientDto ingredient: ingredientList) {
+                if(ingredient.getStock()!=0){
+                    ingredientesTotales.add(new PIngredientsCantDto(ingredient, ingredient.getStock()));
+                }
+            }
+
+            return ingredientesTotales;
         }catch (Exception e){
             log.info(e.getMessage());
             throw new CustomException(e.getMessage());
@@ -154,18 +172,18 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
     public boolean validarStock(List<OProductsWithoutOrderDto> productosAValidar) throws CustomException {
         try{
             boolean bandera = true;
-            List<IngredientDto> ingredientList = extraerIngredientes(productosAValidar);
+            List<PIngredientsCantDto> ingredientList = extraerIngredientes(productosAValidar);
 
-            for (IngredientDto ingredient: ingredientList) {
-                if (!(ingredient.getStock()==0L)){
-                    if (!ingredientService.validarStock(ingredient.getId(), ingredient.getStock())){
-                        //System.out.println("No hay stock para "+ ingredient.getName());
-                        bandera = false;
-                        break;
-                    } else {
-                        //System.out.println("si hay stock para "+ ingredient.getName());
-                    }
+            for (PIngredientsCantDto ingredient: ingredientList) {
+                if (ingredientService.validarStock(ingredient.getIngredient().getId(), ingredient.getCant())){
+                    //System.out.println("No hay stock para "+ ingredient.getName());
+
+                } else {
+                    //System.out.println("si hay stock para "+ ingredient.getName());
+                    bandera = false;
+                    break;
                 }
+
 
             }
             return bandera;
@@ -178,14 +196,10 @@ public class ProductServiceImpl extends BaseServicesDTOImpl<Product, ProductDto,
     @Override
     public void descontarOReponerStock(List<OProductsWithoutOrderDto> productosAValidar, boolean descontarOReponer) throws CustomException {
         try {
-            List<IngredientDto> ingredientList = extraerIngredientes(productosAValidar);
+            List<PIngredientsCantDto> ingredientList = extraerIngredientes(productosAValidar);
+            ingredientService.descontarOReponerStock(ingredientList, descontarOReponer);
 
-            for (IngredientDto ingredient: ingredientList) {
-                if (!(ingredient.getStock()==0L)){
-                    ingredientService.descontarOReponerStock(ingredient.getId(), ingredient.getStock(), descontarOReponer);
-                }
 
-            }
 
         }catch (Exception e){
             log.info(e.getMessage());

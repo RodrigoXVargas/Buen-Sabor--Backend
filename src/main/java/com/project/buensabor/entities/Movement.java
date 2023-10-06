@@ -33,7 +33,7 @@ public class Movement extends Base {
     @Column
     private Double total;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
+    @ManyToOne(fetch = FetchType.LAZY, optional = true)
     @JoinColumn(name = "order_fk")
     private Order order;
 

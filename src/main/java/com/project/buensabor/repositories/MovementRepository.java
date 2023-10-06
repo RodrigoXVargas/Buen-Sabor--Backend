@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface MovementRepository extends BaseRepository<Movement, Long> {
 
-    @Query(value= "", nativeQuery = true)
-    List<Movement> getMovementsByDateBetween(LocalDate desde, LocalDate hasta);
+    @Query(value= "SELECT * FROM movements m where type like :type  and m.date between :desde and :hasta ;", nativeQuery = true)
+    List<Movement> getMovementsByDateBetween(LocalDate desde, LocalDate hasta, String type);
 
 }

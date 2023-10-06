@@ -145,8 +145,19 @@ public class MovementServiceImpl extends BaseServicesDTOImpl<Movement, MovementD
 
 
     @Override
-    public List<MovementDto> getMovementsByDates(LocalDate desde, LocalDate hasta) throws Exception {
-        return null;
+    public List<MovementDto> getMovementsByDates(LocalDate desde, LocalDate hasta, String type) throws Exception {
+        try{
+            type = type+"%";
+            List<Movement> movementList = movementRepository.getMovementsByDateBetween(desde, hasta, type);
+            List<MovementDto> movementDtoList = new ArrayList<>();
+            for (Movement movement: movementList) {
+                movementDtoList.add(mapper.convertToDto(movement));
+            }
+            return movementDtoList;
+        } catch (Exception e) {
+            log.info(e.getMessage());
+            throw new Exception(e.getMessage());
+        }
     }
 
     @Override
@@ -162,7 +173,7 @@ public class MovementServiceImpl extends BaseServicesDTOImpl<Movement, MovementD
                     TypeMovement.Restocking,
                     dateService.dateNow(),
                     "Restocking",
-                    total,
+                    total*-1,
                     null);
             movement = movementRepository.save(movement);
 

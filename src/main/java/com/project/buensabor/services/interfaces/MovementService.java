@@ -10,7 +10,7 @@ import java.util.List;
 public interface MovementService extends BaseServicesDTO<MovementDto, Long> {
 
 
-    List<MovementDto> getMovementsByDates(LocalDate desde, LocalDate hasta) throws Exception;
+    List<MovementDto> getMovementsByDates(LocalDate desde, LocalDate hasta, String type) throws Exception;
 
     void saveRestoking(List<PIngredientsCantDto> ingredientList) throws Exception;
 }

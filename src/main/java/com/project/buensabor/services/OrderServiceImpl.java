@@ -24,6 +24,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -153,7 +154,7 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
                     TypeMovement.Credit_Note,
                     dateService.dateNow(),
                     description,
-                    order.getTotalPrice(),
+                    order.getTotalPrice()*-1,
                     order);
             movement = movementRepository.save(movement);
 
@@ -178,7 +179,28 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
             order = orderRepository.save(order);
 
             return "Se añadió "+ minutes + " a la orden "+ idOrder;
-        }catch (Exception e){
+        } catch (Exception e){
+            log.info(e.getMessage());
+            throw new CustomException(e.getMessage());
+        }
+    }
+
+    @Override
+    public List<OrderWithoutuserDto> getOrdersByIdUserBetweenDates(Long id, LocalDate desde, LocalDate hasta) throws CustomException {
+        try{
+            if (id==0){
+                throw new CustomException("El id no puede ser 0 o nulo");
+            }
+            List<Order> orderList = orderRepository.findOrdersByUserIdBetweenDates(id, desde, hasta);
+            List<OrderWithoutuserDto> orderWithoutuserDtoList = new ArrayList<>();
+            for (Order order: orderList) {
+                OrderWithoutuserDto orderWithoutuserDto = modelMapper.map(order, OrderWithoutuserDto.class);
+                orderWithoutuserDto.setProducts(this.getOrderProductsByOrder(orderWithoutuserDto.getId()));
+                orderWithoutuserDtoList.add(orderWithoutuserDto);
+            }
+
+            return orderWithoutuserDtoList;
+        } catch (Exception e){
             log.info(e.getMessage());
             throw new CustomException(e.getMessage());
         }

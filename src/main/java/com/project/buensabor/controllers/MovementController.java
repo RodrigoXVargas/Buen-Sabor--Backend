@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+
 @RestController
 @Slf4j
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -27,6 +29,19 @@ public class MovementController extends BaseControllerImpl<Movement, MovementDto
     public ResponseEntity<?> getAll() {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(movementService.findAll());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Error. Por favor intente más tarde.\"}");
+        }
+    }
+
+    @PreAuthorize("hasAnyAuthority('movement:getMovementsByDates', '_superAdmin')")
+    @GetMapping("/getMovementsByDates/{desde}&{hasta}&{type}")
+    public ResponseEntity<?> getMovementsByDates(
+            @PathVariable LocalDate desde,
+            @PathVariable LocalDate hasta,
+            @PathVariable String type) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(movementService.getMovementsByDates(desde, hasta, type));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Error. Por favor intente más tarde.\"}");
         }

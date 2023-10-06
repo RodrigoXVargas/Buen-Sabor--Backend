@@ -13,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+
 @RestController
 @Slf4j
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -70,6 +72,19 @@ public class OrderController extends BaseControllerImpl<Order, OrderDto, OrderSe
     public ResponseEntity<?> plusMinutesOrder(@PathVariable Long idOrder, @PathVariable Long minutes){
         try {
             return ResponseEntity.status(HttpStatus.OK).body(orderService.plusMinutesOrder(idOrder, minutes));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Error. Por favor intente más tarde.\"}");
+        }
+    }
+
+    @PreAuthorize("hasAnyAuthority('order:getOrderByUserAndDates','_superAdmin')")
+    @GetMapping("/getByUserAndDates/{id}&{desde}&{hasta}")
+    public ResponseEntity<?> getByUserAndDates(
+            @PathVariable Long id,
+            @PathVariable LocalDate desde,
+            @PathVariable LocalDate hasta) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(orderService.getOrdersByIdUserBetweenDates(id, desde, hasta));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"error\":\"Error. Por favor intente más tarde.\"}");
         }

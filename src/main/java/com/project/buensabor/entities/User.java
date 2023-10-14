@@ -1,9 +1,5 @@
 package com.project.buensabor.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.project.buensabor.entities.Base.Base;
 import com.project.buensabor.enums.StatusUser;
 import jakarta.persistence.*;
@@ -11,9 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "USERS")
@@ -32,16 +25,17 @@ public class User extends Base {
     @Column
     private Long telephone;
 
-    @Column
+    @Column(unique = true)
     private String mail;
 
     @Column
     private String password;
 
     @Column
+    @Enumerated(EnumType.STRING)
     private StatusUser blacklist;
 
-    @ManyToOne(cascade= CascadeType.MERGE)
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "rol_fk")
     private Rol rol;
 

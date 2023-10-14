@@ -1,9 +1,5 @@
 package com.project.buensabor.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.project.buensabor.entities.Base.Base;
 import com.project.buensabor.enums.RolName;
 import jakarta.persistence.*;
@@ -11,9 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.web.bind.annotation.CrossOrigin;
-
-import java.util.List;
 
 @Entity
 @Table(name = "ROLS")
@@ -27,5 +20,8 @@ public class Rol extends Base {
     @Column
     private RolName rol;
 
-
+    public Rol(Long id, RolName rol) {
+        super(id);
+        this.rol = rol;
+    }
 }

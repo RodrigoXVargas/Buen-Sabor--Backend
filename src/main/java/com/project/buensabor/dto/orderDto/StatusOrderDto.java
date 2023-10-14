@@ -1,7 +1,11 @@
 package com.project.buensabor.dto.orderDto;
 
 import com.project.buensabor.dto.BaseDto;
-import lombok.*;
+import com.project.buensabor.enums.StatusType;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -9,6 +13,6 @@ import lombok.*;
 @AllArgsConstructor
 public class StatusOrderDto extends BaseDto {
 
-    private String status;
+    private StatusType statusType;
 
 }

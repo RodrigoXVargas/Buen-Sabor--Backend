@@ -1,7 +1,5 @@
 package com.project.buensabor.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.project.buensabor.entities.Base.Base;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -9,9 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "ORDERS")
@@ -21,8 +18,10 @@ import java.util.List;
 @AllArgsConstructor
 public class Order extends Base {
 
+
     @Column
-    private String date;
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime creationDate;
 
     @Column
     private String withdrawalMode;
@@ -34,9 +33,11 @@ public class Order extends Base {
     @JoinColumn(name = "paymode_fk")
     private Paymode paymode;
 
-    @ManyToOne(cascade = CascadeType.MERGE)
-    @JoinColumn(name = "address_fk")
-    private Address address;
+    @Column
+    private String address;
+
+    @Column
+    private Long totalCookingTime = 0L;
 
 
     @ManyToOne(cascade = CascadeType.MERGE)

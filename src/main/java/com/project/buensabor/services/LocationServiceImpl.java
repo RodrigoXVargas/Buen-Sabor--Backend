@@ -1,8 +1,8 @@
 package com.project.buensabor.services;
 
+import com.project.buensabor.ModelMappers.LocationMapper;
 import com.project.buensabor.dto.userDto.LocationDto;
 import com.project.buensabor.entities.Location;
-import com.project.buensabor.entities.ModelMappers.LocationMapper;
 import com.project.buensabor.repositories.Base.BaseRepository;
 import com.project.buensabor.services.Base.BaseServicesDTOImpl;
 import com.project.buensabor.services.interfaces.LocationService;

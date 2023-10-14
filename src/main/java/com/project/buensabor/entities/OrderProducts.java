@@ -1,6 +1,5 @@
 package com.project.buensabor.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.project.buensabor.entities.Base.Base;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

@@ -1,8 +1,8 @@
 package com.project.buensabor.services;
 
+import com.project.buensabor.ModelMappers.MeasureMapper;
 import com.project.buensabor.dto.productDto.MeasureDto;
 import com.project.buensabor.entities.Measure;
-import com.project.buensabor.entities.ModelMappers.MeasureMapper;
 import com.project.buensabor.repositories.Base.BaseRepository;
 import com.project.buensabor.services.Base.BaseServicesDTOImpl;
 import com.project.buensabor.services.interfaces.MeasureService;

@@ -1,14 +1,11 @@
 package com.project.buensabor.entities;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.project.buensabor.entities.Base.Base;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
 
 @Entity
 @Table(name = "INGREDIENTS")
@@ -26,6 +23,9 @@ public class Ingredient extends Base {
 
     @Column
     private Double cost;
+
+    @Column
+    private Long stockMin = 0l;
 
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "measure_fk")

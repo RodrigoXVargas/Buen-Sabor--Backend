@@ -1,7 +1,7 @@
 package com.project.buensabor.services;
 
+import com.project.buensabor.ModelMappers.PaymodeMapper;
 import com.project.buensabor.dto.orderDto.PaymodeDto;
-import com.project.buensabor.entities.ModelMappers.PaymodeMapper;
 import com.project.buensabor.entities.Paymode;
 import com.project.buensabor.repositories.Base.BaseRepository;
 import com.project.buensabor.services.Base.BaseServicesDTOImpl;

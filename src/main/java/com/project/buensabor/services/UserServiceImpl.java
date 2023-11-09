@@ -5,6 +5,7 @@ import com.project.buensabor.dto.userDto.AddressDtos.AddressWithoutuserDto;
 import com.project.buensabor.dto.userDto.RolDto;
 import com.project.buensabor.dto.userDto.UserDtos.UserDto;
 import com.project.buensabor.dto.userDto.UserDtos.UserRanking;
+import com.project.buensabor.dto.userDto.UserDtos.UserWithOutPassDto;
 import com.project.buensabor.entities.Address;
 import com.project.buensabor.entities.Location;
 import com.project.buensabor.entities.Rol;
@@ -159,6 +160,23 @@ public class UserServiceImpl extends BaseServicesDTOImpl<User, UserDto, UserMapp
             List<UserRanking> userRankingList = userRepository.usersRankingByDates(desdeLD, hastaLD);
             return userRankingList;
         }catch (Exception e){
+            log.info(e.getMessage());
+            throw new CustomException(e.getMessage());
+        }
+    }
+
+    @Override
+    @Transactional
+    public List<UserWithOutPassDto> getAllUsersWithOutPass() throws CustomException {
+        try {
+            List<User> entities = userRepository.findAll();
+            List<UserWithOutPassDto> entitiesDtos = new ArrayList<>();
+            for (User user: entities) {
+                UserWithOutPassDto userWithOutPassDto = modelMapper.map(this.getAddressesAndOrders(user), UserWithOutPassDto.class);
+                entitiesDtos.add(userWithOutPassDto);
+            }
+            return entitiesDtos;
+        } catch (Exception e) {
             log.info(e.getMessage());
             throw new CustomException(e.getMessage());
         }

@@ -76,6 +76,16 @@ public class UserController extends BaseControllerImpl<User, UserDto, UserServic
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('user:getAllUsersWithoutPass','_superAdmin')")
+    @GetMapping("/getAllWP")
+    public ResponseEntity<?> getAllUsersWithoutPass() {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(userService.getAllUsersWithOutPass());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Error al obtener los usuarios: "+ System.lineSeparator()+ e.getMessage());
+        }
+    }
+
     @Override
     @PreAuthorize("hasAnyAuthority('user:getOne','_superAdmin')")
     @GetMapping("/get/{id}")

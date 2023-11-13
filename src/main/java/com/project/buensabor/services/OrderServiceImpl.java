@@ -178,6 +178,9 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
             order.setTotalCookingTime(order.getTotalCookingTime()+minutes);
             order = orderRepository.save(order);
 
+            this.notificarTopicos(modelMapper.map(order.getStatusOrder(), StatusOrderDto.class));
+            this.notificarUsuario(order.getUser());
+
             return "Se añadió "+ minutes + " a la orden "+ idOrder;
         } catch (Exception e){
             log.info(e.getMessage());
@@ -326,7 +329,7 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
             entity = orderRepository.save(entity);
 
             List<OProductsWithoutOrderDto> withoutOrderDtoList = new ArrayList<>();
-            double totalOrder =0;
+            //double totalOrder =0;
             if (entityDto.getProducts().size()!=0) {
                 for (OProductsWithoutOrderDto oProductsWithoutOrderDto : entityDto.getProducts()) {
                     Optional<Product> optionalProduct = productRepository.findById(oProductsWithoutOrderDto.getProduct().getId());
@@ -339,10 +342,10 @@ public class OrderServiceImpl extends BaseServicesDTOImpl<Order, OrderDto, Order
                     orderProducts = orderProductsRepository.save(orderProducts);
                     oProductsWithoutOrderDto = modelMapper.map(orderProducts, OProductsWithoutOrderDto.class);
                     withoutOrderDtoList.add(oProductsWithoutOrderDto);
-                    totalOrder = product.getPrice()*oProductsWithoutOrderDto.getCant();
+                    //totalOrder = product.getPrice()*oProductsWithoutOrderDto.getCant();
                 }
             }
-            entity.setTotalPrice(totalOrder);
+            //entity.setTotalPrice(totalOrder);
             entity = orderRepository.save(entity);
 
             entityDto = mapper.convertToDto(entity);

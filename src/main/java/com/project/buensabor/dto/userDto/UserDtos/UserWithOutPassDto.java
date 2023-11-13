@@ -1,5 +1,6 @@
 package com.project.buensabor.dto.userDto.UserDtos;
 
+import com.project.buensabor.dto.BaseDto;
 import com.project.buensabor.dto.orderDto.OrderDtos.OrderWithoutuserDto;
 import com.project.buensabor.dto.userDto.AddressDtos.AddressWithoutuserDto;
 import com.project.buensabor.entities.Rol;
@@ -15,7 +16,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserWithOutPassDto {
+public class UserWithOutPassDto extends BaseDto {
 
     private String firstName;
 

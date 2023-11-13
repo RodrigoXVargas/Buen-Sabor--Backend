@@ -11,7 +11,7 @@ public interface UserRanking {
 
     String getLast_name();
 
-    BigInteger getBlacklist();
+    String getBlacklist();
 
     String getMail();
 

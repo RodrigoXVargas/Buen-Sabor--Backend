@@ -44,7 +44,7 @@ public class IngredientServiceImpl extends BaseServicesDTOImpl<Ingredient, Ingre
             }
             Ingredient ingredient = ingredientOptional.get();
 
-            if (ingredient.getStock()-cantRequerida>0){
+            if (ingredient.getStock()-cantRequerida>=0){
                 return true;
             }else {
                 return false;
